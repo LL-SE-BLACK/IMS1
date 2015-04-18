@@ -1039,8 +1039,19 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="./need.html#_3">目录</a><ul>
-<li><a href="./need.html#1">1. 引言</a></li>
-<li><a href="./need.html#2">2. 任务概述</a></li>
+<li><a href="./need.html#1">1. 引言</a><ul>
+<li><a href="./need.html#11">1.1 编写目的</a></li>
+<li><a href="./need.html#12">1.2 背景</a></li>
+<li><a href="./need.html#13">1.3 定义</a></li>
+<li><a href="./need.html#14">1.4 参考资料</a></li>
+</ul>
+</li>
+<li><a href="./need.html#2">2. 任务概述</a><ul>
+<li><a href="./need.html#21">2.1 目标</a></li>
+<li><a href="./need.html#22">2.2 用户的特点</a></li>
+<li><a href="./need.html#23">2.3 假定和约束</a></li>
+</ul>
+</li>
 <li><a href="./need.html#3">3. 用户场景</a><ul>
 <li><a href="./need.html#31">3.1 用例表</a><ul>
 <li><a href="./need.html#1-">表1用例 - 用户登录</a></li>
@@ -1107,10 +1118,99 @@ body .markdown-body
 <h2 id="1"><a name="user-content-1" href="./need.html#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 引言</h2>
 <p><br><br>
 </p></center><p></p>
+<h3 id="11"><a name="user-content-11" href="./need.html#11" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.1 编写目的</h3>
+<p>本需求说明书的编写目的，主要在于规范教务管理系统信息管理子系统的编写。  </p>
+<p>它说明了本子系统的各项功能和性能需求，明确标识各功能的实现过程，阐述实用范围及背景，提供 客户解决问题或达到目标所需的条件或权能，提供一个度量和遵循的基准。  </p>
+<p>另一方面，本说明书也是为了提高软件开发过程中的能见度，便于对软件开发过程中的控 制与管理，同时也便于程序员和客户之间的交流、协作，并可以作为工作成果的原始依据保存 下来。它是用户和开发者对软件初始规定的共同理解，是整个开发工作的基础，它对本子系统 的功能、性能、用户界面及运行环境等作出详细的描述，以便于系统的进一步开发工作。  </p>
+<p>目的在于:  </p>
+<ol>
+<li>作为信息管理子系统开发内容及其约束的参考依据，为开发方与客户方提供参考。  </li>
+<li>根据信息管理子系统的工作特点和工作流程，为系统开发者进行设计和编程提供基础。  </li>
+<li>提供测试和验收的依据，即为选取测试用例和进行验收的依据。  </li>
+</ol>
+<p>本说明书的预期读者包括：  </p>
+<ol>
+<li>软件客户  </li>
+<li>项目经理  </li>
+<li>项目开发人员  </li>
+<li>软件质量分析员  </li>
+<li>软件维护人员  </li>
+</ol>
+<h3 id="12"><a name="user-content-12" href="./need.html#12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2 背景</h3>
+<ol>
+<li>
+<p>软件系统名称<br>
+<strong>教务管理系统</strong></p>
+</li>
+<li>
+<p>任务提出者<br>
+<strong>浙江大学软件工程基础课程任课老师 陈越</strong></p>
+</li>
+<li>
+<p>开发者<br>
+<strong>浙江大学2014-2015学年春夏学期软件工程基础课程部分学生组成的项目组</strong></p>
+</li>
+<li>
+<p>用户<br>
+<strong>学生、老师、学校管理者、系统管理员、验收员(由于此软件是作为课程实践而布置的作业，我们将其假定为浙江大学软件工程基础课程助教)。</strong>  </p>
+</li>
+<li>
+<p>实现该软件的计算机网络<br>
+<strong>由若干台机组成的局域网</strong>  </p>
+</li>
+<li>
+<p>该软件系统同其他系统或其他机构的基本的相互来往关系  </p>
+<ul>
+<li>该子系统为自动排课子系统提供教师基本信息、课程基本信息  </li>
+<li>该子系统为选课子系统提供教师基本信息、课程基本信息、学生基本信息  </li>
+<li>该子系统为课程资源共享子系统提供课程基本信息  </li>
+<li>该子系统为课程论坛子系统提供教师基本信息、课程基本信息、学生基本信息  </li>
+<li>该子系统为在线测试子系统提供教师基本信息、课程基本信息、学生基本信息  </li>
+<li>该子系统为分数管理子系统提供教师基本信息、学生基本信息  </li>
+<li>该子系统为所有子系统提供使用者权限说明以及系统安全保障  </li>
+</ul>
+</li>
+<li>
+<p>相关背景介绍 <br>
+<strong>为全面提高学生创新和实践能力，浙江大学软件工程基础课程分为课堂教学和综合性实 验两部分。综合性实验采取分组形式完成，每 个学生为 组，分别设有组长、主程 序员、程序员、测试员、文档员等角色，全面锻炼学生的系统设计与实现能力、测试能 力、组织文档能力、以及团队合作能力。综合性实验从实际问题中抽取，贯穿全部重要知 识点，通过 个步骤的阶段性验收，锻炼学生综合运用每个环节所学知识解决实际问题 的能力。本次课程，教师选取教务管理系统作为综合性实验题目。</strong>  </p>
+</li>
+</ol>
+<h3 id="13"><a name="user-content-13" href="./need.html#13" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.3 定义</h3>
+<h3 id="14"><a name="user-content-14" href="./need.html#14" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.4 参考资料</h3>
 <p></p><center><p></p>
 <h2 id="2"><a name="user-content-2" href="./need.html#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 任务概述</h2>
 <p><br><br>
 </p></center><p></p>
+<h3 id="21"><a name="user-content-21" href="./need.html#21" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 目标</h3>
+<p>基础信息管理子系统，实现包含用户基本信息管理、课程基本信息管理、用户权限管理、 系统安全管理这四大基本功能在内的一系列功能。<br>
+用户基本信息管理:包括用户的账号、登陆密码、用户年级或所属单位、手机号、邮箱等 基本信息。</p>
+<p>课程基本信息管理:包括课程号、课程名、面向对象、不同老师的开班情况、已选人数等 基本信息。</p>
+<p>用户权限管理:不同类型用户拥有不同的权限，系统管理员拥有最高权限。学生的有限权 限包括修改个人信息、选课退课等；一般老师的有限权限包括修改个人信息、输入学生分数等； 学校管理者的有限权限包括增加删除课程、修改开课老师信息与选课学生信息等；系统管理员 具有所有权限，能够决定赋予其他用户什么权限。<br>
+系统安全管理:记录系统的每次重要更改信息，定期对系统进行检测与维护，确保系统的安全性。</p>
+<h3 id="22"><a name="user-content-22" href="./need.html#22" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.2 用户的特点</h3>
+<p>用户分四大类：</p>
+<ol>
+<li>
+<p>学生<br>
+<strong>学生是教育系统的主体用户。学生群体对于系统的使用能够较快入门并熟悉，他们频繁使用此系统进行课程查询与成绩查询。应保障系统能够持续运作并接受高频率的使用。</strong>  </p>
+</li>
+<li>
+<p>一般老师<br>
+<strong>一般老师相对较少使用此系统，在开学前与期末阶段使用此系统的频率较高。因一些老师对于新系统的接受程度较低，该系统对于学院老师的界面应尽量直观、易懂，操作应尽量简单、容易上手、易于操作，性能应尽量实时、准确。</strong>  </p>
+</li>
+<li>
+<p>学校管理者<br>
+<strong>学校管理者使用此系统的频率比一般老师高，相对学生较低。一般在选课阶段以及期末阶段使用此系统的频率较高。平时为了查阅教学班信息也会使用此系统。因一些管理者 对于新系统的接受程度较低，该系统对于管理者的界面应尽量直观、易懂，操作应尽量简单、容易上手、易于操作，性能应尽量实时、准确。</strong>  </p>
+</li>
+<li>
+<p>系统管理员<br>
+<strong>系统管理员熟知系统的运作规律，对系统进行定期检测与维护，拥有最高权限。在尽可能给予管理员更多权限的同时要设立一定约束条件，以免错误操作带来损失。</strong>  </p>
+</li>
+</ol>
+<h3 id="23"><a name="user-content-23" href="./need.html#23" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.3 假定和约束</h3>
+<p>本次软件开发出于实验性目的，暂无经费划拨，希望项目开发团队能够充分利用现有资源高效地开发出符合需求的系统。  </p>
+<p>教学服务系统由6个子系统构成，每个子系统完成其中一项功能，最后进行系统集成。此项目开发期限较短，因此各个子系统务必要安排好工作进度，保证有一定的时间进行系统集成。基础信息管理子系统与其它几个子系统均有关联，因此，务必要做好与其它几个子系统开发团队的沟通协商工作。  </p>
+<p>此次软件开发本着实验教学的目的，同时访问本系统的客户端较少，故对数据处理能力等 方面要求不高。  </p>
 <p></p><center><p></p>
 <h2 id="3"><a name="user-content-3" href="./need.html#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. 用户场景</h2>
 <p><br><br>
@@ -1583,32 +1683,32 @@ body .markdown-body
 </table>
 <h3 id="32-ipo"><a name="user-content-32-ipo" href="./need.html#32-ipo" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 IPO图</h3>
 <p>以下IPO图表示用户数据输入和系统数据输出的流程和关系。本系统的逻辑具有一定复杂性，因此图示是一种较好的表示方式。</p>
-<p><img alt="IPO图" src="./IPO.bmp"></p>
+<p><img alt="IPO图" src="./need_files/IPO.bmp"></p>
 <p></p><center><p></p>
 <h2 id="4_1"><a name="user-content-4_1" href="./need.html#4_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 数据流图</h2>
 <p><br><br>
 </p></center><br>
 以下给出与本子系统有关的数据流图。<p></p>
 <h3 id="41"><a name="user-content-41" href="./need.html#41" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 环境层数据流图</h3>
-<p><img alt="环境层数据流图" src="./stream0.png"></p>
+<p><img alt="环境层数据流图" src="./need_files/stream0.png"></p>
 <h3 id="42"><a name="user-content-42" href="./need.html#42" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.2 第一层数据流图</h3>
-<p><img alt="第一层数据流图" src="./stream1.png"></p>
+<p><img alt="第一层数据流图" src="./need_files/stream1.png"></p>
 <h3 id="43"><a name="user-content-43" href="./need.html#43" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3 第二层数据流图</h3>
 <h4 id="431"><a name="user-content-431" href="./need.html#431" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.1 登录处理</h4>
-<p><img alt="登录处理" src="./stream2.png"></p>
+<p><img alt="登录处理" src="./need_files/stream2.png"></p>
 <h4 id="432"><a name="user-content-432" href="./need.html#432" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.2 修改登录用户信息</h4>
-<p><img alt="修改登录用户信息" src="./stream3.png"></p>
+<p><img alt="修改登录用户信息" src="./need_files/stream3.png"></p>
 <h4 id="433"><a name="user-content-433" href="./need.html#433" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.3 修改密码</h4>
-<p><img alt="修改密码" src="./stream4.png"></p>
+<p><img alt="修改密码" src="./need_files/stream4.png"></p>
 <h4 id="434"><a name="user-content-434" href="./need.html#434" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.4 课程信息管理</h4>
-<p><img alt="课程信息管理" src="./stream5.png"></p>
+<p><img alt="课程信息管理" src="./need_files/stream5.png"></p>
 <h4 id="435"><a name="user-content-435" href="./need.html#435" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.5 权限管理</h4>
-<p><img alt="权限管理" src="./stream6.png"></p>
+<p><img alt="权限管理" src="./need_files/stream6.png"></p>
 <p></p><center><p></p>
 <h2 id="5_1"><a name="user-content-5_1" href="./need.html#5_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. 状态图</h2>
 <p><br><br>
 </p></center><br>
-<img alt="状态图" src="./state.bmp"><p></p>
+<img alt="状态图" src="./need_files/state.bmp"><p></p>
 <p></p><center><p></p>
 <h2 id="6-crc"><a name="user-content-6-crc" href="./need.html#6-crc" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6. CRC卡</h2>
 <p><br><br>
@@ -2400,7 +2500,7 @@ body .markdown-body
 1. 教务处管理员可以增加，删除，修改，查询所有教师和学生的信息。<br>
 2. 学生和教师可以修改填充个人信息，上传照片等等。  </p>
 <h3 id="82"><a name="user-content-82" href="./need.html#82" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>8.2 性能需求</h3>
-<p>对于教务信息管理系统而言，信息查询速度一定要快并且准确。并且在选课阶段有可能产生多用户同时登陆教务管理系统的情况。我们提出以下要求：<br>
+<p>对于教务信息管理系统而言，信息查询速度一定要快并且准确。并且在选课阶段有可能产生多用户同时登陆教务管理系统的情况。我们提出以下要求：  </p>
 <ul>
 <li>后台数据库设计简洁直观，方便前端数据录入和后端数据输出。  </li>
 <li>系统具有良好的反应速度，给用户良好的反应体验。我们要求在良好的网络情况下，系统应具有以下时间特性要求：  <ul>
