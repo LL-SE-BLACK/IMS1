@@ -1,6 +1,18 @@
 # 信息管理子系统内部说明
+## 数据流基本说明
 
-## 数据词典基本说明
+![data stream](./datastream.png)
+
+|       数据流名     |     来源     |     去向     |                                   说明                                       |
+| ------------------ | ------------ | ------------ | ---------------------------------------------------------------------------- |
+| 学生用户指令       | 学生用户     | 教学管理系统 | 包括学生用户发出的登陆指令，成绩查询指令，课程信息查询指令，教室查询指令等等 |
+| 学生指令执行结果   | 教学服务系统 | 学生用户     | 教务系统呈现给用户的数据                                                     |
+| 教师用户指令       | 教师用户     | 教学管理系统 | 包括教师用户发出的登陆指令，课程查询指令，教室查询指令，学生成绩录入信息等等 |
+| 教师指令执行结果   | 教学服务系统 | 教师用户     | 教务系统呈现给用户的数据                                                     |
+| 管理员用户指令     | 管理员用户   | 教学管理系统 | 包括管理员用户发出的修改学生选课信息，成绩信息等指令                         |
+| 管理员指令执行结果 | 教学服务系统 | 管理员用户   | 教务系统呈现给用户的数据                                                     |
+
+## 数据元素&精度基本说明
 
 |    数据名   |        类型定义       |   字节   |                说明              |                示例              |
 | ----------- | --------------------- | --------:| -------------------------------- | --------------------------------:|
@@ -17,16 +29,44 @@
 | classroom   | varchar(50)           | [0, 50]  | 教室名称，由建筑名称和门牌号构成 | 曹光彪二期101                    |
 
 ## CRC说明
+### 登录
+#### Class
+
+```java
+class Login {
+  private char[]    id;
+  private char[]    password;  // char[32] for md5 password
+  private LoginType type;      // Enumeration
+}
+```
+
+#### Responsibility
+- 记录登录时的id，并通过登录类型验证id长度
+- 对比md5加密后的密码和数据库中存储的密码
+- 验证登录信息成功后返回反馈信息
+- 验证失败后请用户重新输入，超过一定次数则拒绝继续尝试
+
+#### Collaborator
+- __INNER__ 通过验证后创建用户实例
+- __OUTER__ _TODO_
+
+### 基本用户
+#### Class
+
+```java
+public class User {
+  private char[]  id;       // char[10] for Student, char[6] for Teacher
+  private char[]  contact;  // char[11]
+  private String  name;
+  private Gender  gender;   // Enumeration
+}
+```
+
 ### 学生用户
 #### Class
 
 ```java
-public Class Student {
-  private char[10]    id;
-  private char[11]    contact;
-  private String      name;
-  private Gender      gender;      // Enumeration
-
+public class Student extends User {
   private College     college;     // Enumeration
   private Major       major;       // Enmueration
   private Grade       grade;       // Enmueration
@@ -54,12 +94,7 @@ public Class Student {
 #### Class
 
 ```java
-public Class Teacher {
-  private char[10]  id;
-  private char[11]  contact;
-  private String    name;
-  private Gender    gender;      // Enumeration
-
+public class Teacher extends User {
   private College   college;     // Enumeration
   private Major     major;       // Enmueration
   private Degree    degree;      // Enumeration
@@ -81,17 +116,36 @@ public Class Teacher {
 - __INNER__ 教职工用户通过登录接口输入用户id和加密后的密码，通过验证后登录成功，即创建该用户的`Teacher`类实例；由于密码只在登录时用到，因此类内不包含密码属性
 - __OUTER__ _TODO_
 
+### 管理员
+#### Class
+
+```java
+public class Administrator extends User {
+  private Right rights;  // Structure Reference
+}
+```
+
+#### Responsibility
+- 记录管理员的基本信息和权限信息
+- 提供对学生、教职工用户信息的修改服务
+- 提供对系统信息（课表）等的修改服务
+
+#### Collaborator
+- __INNER__ 提供管理员用户修改系统数据、其他用户数据的服务
+- __OUTER__ _TODO_
+
+
 ### 课程信息
 #### Class
 
 ```java
-public Class Course {
+public class Course {
   public Class TimeAndRoom {
     ClassTime time;
     Classroom room;
   }
 
-  private char[8]                                   id;
+  private char[]                                    id;
   private String                                    name;
   private int                                       credits;
 
