@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bootstrap Instance</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<class>
+
+<div class="container">
+    <div class="row" >
+        <div class="col-xs-6 col-sm-3"
+             id="box1"
+             onclick="changeContent('box1')"
+             style="background-color: #dedef8;
+         box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        </div>
+        <div class="col-xs-6 col-sm-3"
+             id="box2"
+             onclick="changeContent('box2')"
+             style="background-color: #dedef8;box-shadow:
+         inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                eiusmod tempor incididunt ut.
+            </p>
+        </div>
+
+        <div class="clearfix visible-xs"></div>
+
+        <div class="col-xs-6 col-sm-3"
+             id="box3"
+             onclick="changeContent('box3')"
+             style="background-color: #dedef8;
+         box-shadow:inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+        </div>
+        <div class="col-xs-6 col-sm-3"
+             id="box4"
+             onclick="changeContent('box4')"
+             style="background-color: #dedef8;box-shadow:
+         inset 1px -1px 1px #444, inset -1px 1px 1px #444;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim
+            </p>
+        </div>
+    </div>
+</div>
+</class>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Title of Modal
+                </h4>
+            </div>
+            <form role="form">
+                <div class="form-group">
+                    <label for="modal_content">Content</label>
+                    <input type="text" class="form-control" id="modal_content"
+                           placeholder="Please Input the Text">
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Cancel
+                </button>
+                <button type="button" class="btn btn-primary"
+                        onclick="writeContent()"
+                        data-dismiss="modal">
+                    Okay
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+</html>
+
+
+<script src="../static/js/jquery.cookie.js"></script>
+<script src="../static/js/csrftoken.js"></script>
+
+<script>
+    var box_clicked = null;
+
+    function changeContent(box_id) {
+        box_clicked = document.getElementById(box_id);
+        document.getElementById("modal_content").value = box_clicked.innerHTML.trim().replace("<p>","").replace("</p>","");
+        $("#myModal").modal({backdrop:true},{keyboard:true});
+    }
+    function writeContent() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        else {
+            // code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        /*xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+            }
+        }*/
+        xmlhttp.open("POST","../hello",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        //var postMessage = "changedRegion=" + box_clicked.innerHTML;
+        //console.log(document.body.innerHTML.toJSON());
+        var postMessage = "changedRegion=" + document.body.innerHTML;
+        xmlhttp.send(postMessage);
+
+        var box_content = document.getElementById("modal_content").value;
+        if (box_content==''||box_content==' '){}
+        else {box_clicked.innerHTML = box_content;}
+        box_clicked = null;
+    }
+</script>
+
