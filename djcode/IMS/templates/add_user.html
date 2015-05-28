@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>LOGIN_TEST</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row" align="middle">
+        <div class="col" align="middle">
+            <form role="form" action="../user_added/" method="post"> {% csrf_token %}
+                <label for="name">请选择用户类型</label>
+                <select class="form-control" id="usertype">
+                    <option>Admin</option>
+                    <option>Faculty</option>
+                    <option>Student</option>
+                </select>
+                <br/>
+                <br/>
+                <div class="input-prepend">
+                    <span class="add-on"><span class="icon-lock"></span></span>
+                    <input class="span2" placeholder="请输入用户ID" id="userid" type="text" />
+                </div>
+                <br/>
+                <p id="indicator"></p>
+                <br/>
+                <button type="button" class="btn btn-default"
+                        onclick="judgeInput()">完成</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+<script>
+    var usertype, userid;
+
+    function judgeInput() {
+        usertype = document.getElementById("usertype").value;
+        userid = document.getElementById("userid").value;
+        if (usertype=="Admin") {
+            document.getElementById("indicator").innerHTML = "该功能尚未开通，管理员用户只能由root后台添加！";
+        }
+        else if (usertype=="Faculty") {
+            if (userid.length!=6) {
+                document.getElementById("indicator").innerHTML = "教职工用户ID长度为6位！";
+            }
+            else {
+                $.ajaxSetup({
+                     data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+                }); //cannot be written in outer *.js but must be embedded in template
+                $.post("../user_added/", { user_type: usertype, user_id: userid});
+                document.getElementById("indicator").innerHTML = "";
+            }
+        }
+        else if (usertype=="Student") {
+            if (userid.length!=10) {
+                document.getElementById("indicator").innerHTML = "学生用户ID长度为10位！";
+            }
+            else {
+                $.ajaxSetup({
+                     data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+                }); //cannot be written in outer *.js but must be embedded in template
+                $.post("../user_added/", { user_type: usertype, user_id: userid});
+                document.getElementById("indicator").innerHTML = "";
+            }
+        }
+        else {
+            document.getElementById("indicator").innerHTML = "输入无法识别！";
+        }
+    }
+
+</script>

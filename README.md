@@ -21,22 +21,22 @@
 ### 1. login_info
 
 | id | password | logintype |
----|---|---|
-VARCHAR(10) | VARCHAR(32) | VARCHAR(10)
+|---|---|---|
+| VARCHAR(10) | VARCHAR(32) | VARCHAR(10) |
 
 ### 2. student_users
 
-| id | contact | name | gender | college | major | grade | gpa |credits |
----|---|---|---|---|---|---|---|---|
-CHARACTER(10) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | INTEGER | FLOAT | FLOAT
+| id | contact | name | gender | college | major | grade | gpa | credits |
+|---|---|---|---|---|---|---|---|---|
+| CHARACTER(10) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | INTEGER | FLOAT | FLOAT |
 
 - `college`: 学院
 
 ### 3. faculty_users
 
 | id | contact | name | gender | college | major | degree | title |
----|---|---|---|---|---|---|---|
-CHARACTER(6) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | VARCHAR(20) | VARCHAR(20)
+|---|---|---|---|---|---|---|---|
+| CHARACTER(6) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | VARCHAR(20) | VARCHAR(20) |
 
 - `degree`: 行政级别（chairman, lead researcher, etc.）
 - `title`: 学术头衔（Professor, Assistant Prof., etc.）
@@ -44,24 +44,24 @@ CHARACTER(6) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) |
 ### *4. admin_users （暂时没有这张表）
 
 | id | contact | name | gender | right |
----|---|---|---|---
-CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | INTEGER
+|---|---|---|---|---|
+| CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | INTEGER |
 
 - `right`: 记录root赋予给各管理员用户的、各项不同的信息记录操作的权限（类似于Linux中`777`……）
 
 ### 5. course_info
 
 | id | name | credits | semester | textbook |
----|---|---|---|---
-CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110)
+|---|---|---|---|---|
+| CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
 
 - `semester`: 0 for fall, 1 for winter, 2 for spring, 3 for summer, 4 for short, 5 for fall-winter, 6 for spring-summer
 
 ### 6. class_info
 
 | id | teacher | time | room | examdate | examtime | examroom | capacity |
----|---|---|---|---|---|---|---
-CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER
+|---|---|---|---|---|---|---|---|
+| CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
 
 - 教学班信息
 - `examdate`: 考试日期
@@ -71,8 +71,8 @@ CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | 
 ### 7. pre_requisites
 
 | id | prereq |
----|---
-CHARACTER(8) | CHARACTER(8)
+|---|---|
+| CHARACTER(8) | CHARACTER(8) |
 
 - 课程预修要求
 

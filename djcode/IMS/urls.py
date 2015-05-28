@@ -1,3 +1,5 @@
+__author__ = 'Adward'
+
 """djcode URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -14,18 +16,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from django.contrib import admin
-#from IMS import urls as ims_urls
-from IMS import views as ims_views
+from IMS import views
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    #url(r'^ims/', include(ims_urls)),
-    #url(r'^hello/', ims_views.hello),
-    url(r'^login/',ims_views.login),
-    url(r'^loggedin/',ims_views.loggedin),
-    url(r'^add_user/', ims_views.add_user),
-    url(r'^user_added/', ims_views.user_added),
-    url(r'^user_auth/', ims_views.user_auth),
-    url(r'^home/', ims_views.login_jump),
+    url(r'^hello/', views.hello),
 ]
