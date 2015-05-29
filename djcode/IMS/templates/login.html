@@ -12,64 +12,31 @@
 <div class="container">
     <div class="row" align="middle">
         <div class="col" align="middle">
-            <form role="form" action="../home/" method="post" id="login_form"> {% csrf_token %}
+            <form role="form" action="../user_auth/" method="post" id="login_form"> {% csrf_token %}
                 <div class="input-prepend">
                     <span class="add-on"><span class="icon-user"></span></span>
-                    <input class="span2" placeholder="请输入ID" type="text" id="userid" />
+                    <input class="span2" placeholder="请输入ID" type="text" name="userid" />
                 </div><br />
                 <div class="input-prepend">
                     <span class="add-on"><span class="icon-lock"></span></span>
-                    <input class="span2" placeholder="请输入密码" type="password" id="userpasswd"/>
+                    <input class="span2" placeholder="请输入密码" type="password" name="userpasswd"/>
                 </div><br />
-                <button type="button" class="btn btn-default"
-                        onclick="judgeInput()">登录</button>
-                <button type="submit" class="btn btn-primary"
-                        style="display: none" id="submit_button"></button>
+                <button type="submit" class="btn btn-default">登录</button>
             </form>
         </div>
         <br/>
-        <p id="indicator"></p>
+        {% if no_match  %}
+            <p>用户名或密码错误</p>
+        {% endif %}
+        {% if forbidden  %}
+            <p>用户被禁用</p>
+        {% endif %}
+        {% if unknown_error  %}
+            <p>UNKNOWN</p>
+        {% endif %}
     </div>
 </div>
 
 
 </body>
 </html>
-
-<script>
-    var usertype, userid, userpasswd;
-
-    function judgeInput() {
-        userid = document.getElementById("userid").value;
-        userpasswd = document.getElementById("userpasswd").value;
-        if (userid.length==10) usertype = "Student";
-        else if (userid.length==6) usertype = "Faculty";
-        else if (userid.length==3) usertype = "Admin";
-        else {
-            document.getElementById("indicator").innerHTML = "用户ID长度不符";
-        }
-        //
-        $.ajaxSetup({
-            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
-        }); //cannot be written in outer *.js but must be embedded in template
-        $.post("../user_auth/", {user_id: userid, user_passwd: userpasswd},
-            function(data,status){
-                if (data==1){
-                    document.getElementById("indicator").innerHTML = "用户名或密码错误";
-                }
-                else if (data==2){
-                    document.getElementById("indicator").innerHTML = "用户被禁用";
-                }
-                else if (data==0){
-                    $("button#submit_button").click();
-                    //$("form").submit();
-                }
-                else {
-                    document.getElementById("indicator").innerHTML = "Unknown";
-                }
-            });
-
-        document.getElementById("indicator").innerHTML = "";
-    }
-
-</script>

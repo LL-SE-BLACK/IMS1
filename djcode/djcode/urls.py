@@ -17,15 +17,15 @@ from django.conf.urls import include, url
 from django.contrib import admin
 #from IMS import urls as ims_urls
 from IMS import views as ims_views
+import django.contrib.auth.views as auth_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^ims/', include(ims_urls)),
-    #url(r'^hello/', ims_views.hello),
-    url(r'^login/',ims_views.login),
-    url(r'^loggedin/',ims_views.loggedin),
+    url(r'^$',ims_views.startup),
     url(r'^add_user/', ims_views.add_user),
     url(r'^user_added/', ims_views.user_added),
     url(r'^user_auth/', ims_views.user_auth),
-    url(r'^home/', ims_views.login_jump),
+    url(r'^home/', ims_views.home),
+    url(r'^logout/',ims_views.loggingout),
 ]
