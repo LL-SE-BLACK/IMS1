@@ -52,11 +52,12 @@
 
 ### 5. course_info
 
-| course_id | name | credits | semester | textbook |
-|---|---|---|---|---|
-| CHARACTER(10) | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
+| course_id | name | credits | semester | textbook | college |
+|---|---|---|---|---|---|
+| CHARACTER(10) | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) | VARCHAR(50) |
 
 - `semester`: 0 for fall, 1 for winter, 2 for spring, 3 for summer, 4 for short, 5 for fall-winter, 6 for spring-summer
+- `college`: 开课学院
 
 ### 6. class_info
 

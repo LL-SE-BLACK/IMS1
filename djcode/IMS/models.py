@@ -39,15 +39,16 @@ class Faculty_user(models.Model):
 
 class Course_info(models.Model):
     '''
-    | course_id | name | credits | semester | textbook |
-    |---|---|---|---|---|
-    | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
+    | course_id | name | credits | semester | textbook | college |
+    |---|---|---|---|---|---|
+    | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) | VARCHAR(50) |
     '''
     course_id = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=110)
     credits = models.FloatField
     semester = models.IntegerField
     textbook = models.CharField(max_length=110)
+    college = models.CharField(max_length=50)
 
 class Class_info(models.Model):
     '''
