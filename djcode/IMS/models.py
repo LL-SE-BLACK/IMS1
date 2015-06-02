@@ -39,11 +39,11 @@ class Faculty_user(models.Model):
 
 class Course_info(models.Model):
     '''
-    | id | name | credits | semester | textbook |
+    | course_id | name | credits | semester | textbook |
     |---|---|---|---|---|
     | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
     '''
-    id = models.CharField(max_length=8, primary_key=True)
+    course_id = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=110)
     credits = models.FloatField
     semester = models.IntegerField
@@ -51,11 +51,12 @@ class Course_info(models.Model):
 
 class Class_info(models.Model):
     '''
-    | id | teacher | time | room | examdate | examtime | examroom | capacity |
-    |---|---|---|---|---|---|---|---|
-    | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
+    | class_id | course_id | teacher | time | room | examdate | examtime | examroom | capacity |
+    |---|---|---|---|---|---|---|---|---|
+    | CHARACTER(10) | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
     '''
-    courseid = models.CharField(max_length=8)
+    class_id = models.CharField(max_length=10)
+    course_id = models.CharField(max_length=8)
     teacher = models.CharField(max_length=20)
     time = models.IntegerField
     room = models.CharField(max_length=20)

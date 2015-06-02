@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="945f34a2-4bc2-4d6f-97a0-e50ebfdee993" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/IMS/templates/logout.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/templates/login.html" afterPath="$PROJECT_DIR$/IMS/templates/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/models.py" afterPath="$PROJECT_DIR$/IMS/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/templates/panel_for_admin.html" afterPath="$PROJECT_DIR$/IMS/templates/panel_for_admin.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/templates/panel_for_faculty.html" afterPath="$PROJECT_DIR$/IMS/templates/panel_for_faculty.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/templates/panel_for_student.html" afterPath="$PROJECT_DIR$/IMS/templates/panel_for_student.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/djcode/settings.py" afterPath="$PROJECT_DIR$/djcode/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/djcode/urls.py" afterPath="$PROJECT_DIR$/djcode/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/IMS/views.py" afterPath="$PROJECT_DIR$/IMS/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="945f34a2-4bc2-4d6f-97a0-e50ebfdee993" name="Default" comment="" />
     <ignored path="djcode.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -79,7 +65,7 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/IMS/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.062937" vertical-offset="0" max-vertical-offset="1200">
+            <state vertical-scroll-proportion="0.8041958" vertical-offset="540" max-vertical-offset="1200">
               <caret line="59" column="16" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="16" />
               <folding />
             </state>
@@ -552,7 +538,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2536349" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32892805" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32892805" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -713,7 +699,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/IMS/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.062937" vertical-offset="0" max-vertical-offset="1200">
+        <state vertical-scroll-proportion="0.8041958" vertical-offset="540" max-vertical-offset="1200">
           <caret line="59" column="16" selection-start-line="59" selection-start-column="16" selection-end-line="59" selection-end-column="16" />
           <folding />
         </state>

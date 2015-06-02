@@ -48,19 +48,20 @@
 | CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | INTEGER |
 
 - `right`: 记录root赋予给各管理员用户的、各项不同的信息记录操作的权限（类似于Linux中`777`……）
+- 目前用Django自带的User类做登录和权限组管理
 
 ### 5. course_info
 
-| id | name | credits | semester | textbook |
+| course_id | name | credits | semester | textbook |
 |---|---|---|---|---|
-| CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
+| CHARACTER(10) | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) |
 
 - `semester`: 0 for fall, 1 for winter, 2 for spring, 3 for summer, 4 for short, 5 for fall-winter, 6 for spring-summer
 
 ### 6. class_info
 
-| id | teacher | time | room | examdate | examtime | examroom | capacity |
-|---|---|---|---|---|---|---|---|
+| class_id | course_id | teacher | time | room | examdate | examtime | examroom | capacity |
+|---|---|---|---|---|---|---|---|---|
 | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
 
 - 教学班信息
@@ -70,11 +71,24 @@
 
 ### 7. pre_requisites
 
-| id | prereq |
+| course_id | prereq |
 |---|---|
 | CHARACTER(8) | CHARACTER(8) |
 
 - 课程预修要求
+
+### 8. class_table
+
+| student_id | class_id |
+|---|---|
+| CHARACTER(10) | CHARACTER(10) |
+
+- 学生课程（选课）表，即学生id和教学班id的一对多映射关系
+
+### 9. scores
+
+- 学生成绩表，包括平时成绩、总成绩等；
+- 建议和选课表做成同一张，由成绩管理组设计后，存放于此（如有其他建议，请尽快和本组联系）
 
 
 以下内容如与上述有冲突，以上述为准（有些还来不及细改orz）
