@@ -63,7 +63,7 @@
 
 | class_id | course_id | teacher | time | room | examdate | examtime | examroom | capacity |
 |---|---|---|---|---|---|---|---|---|
-| CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
+| CHARACTER(10) | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
 
 - 教学班信息
 - `examdate`: 考试日期
