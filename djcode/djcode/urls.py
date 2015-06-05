@@ -27,5 +27,5 @@ urlpatterns = [
     url(r'^user_added/', ims_views.user_added),
     url(r'^user_auth/', ims_views.user_auth),
     url(r'^home/', ims_views.home),
-    url(r'^logout/',ims_views.loggingout),
+    url(r'^logout/', ims_views.loggingout),
 ]
