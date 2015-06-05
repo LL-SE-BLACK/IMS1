@@ -49,6 +49,12 @@ def user_added(request):
     user = User.objects.create_user(userid[0], userid[0]+'@zju.edu.cn', userpasswd)
     if usertype=='Admin':
         user.user_permissions.add()
+    elif usertype=='Student':
+        #pass
+        #TODO add a student to database
+    elif usertype=='Faculty':
+        #pass
+        #TODO add a faculty to database
     user.save()
     return render_to_response('add_user.html', c)
 
