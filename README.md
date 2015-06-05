@@ -1,6 +1,21 @@
 # Info-Manage-System
 
 # 信息管理子系统内部说明
+## Django Systerm
+###1. Django Admin
+访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认都是ims（我设的），可以在后台用命令添加。
+
+###2. 数据库接口 models.py
+Django将数据库I/O抽象为模型（MTV），要调用IMS子系统抽象的一系列基础信息数据库表，`import djcode.IMS.models`即可。
+
+###3. csrf
+在使用post或者get请求的Templates或者JS脚本中务必注意csrf中间件的限制，增加`{%csrf_token%}`，如`https://github.com/LL-SE-BLACK/IMS1/blob/master/djcode/IMS/templates/login.html`;
+
+Ajax请求时对于csrf的使用请见示例：`https://github.com/LL-SE-BLACK/IMS1/blob/master/djcode/IMS/templates/add_user.html`
+
+###4. user类
+用户登录、权限检查和admin组用户的信息管理全部交给Django自带的user类。在进入每个子模块的每个功能模块时，虽然已经使用了csrf中间件防止跨域url伪造攻击，都仍要检查用户登录与否、是否拥有相应权限。
+
 ## 数据流基本说明
 
 ![data stream](Presentation/datastream.png)
