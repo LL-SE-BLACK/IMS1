@@ -2,11 +2,150 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>学生界面</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
 </head>
 <body>
     <p>Panel for Student</p>
     <br/>
+
+
+    <div id="changInfo">
+        <form class="form-horizontal" action="../changeStudentInfo/" method="get" id="changeInfo_form">
+            {% csrf_token %}
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">学号</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static" id="idMessage" > {{studentInfo.id}} </p>
+                </div>
+              </div>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">联系方式</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="contact" id="inputId" value={{studentInfo.contact}}>
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="name" id="inputId" value={{studentInfo.name}}>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">性别</label>
+                    <label class="radio-inline">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="male" {% if studentInfo.gender %} checked {% endif %}> 男
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="female" {% if not studentInfo.gender %} checked {% endif %}> 女
+                    </label>
+
+            </div>
+            <div class="form-group">
+            <label class="col-sm-2 control-label">学院</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name='college' id="inputId" value={{studentInfo.college}}>
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">专业</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name='major' id="inputId" value={{studentInfo.major}}>
+            </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-sm-2 control-label">年级</label>
+            <div class="col-sm-10">
+              <p class="form-control-static"  id="inputId" > {{studentInfo.grade}}</p>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">学分</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static"  id="inputId" >{{studentInfo.credits}}</p>
+                </div>
+            </div>
+
+             <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-default">确认修改</button>
+                </div>
+              </div>
+
+        </form>
+    </div>
+
+    </br>
+
+    <div id="changPasswd">
+        <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="../changePasswd/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">请输入密码</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" name="passwd1" id="inputPasswd" placeholder="New Password"/>
+                </div>
+              </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">再次输入密码</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" name="passwd2" id="repytePasswd" placeholder="Retype Password"/>
+                </div>
+              </div>
+            <p id="indicatorFromJs"></p>
+            <p id="indicatorFormServer">
+                **{% if passwdErrors %}**
+{#                    **<ul>**#}
+{#                        **{% for error in studentInfo.passwdErrors %}**#}
+{#                        **<li>{{ error }}</li>**#}
+{#                        **{% endfor %}**#}
+{#                    **</ul>**#}
+                    密码长度为5-20位，两次输入请保持一致！
+                **{% endif %}**
+            </p>
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default" >确认修改</button>
+            </div>
+        </form>
+    </div>
+
     <a href="../logout/">Logout>>></a>
 </body>
+    <script>
+        function checkPasswd() {
+            //TODO
+            var pass1 = $('#inputPasswd').val();
+            var pass2 = $('#repytePasswd').val();
+            var indicatorFromJs = $('#indicatorFromJs');
+            if (pass1 != pass2) {
+                indicatorFromJs.html("两次输入的密码不一致！");
+                return false;
+            }
+            else {
+                if (pass1.length < 5 || pass1.length > 20) {
+                    indicatorFromJs.html("密码长度在5-20之间");
+                    return false;
+                }
+                else {
+                    indicatorFromJs.html("");
+                    return true;
+{#                    var userid = $('#idMessage').html();#}
+{#                    console.log("userid" + userid);#}
+{#                    $.ajaxSetup({#}
+{#                         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }#}
+{#                    });#}
+{#                    $.post("../changePasswd/", { id: userid, passwd: pass1});#}
+                }
+            }
+        }
+    </script>
 </html>
