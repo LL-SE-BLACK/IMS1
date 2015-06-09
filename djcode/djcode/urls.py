@@ -28,4 +28,6 @@ urlpatterns = [
     url(r'^user_auth/', ims_views.user_auth),
     url(r'^home/', ims_views.home),
     url(r'^logout/', ims_views.loggingout),
+    url(r'^changeStudentInfo/', ims_views.changeStudentInfo),
+    url(r'^changePasswd/', ims_views.changePasswd),
 ]

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
 # Create your models here.
@@ -11,14 +12,18 @@ class Student_user(models.Model):
     | CHARACTER(10) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | INTEGER | FLOAT | FLOAT |
     '''
     id = models.CharField(max_length=10, primary_key=True)
-    contact = models.CharField(max_length=11)
-    name = models.CharField(max_length=20)
-    gender = models.BooleanField
-    college = models.CharField(max_length=50)
-    major = models.CharField(max_length=50)
-    grade = models.IntegerField
-    gpa = models.FloatField
-    credits = models.FloatField
+    contact = models.CharField(max_length=11,default='18812345678')
+    name = models.CharField(max_length=20,default='张三')
+    gender = models.BooleanField(default=True)
+    college = models.CharField(max_length=50,default='计算机科学与技术学院')
+    major = models.CharField(max_length=50,default='计算机科学与技术')
+    grade = models.IntegerField(default=3)
+    gpa = models.FloatField(default=4.0)
+    credits = models.FloatField(default=100.0)
+
+    def __unicode__(self):
+        # return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, grade:%s, gpa:%f, credits:%f'(self.id, self.contact,self.name,self.gender, self.college,self.major,self.grade, self.credits)
+        return 'id:' + self.id
 
 class Faculty_user(models.Model):
     '''
