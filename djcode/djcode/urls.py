@@ -22,9 +22,6 @@ from IMS import views as ims_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-
-    url(r'^rms/', include('RMS.urls')),
-
     #url(r'^ims/', include(ims_urls)),
     url(r'^$',ims_views.startup),
     url(r'^add_user/', ims_views.add_user),
