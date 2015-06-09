@@ -20,4 +20,6 @@ from IMS import views
 
 urlpatterns = [
     url(r'^hello/', views.hello),
+
+
 ]
