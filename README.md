@@ -3,7 +3,7 @@
 # 信息管理子系统内部说明
 ## Django Systerm
 ###1. Django Admin
-访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认都是ims（我设的），可以在后台用命令添加。
+访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认是IMS/ims（我设的），可以在后台用命令添加。（有可能是ims/ims。。。）
 
 ###2. 数据库接口 models.py
 Django将数据库I/O抽象为模型（MTV），要调用IMS子系统抽象的一系列基础信息数据库表，`import djcode.IMS.models`即可。
