@@ -3,11 +3,7 @@
 # 信息管理子系统内部说明
 ## Django Systerm
 ###1. Django Admin
-<<<<<<< HEAD
-访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认是IMS/ims（我设的），可以在后台用命令添加。（有可能是ims/ims。。。）
-=======
-访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认都是IMS（我设的），可以在后台用命令添加。
->>>>>>> origin/master
+访问`http://localhost:8000/admin`即可用GUI的方式管理用户组和权限组，superuser账户名和密码默认都是ims（我设的），可以在后台用命令添加。
 
 ###2. 数据库接口 models.py
 Django将数据库I/O抽象为模型（MTV），要调用IMS子系统抽象的一系列基础信息数据库表，`import djcode.IMS.models`即可。
@@ -145,7 +141,7 @@ class Login {
 
 #### Responsibility
 - 记录登录时的id，并通过登录类型验证id长度
-- 对比md5加密后的密码和数据库中存储的话
+- 对比md5加密后的密码和数据库中存储的密码
 - 验证登录信息成功后返回反馈信息
 - 验证失败后请用户重新输入，超过一定次数则拒绝继续尝试
 

@@ -15,16 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-import django.contrib.auth.views as auth_views
-
 #from IMS import urls as ims_urls
 from IMS import views as ims_views
+import django.contrib.auth.views as auth_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-
-    url(r'^rms/', include('RMS.urls')),
-
     #url(r'^ims/', include(ims_urls)),
     url(r'^$',ims_views.startup),
     url(r'^add_user/', ims_views.add_user),
@@ -32,6 +28,4 @@ urlpatterns = [
     url(r'^user_auth/', ims_views.user_auth),
     url(r'^home/', ims_views.home),
     url(r'^logout/', ims_views.loggingout),
-    url(r'^changeStudentInfo/', ims_views.changeStudentInfo),
-    url(r'^changePasswd/', ims_views.changePasswd),
 ]
