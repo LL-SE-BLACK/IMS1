@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from django.views.decorators.csrf import csrf_exempt
+
 __author__ = 'xyh' #...
 
-from head import *
+from IMS.head import *
 
-from models import Student_user
-from student_forms import StudentInfoForm
+from IMS.models import Student_user
+from IMS.student_forms import StudentInfoForm
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
@@ -25,7 +27,7 @@ def changeStudentInfo(request):
             form = StudentInfoForm(request.GET)
             if form.is_valid():
                 info = form.cleaned_data
-                print request.user
+                print(request.user)
                 userid = str(request.user)
                 stu = Student_user.objects.get(id=userid)
                 print("From: " + stu.__unicode__())
@@ -47,13 +49,13 @@ def changeStudentInfo(request):
                 return render_to_response('panel_for_student.html', {'studentInfo':request.GET, 'infoErrors':form.errors})
 
     else:
-        print 'ERROR: not GET'
+        print('ERROR: not GET')
 
 
 @csrf_exempt  #Note: 如果有人有时间，求帮我看看跨站为啥搞不定。。
 @login_required
 def changePasswd(request):
-    print "change passwd"
+    print("change passwd")
     if request.method == 'POST':
         c = {}
         c.update(csrf(request))

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from head import *
-from models import Student_user
-from student_forms import StudentInfoForm
+from IMS.head import *
+from IMS.models import Student_user
+from IMS.student_forms import StudentInfoForm
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
@@ -13,11 +13,11 @@ def startup(request):
 
 def loggingin(request):
     if not request.user.is_authenticated():
-        print "not authenticated"
+        print("not authenticated")
         # return render(request, 'add_user.html')
         return render(request, 'login.html')
     else:
-        print 'authenticated'
+        print('authenticated')
         return HttpResponseRedirect('../home/')
 
 @login_required
@@ -49,7 +49,7 @@ def user_added(request):
         else:
             newStudent = Student_user(id=userid)
             newStudent.save()
-            print 'newStudent:',newStudent
+            print('newStudent:', newStudent)
     elif usertype == 'Faculty':
         pass
         #TODO add a faculty to database
