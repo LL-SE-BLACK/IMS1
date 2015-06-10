@@ -4,7 +4,7 @@ __author__ = 'xyh' #...
 from head import *
 
 from models import Student_user
-from forms import StudentInfoForm
+from student_forms import StudentInfoForm
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
@@ -15,9 +15,11 @@ LEN_OF_ADMIN_ID = 3
 @login_required
 def changeStudentInfo(request):
     print "change student info"
-    if request.method == 'POST':
+    if request.method == 'GET':
         c = {}
         c.update(csrf(request))
+        print(request.GET)
+
         #TODO
     else:
         print 'ERROR: not post'
