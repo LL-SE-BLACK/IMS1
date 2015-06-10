@@ -6,17 +6,33 @@
     <schema name="" catalog=""/>
     <table name="IMS_class_info" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="courseid" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="teacher" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="room" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="examroom" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="class_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="course_id_id" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
+      <foreign-key name="#FAKE_IMS_class_info_1" columns="course_id_id" ref-table="IMS_course_info" ref-schema="" ref-catalog="" ref-columns="course_id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="#FAKE_IMS_class_table_2" table="IMS_class_table" schema="" catalog="" columns="class_id_id"/>
+      <index name="IMS_class_info_4c30cc1b" unique="true" columns="course_id_id"/>
+    </table>
+    <table name="IMS_class_table" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="class_id_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="student_id_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_IMS_class_table_1" columns="student_id_id" ref-table="IMS_student_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_IMS_class_table_2" columns="class_id_id" ref-table="IMS_class_info" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="IMS_class_table_e462bf81" unique="true" columns="student_id_id"/>
+      <index name="IMS_class_table_468acf72" unique="true" columns="class_id_id"/>
     </table>
     <table name="IMS_course_info" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="course_id" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="name" sqlType="VARCHAR(110)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="textbook" sqlType="VARCHAR(110)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <primary-key columns="id"/>
+      <column name="college" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="course_id"/>
+      <exported-key name="#FAKE_IMS_class_info_1" table="IMS_class_info" schema="" catalog="" columns="course_id_id"/>
     </table>
     <table name="IMS_faculty_user" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="VARCHAR(6)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
@@ -30,17 +46,22 @@
     </table>
     <table name="IMS_pre_requisites" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="courseid" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="prereq" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="course_id" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
     </table>
     <table name="IMS_student_user" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="contact" sqlType="VARCHAR(11)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="college" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="major" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="credits" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
+      <column name="gender" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="gpa" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
+      <column name="grade" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
+      <exported-key name="#FAKE_IMS_class_table_1" table="IMS_class_table" schema="" catalog="" columns="student_id_id"/>
     </table>
     <table name="auth_group" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
