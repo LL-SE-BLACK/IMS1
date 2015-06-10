@@ -16,7 +16,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
-from IMS import views, change_student_personal_info
+from IMS import views, change_student_personal_info, fac_stu_manage
 
 urlpatterns = [
     url(r'^$', views.loggingin),
@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^user_auth/', views.user_auth),
     url(r'^home/', views.home),
     url(r'^logout/', views.loggingout),
+    url(r'^manage/', fac_stu_manage.manage),
+    url(r'^updateuser/', fac_stu_manage.updateuser), #by Henry
     url(r'^changeStudentInfo/', change_student_personal_info.changeStudentInfo), #by xyh
     url(r'^changePasswd/', change_student_personal_info.changePasswd), #by xyh
 ]
