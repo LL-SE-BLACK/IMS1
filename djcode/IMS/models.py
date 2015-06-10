@@ -22,8 +22,9 @@ class Student_user(models.Model):
     credits = models.FloatField(default=100.0)
 
     def __unicode__(self):
-        # return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, grade:%s, gpa:%f, credits:%f'(self.id, self.contact,self.name,self.gender, self.college,self.major,self.grade, self.credits)
-        return 'id:' + self.id
+        return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, grade:%s, gpa:%f, credits:%f'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.grade, self.gpa, self.credits)
+        # return 'id:' + self.id
+
 
 class Faculty_user(models.Model):
     '''
