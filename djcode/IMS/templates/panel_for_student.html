@@ -3,9 +3,9 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>学生界面</title>
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/js/bootstrap.min.js"></script>
 </head>
 <body>
     <p>Panel for Student</p>
@@ -13,65 +13,72 @@
 
 
     <div id="changInfo">
-        <form class="form-horizontal" action="../changeStudentInfo/" method="GET" id="changeInfo_form">
+        <form class="form-horizontal" action="../changeStudentInfo/" method="GET" id="changeInfo_form" onSubmit="return checkStudentInfo();">
             {% csrf_token %}
 
               <div class="form-group">
                 <label class="col-sm-2 control-label">学号</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static" id="idMessage" > {{studentInfo.id}} </p>
+                    <input class="form-control-static" name="id" id="inputId"  value="{{studentInfo.id}}" readonly>
                 </div>
               </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">联系方式</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="contact" id="inputId" value={{studentInfo.contact}}>
+              <input type="text" class="form-control" name="contact" id="inputContact" value={{studentInfo.contact}}>
             </div>
             </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">姓名</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" id="inputId" value={{studentInfo.name}}>
+              <input type="text" class="form-control" name="name" id="inputName" value={{studentInfo.name}}>
             </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">性别</label>
                     <label class="radio-inline">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="male" {% if studentInfo.gender %} checked {% endif %}> 男
+                      <input type="radio" name="gender" id="inlineRadio1" value=1 {% if studentInfo.gender %} checked {% endif %}> 男
                     </label>
                     <label class="radio-inline">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="female" {% if not studentInfo.gender %} checked {% endif %}> 女
+                      <input type="radio" name="gender" id="inlineRadio2" value=0 {% if not studentInfo.gender %} checked {% endif %}> 女
                     </label>
 
             </div>
             <div class="form-group">
             <label class="col-sm-2 control-label">学院</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name='college' id="inputId" value={{studentInfo.college}}>
+              <input type="text" class="form-control" name='college' id="inputCollege" value={{studentInfo.college}}>
             </div>
             </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">专业</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name='major' id="inputId" value={{studentInfo.major}}>
+              <input type="text" class="form-control" name='major' id="inputMajor" value={{studentInfo.major}}>
             </div>
             </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">年级</label>
             <div class="col-sm-10">
-              <p class="form-control-static"  id="inputId" > {{studentInfo.grade}}</p>
+              <input class="form-control-static" name="grade" value="{{studentInfo.grade}}" id="inputGrade">
             </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">学分</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static"  id="inputId" >{{studentInfo.credits}}</p>
+                    <input class="form-control-static" name="credits" id="inputCredits" value="{{studentInfo.credits}}" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">GPA</label>
+                <div class="col-sm-10">
+                    <input class="form-control-static" name="gpa" id="inputGPA" value="{{studentInfo.gpa}}" readonly>
                 </div>
             </div>
 
@@ -80,7 +87,21 @@
                   <button type="submit" class="btn btn-default">确认修改</button>
                 </div>
               </div>
-
+            <p id="indicatorFromJsOnInfo"></p>
+            <p id="indicatorFormServerOnInfo">
+                    {% if infoErrors %}
+                        <p style="color: red;">
+                            Please correct the error{{ infoErrors|pluralize }} below.
+                            </br>
+                            {{ infoErrors}}
+                        </p>
+                    {% endif %}
+                    {% if infoSuccess %}
+                        <p style="color: red;">
+                            修改成功！
+                        </p>
+                    {% endif %}
+            </p>
         </form>
     </div>
 
@@ -101,16 +122,16 @@
                   <input type="password" class="form-control" name="passwd2" id="repytePasswd" placeholder="Retype Password"/>
                 </div>
               </div>
-            <p id="indicatorFromJs"></p>
-            <p id="indicatorFormServer">
-                **{% if passwdErrors %}**
+            <p id="indicatorFromJsOnpasswd"></p>
+            <p id="indicatorFormServerOnPasswd">
+                {% if passwdErrors %}
 {#                    **<ul>**#}
 {#                        **{% for error in studentInfo.passwdErrors %}**#}
 {#                        **<li>{{ error }}</li>**#}
 {#                        **{% endfor %}**#}
 {#                    **</ul>**#}
                     密码长度为5-20位，两次输入请保持一致！
-                **{% endif %}**
+                {% endif %}
             </p>
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" class="btn btn-default" >确认修改</button>
@@ -121,6 +142,46 @@
     <a href="../logout/">Logout>>></a>
 </body>
     <script>
+        function checkStudentInfo(){
+            var id = $('#inputId').val();
+            var contact = $('#inputContact').val();
+            var name = $('#inputName').val();
+            var college = $('#inputCollege').val();
+            var major = $('#inputMajor').val();
+            var grade = $('#inputGrade').val();
+            var credits = $('#inputCredits').val();
+            var gpa = $('inputGPA').val();
+            var valid = true;
+            var indicator = $('#indicatorFromJsOnInfo');
+
+            if(id.length != 10 || isNaN(id)) {
+                indicator.append("</br> 学号为10位数字！");
+                valid = false;
+            }
+            if(contact.length > 11 || contact.length == 0 || isNaN(contact)) {
+                indicator.append("</br> 手机号码为0-11位数字！");
+                valid = false;
+            }
+            if(name.length > 20 || name.length == 0) {
+                console.log("name too long!");
+                indicator.append("</br> 姓名最大长度为20位！");
+                valid = false;
+            }
+            if(college.length > 50 || college.length == 0) {
+                indicator.append("</br> 学院最大长度为50位！");
+                valid = false;
+            }
+            if(major.length > 50 || major.length == 0) {
+                indicator.append("</br> 专业最大长度为50位！");
+                valid = false;
+            }
+
+
+            return valid;
+
+        }
+
+
         function checkPasswd() {
             //TODO
             var pass1 = $('#inputPasswd').val();
