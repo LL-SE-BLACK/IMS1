@@ -40,6 +40,7 @@ def user_added(request):
     usertype = request.POST['user_type']
     userid = request.POST['user_id']
     userpasswd = '123456' #default
+    print("haha")
     user = User.objects.create_user(userid, userid+'@zju.edu.cn', userpasswd)
     if usertype == 'Admin':
         user.user_permissions.add()
@@ -49,7 +50,7 @@ def user_added(request):
         else:
             newStudent = Student_user(id=userid)
             newStudent.save()
-            print 'newStudent:',newStudent
+            #print 'newStudent:',newStudent
     elif usertype == 'Faculty':
         pass
         #TODO add a faculty to database
