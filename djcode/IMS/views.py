@@ -2,7 +2,7 @@
 
 from head import *
 from models import Student_user
-from forms import StudentInfoForm
+from student_forms import StudentInfoForm
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
