@@ -18,7 +18,7 @@ def loggingin(request):
         return render(request, 'login.html')
     else:
         print 'authenticated'
-        return HttpResponseRedirect('../home/')
+        return HttpResponseRedirect('home/')
 
 @login_required
 def loggingout(request):
@@ -56,6 +56,7 @@ def user_added(request):
     user.save()
     return render_to_response('add_user.html', c)
 
+@csrf_exempt
 def user_auth(request):
     c = {}
     c.update(csrf(request))
@@ -72,13 +73,14 @@ def user_auth(request):
         print('nomatch')
         return HttpResponseRedirect('../', t.render(Context({'no_match': 1}))) #username or passwd invalid, doesn't match
 
+@csrf_exempt
 @login_required
 def home(request):
     user_name = str(request.user)  # user Id
     user_name_len = user_name.__len__()
     if user_name_len == LEN_OF_STUDENT_ID:
         stu = Student_user.objects.get(id=user_name)
-        return render_to_response('panel_for_student.html',{'studentInfo':stu})
+        return render_to_response('change_student_info.html',{'studentInfo':stu})
     elif user_name_len == LEN_OF_FACULTY_ID:
         t = get_template('panel_for_faculty.html')
         return HttpResponse(t.render())

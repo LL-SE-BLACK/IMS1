@@ -40,11 +40,11 @@ def changeStudentInfo(request):
                 stu.name = info['name']
                 stu.save()
                 print("To:" + stu.__unicode__())
-                return render_to_response('panel_for_student.html', {'studentInfo':info, 'infoSuccess':1})
+                return render_to_response('change_student_info.html', {'studentInfo':info, 'infoSuccess':1})
             else:
                 print("Error: Form invalid!")
                 print(form.errors)
-                return render_to_response('panel_for_student.html', {'studentInfo':request.GET, 'infoErrors':form.errors})
+                return render_to_response('change_student_info.html', {'studentInfo':request.GET, 'infoErrors':form.errors})
 
     else:
         print 'ERROR: not GET'
@@ -76,7 +76,7 @@ def changePasswd(request):
             c.update(errors)
             stu = Student_user.objects.get(id=str(request.user))
             c.update({'studentInfo': stu })
-            return render_to_response('panel_for_student.html', c, context_instance=RequestContext(request))
+            return render_to_response('change_student_info.html', c, context_instance=RequestContext(request))
         else : # success and valid request
             return render_to_response('change_passwd_success.html', {'studentInfo':c}, context_instance=RequestContext(request))
     else:
