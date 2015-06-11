@@ -40,7 +40,17 @@ class Faculty_user(models.Model):
     degree = models.CharField(max_length=20)
     title = models.CharField(max_length=20)
 
-#class Admin_user: disabled temporarily
+class Admin_user(models.Model):
+    '''
+    | id | contact | name | gender | college |
+    |---|---|---|---|---|
+    | CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) |
+    '''
+    id = models.CharField(max_length=3, primary_key=True)
+    contact = models.CharField(max_length=11)
+    name = models.CharField(max_length=20)
+    gender = models.BooleanField
+    college = models.CharField(max_length=50)
 
 class Course_info(models.Model):
     '''
