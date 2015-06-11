@@ -35,7 +35,7 @@ class Faculty_user(models.Model):
     id = models.CharField(max_length=6, primary_key=True)
     contact = models.CharField(max_length=11)
     name = models.CharField(max_length=20)
-    gender = models.BooleanField
+    gender = models.BooleanField(default=0)
     college = models.CharField(max_length=50)
     major = models.CharField(max_length=50)
     degree = models.CharField(max_length=20)
@@ -50,7 +50,7 @@ class Admin_user(models.Model):
     id = models.CharField(max_length=3, primary_key=True)
     contact = models.CharField(max_length=11)
     name = models.CharField(max_length=20)
-    gender = models.BooleanField
+    gender = models.BooleanField(default=0)
     college = models.CharField(max_length=50)
 
 class Course_info(models.Model):
@@ -61,8 +61,8 @@ class Course_info(models.Model):
     '''
     course_id = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=110)
-    credits = models.FloatField
-    semester = models.IntegerField
+    credits = models.FloatField(default=0)
+    semester = models.IntegerField(default=0)
     textbook = models.CharField(max_length=110)
     college = models.CharField(max_length=50)
 
@@ -75,12 +75,12 @@ class Class_info(models.Model):
     class_id = models.CharField(max_length=10)
     course_id = models.ForeignKey(Course_info)
     teacher = models.CharField(max_length=20)
-    time = models.IntegerField
+    time = models.IntegerField(default=0)
     room = models.CharField(max_length=20)
     examdate = models.DateTimeField
-    examtime = models.IntegerField
+    examtime = models.IntegerField(default=0)
     examroom = models.CharField(max_length=20)
-    capacity = models.IntegerField
+    capacity = models.IntegerField(default=0)
 
 class Pre_requisites(models.Model):
     '''

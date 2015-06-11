@@ -1,0 +1,86 @@
+<html>
+<head>
+    <title>Modify Course</title>
+</head>
+<body>
+	<a href="/ims/course/">back to course management</input></a>
+	<p></p>
+	<h1>Course Search</h1>
+	{% if errors %}
+		<ul>
+			{% for error in errors %}
+				<p style="color: red">{{ error }}</p>
+			{% endfor %}
+		</ul>
+	{% endif %}
+    <form id = 'formSearch' action="" method="get">
+        <input type="text" name="term">
+        <select id="type" name="type">
+  			<option value ="course_id">Course ID</option>
+  			<option value ="course_name">Course Name</option>
+  			<option value="teacher">Teacher</option>
+		</select>
+        <input type="submit" value="Search Couse">
+    </form>
+
+    {% if modifyIsDone %}
+    	<p style="color: blue;">
+            Course Modified successfully.
+        </p>
+    {% endif %}
+    
+    {% if inModify %}
+    	<p>Course ID: {{ courseId }}</p>
+ 		<form id="submit" action="" method="post">
+	        {% csrf_token %}
+	        <table>
+	            {{ form.as_table }}
+	        </table>
+	        <input type="submit" value="Submit">
+	        <input type="hidden" name = "courseId" value={{ courseId }}>
+   		</form>
+    {% else %}
+	    <form id='formSelect' action="" method="post">
+	    	{% csrf_token %}
+		    {% if courses %}
+			    <p>Found {{ courses | length }} course{{ courses | pluralize }}.</p>
+			    <table>
+			    	<tr>
+			        	<th>Course ID</th>
+			        	<th>Course Name</th>
+			        	<th>Credits</th>
+			        	<th>Semester</th>
+			        	<th>Textbook</th>
+			        	<th>College</th>
+			        </tr>
+			        {% for course in courses %}
+			        <tr>
+			        	<th>{{ course.course_id }}</th>
+			        	<th>{{ course.name }}</th>
+			        	<th>{{ course.credits }}</th>
+			        	<th>{{ course.semester }}</th>
+			        	<th>{{ course.textbook }}</th>
+			        	<th>{{ course.college }}</th>
+			        	<th><input type="button" name="course" value="modify" onclick="javascript:f('{{course.course_id}}')"></th>
+			        </tr>
+			        {% endfor %}
+			    </table>
+			{% else %}
+				{% if inSearch %}
+		    		<p>No course found.</p>
+				{% endif %}
+			{% endif %}
+			<input type="hidden" name="modifyid" id="modifyid">
+		</form>
+	{% endif %}
+
+</body>
+</html>
+
+<script type="text/javascript">
+	function f(a) {
+		var form = document.getElementById("formSelect");
+		form.modifyid.value = a;
+		form.submit();
+	}
+</script>
