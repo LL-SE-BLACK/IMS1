@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>用户主页</title>
+</head>
+<body>
+{% if isStudent %}
+    Weclome, {{ id }}同学!
+{% endif %}
+{% if isFaculty %}
+    Weclome, {{ id }}老师!
+{% endif %}
+{% if isAdmin %}
+    Weclome, {{ id }}管理员!
+{% endif %}
+</br>
+<a href="./profile">个人信息显示与修改 </a>
+</br>
+<a href="../logout/">Logout>>></a>
+
+</body>
+</html>

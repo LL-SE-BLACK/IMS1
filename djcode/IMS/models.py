@@ -33,15 +33,33 @@ class Faculty_user(models.Model):
     | CHARACTER(6) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | VARCHAR(20) | VARCHAR(20) |
     '''
     id = models.CharField(max_length=6, primary_key=True)
-    contact = models.CharField(max_length=11)
-    name = models.CharField(max_length=20)
-    gender = models.BooleanField
-    college = models.CharField(max_length=50)
-    major = models.CharField(max_length=50)
-    degree = models.CharField(max_length=20)
-    title = models.CharField(max_length=20)
+    contact = models.CharField(max_length=11, default= "18812345678")
+    name = models.CharField(max_length=20,default= "张三")
+    gender = models.BooleanField(default=0)
+    college = models.CharField(max_length=50,default="计算机科学与技术学院")
+    major = models.CharField(max_length=50,default='计算机科学与技术')
+    degree = models.CharField(max_length=20,default='博士')
+    title = models.CharField(max_length=20, default="研究员")
 
-#class Admin_user: disabled temporarily
+    def __unicode__(self):
+        return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, degree:%s, title:%s'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.degree, self.title)
+        # return 'id:' + self.id
+
+class Admin_user(models.Model):
+    '''
+    | id | contact | name | gender | college |
+    |---|---|---|---|---|
+    | CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) |
+    '''
+    id = models.CharField(max_length=3, primary_key=True)
+    contact = models.CharField(max_length=11,default="18812345678")
+    name = models.CharField(max_length=20, default="张三")
+    gender = models.BooleanField(default=0)
+    college = models.CharField(max_length=50, default="计算机科学与技术学院")
+
+    def __unicode__(self):
+        return u'id:%s, contact:%s, name:%s, gender:%d, college:%s'%(self.id, self.contact,self.name,self.gender, self.college)
+        # return 'id:' + self.id
 
 class Course_info(models.Model):
     '''
@@ -51,8 +69,8 @@ class Course_info(models.Model):
     '''
     course_id = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=110)
-    credits = models.FloatField
-    semester = models.IntegerField
+    credits = models.FloatField(default=0)
+    semester = models.IntegerField(default=0)
     textbook = models.CharField(max_length=110)
     college = models.CharField(max_length=50)
 
@@ -65,12 +83,12 @@ class Class_info(models.Model):
     class_id = models.CharField(max_length=10)
     course_id = models.ForeignKey(Course_info)
     teacher = models.CharField(max_length=20)
-    time = models.IntegerField
+    time = models.IntegerField(default=0)
     room = models.CharField(max_length=20)
     examdate = models.DateTimeField
-    examtime = models.IntegerField
+    examtime = models.IntegerField(default=0)
     examroom = models.CharField(max_length=20)
-    capacity = models.IntegerField
+    capacity = models.IntegerField(default=0)
 
 class Pre_requisites(models.Model):
     '''
