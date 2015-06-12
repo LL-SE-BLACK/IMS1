@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add course</title>
+</head>
+<body>
+    <a href="/ims/user/">back to user management</a>
+    <p></p>
+    <h1>New Faculty Infomation</h1>
+
+    {% if addIsDone %}
+        <p style="color: blue;">
+            Faculty added successfully.
+        </p>
+    {% endif %}
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form id="submit" action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Submit">
+        <input type="file" name="file" value="Upload" />
+    </form>
+
+    {% if multiAdd %}
+        <form id='multiAdd' action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Sure to add following Faculties?</p>
+            <table>
+                <tr>
+                    <th>Faculty ID</th>
+                    <th>Faculty Contact</th>
+                    <th>Faculty Name</th>
+                    <th>Faculty Gender</th>
+                    <th>Faculty College</th>
+                    <th>Faculty Major</th>
+                    <th>Faculty Degree</th>
+                    <th>Faculty Title</th>
+                </tr>
+                {% for term in terms %}
+                    <tr>
+                        <th>{{ term.0 }}</th>
+                        <th>{{ term.1 }}</th>
+                        <th>{{ term.2 }}</th>
+                        <th>{{ term.3 }}</th>
+                        <th>{{ term.4 }}</th>
+                        <th>{{ term.5 }}</th>
+                        <th>{{ term.6 }}</th>
+                        <th>{{ term.7 }}</th>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="button" name="multiAddConfirm" value="Confirm" onclick="javascript:f('multiAdd')">
+            <input type="submit" name="multiAddCancel" value="Cancel">
+            <input type="hidden" name="file">
+        </form>
+    {% endif %}
+
+    {% if isExist %}
+        <p>The following are existed.</p>
+        <table>
+            <tr>
+                <th>Faculty ID</th>
+                <th>Faculty Contact</th>
+                <th>Faculty Name</th>
+                <th>Faculty Gender</th>
+                <th>Faculty College</th>
+                <th>Faculty Major</th>
+                <th>Faculty Degree</th>
+                <th>Faculty Title</th>
+            </tr>
+        {% for term in existed %}
+            <tr>
+                <th>{{ term.0 }}</th>
+                <th>{{ term.1 }}</th>
+                <th>{{ term.2 }}</th>
+                <th>{{ term.3 }}</th>
+                <th>{{ term.4 }}</th>
+                <th>{{ term.5 }}</th>
+                <th>{{ term.6 }}</th>
+                <th>{{ term.7 }}</th>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>
+
+<script type="text/javascript">
+    function f(a) {
+        var tables = document.getElementsByTagName("th");
+        var form = document.getElementById(a);
+        var s = "";
+        for (var i = 8; i < tables.length; i ++) {
+            s += tables[i].innerText + ",";
+        };
+        form.file.value = s;
+        form.submit();
+    }
+</script>
+</html>

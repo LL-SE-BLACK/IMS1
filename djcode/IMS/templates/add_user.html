@@ -7,7 +7,7 @@
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="ChooseOutput()">
 
 <div class="container">
     <div class="row" align="middle">
@@ -15,7 +15,6 @@
             <form role="form" action="../user_added/" method="post"> {% csrf_token %}
                 <label for="name">请选择用户类型</label>
                 <select class="form-control" id="usertype">
-                    <option>Admin</option>
                     <option>Faculty</option>
                     <option>Student</option>
                 </select>
@@ -23,7 +22,7 @@
                 <br/>
                 <div class="input-prepend">
                     <span class="add-on"><span class="icon-lock"></span></span>
-                    <input class="span2" placeholder="请输入用户ID" id="userid" type="text" />
+                    ID:<input class="span2" placeholder="请输入用户ID" id="userid" type="text" />
                 </div>
                 <br/>
                 <p id="indicator"></p>
@@ -41,6 +40,8 @@
 
 <script>
     var usertype, userid;
+
+    function ChooseOutput() {}
 
     function judgeInput() {
         usertype = document.getElementById("usertype").value;
