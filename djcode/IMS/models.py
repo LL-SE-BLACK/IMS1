@@ -33,13 +33,17 @@ class Faculty_user(models.Model):
     | CHARACTER(6) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) | VARCHAR(50) | VARCHAR(20) | VARCHAR(20) |
     '''
     id = models.CharField(max_length=6, primary_key=True)
-    contact = models.CharField(max_length=11)
-    name = models.CharField(max_length=20)
+    contact = models.CharField(max_length=11, default= "18812345678")
+    name = models.CharField(max_length=20,default= "张三")
     gender = models.BooleanField(default=0)
-    college = models.CharField(max_length=50)
-    major = models.CharField(max_length=50)
-    degree = models.CharField(max_length=20)
-    title = models.CharField(max_length=20)
+    college = models.CharField(max_length=50,default="计算机科学与技术学院")
+    major = models.CharField(max_length=50,default='计算机科学与技术')
+    degree = models.CharField(max_length=20,default='博士')
+    title = models.CharField(max_length=20, default="研究员")
+
+    def __unicode__(self):
+        return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, degree:%s, title:%s'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.degree, self.title)
+        # return 'id:' + self.id
 
 class Admin_user(models.Model):
     '''
@@ -48,10 +52,14 @@ class Admin_user(models.Model):
     | CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50) |
     '''
     id = models.CharField(max_length=3, primary_key=True)
-    contact = models.CharField(max_length=11)
-    name = models.CharField(max_length=20)
+    contact = models.CharField(max_length=11,default="18812345678")
+    name = models.CharField(max_length=20, default="张三")
     gender = models.BooleanField(default=0)
-    college = models.CharField(max_length=50)
+    college = models.CharField(max_length=50, default="计算机科学与技术学院")
+
+    def __unicode__(self):
+        return u'id:%s, contact:%s, name:%s, gender:%d, college:%s'%(self.id, self.contact,self.name,self.gender, self.college)
+        # return 'id:' + self.id
 
 class Course_info(models.Model):
     '''
