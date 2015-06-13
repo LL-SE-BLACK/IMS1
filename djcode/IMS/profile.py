@@ -67,7 +67,12 @@ def profile(request):
         else:
             return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu})
     elif user_type == IS_Faculty:
-        faculty = Faculty_user.objects.get(id=user_id)
+        try:
+            faculty = Faculty_user.objects.get(id=user_id)
+        except:
+            #return Http404("No such user matched in database")
+            print("Internal test data integrity error: no such user matched in database")
+            return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
         if infoSuccessFlag:
             return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, "infoSuccess": 1})
         elif infoErrorFlag:
