@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 *.iml
+*.xml
+djcode/.idea/workspace.xml
 __pycache__/
 *.py[cod]
 *.pyc
