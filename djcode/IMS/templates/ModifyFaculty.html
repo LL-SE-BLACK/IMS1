@@ -44,7 +44,7 @@
 	    <form id='formSelect' action="" method="post">
 	    	{% csrf_token %}
 		    {% if faculties %}
-			    <p>Found {{ faculties | length }} faculty{{ faculties | pluralize }}.</p>
+			    <p>Found {{ faculties | length }} faculties{{ faculties | pluralize }}.</p>
 			    <table>
 			    	<tr>
 			        	<th>Faculty ID</th>
