@@ -25,3 +25,10 @@ class CourseFormModify(forms.Form):
 	semester = forms.IntegerField()
 	textbook = forms.CharField(max_length = 110)
 	college = forms.CharField(max_length = 50)
+
+class CourseFormFacultyAdd(forms.Form):
+
+	course_name = forms.CharField(max_length = 110)
+	credits = forms.FloatField()
+	semester = forms.IntegerField()
+	textbook = forms.CharField(max_length = 110)
