@@ -213,7 +213,7 @@ def studentAdd(request):
                         college = info['college'],
                         major = info['major'],
                         grade = info['grade'],
-                        gpa = info['gpa']
+                        gpa = info['gpa'],
                         credits = info['credits']
                     )
                     dbQuery.save()

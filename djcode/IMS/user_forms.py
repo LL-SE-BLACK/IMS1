@@ -29,18 +29,28 @@ class FacultyFormModify(forms.Form):
     title = forms.CharField(max_length=20)
 
 class StudentForm(forms.Form):
-    id = models.CharField(max_length=10)
-    contact = models.CharField(max_length=11)
-    name = models.CharField(max_length=20)
-    gender = models.BooleanField
-    college = models.CharField(max_length=50)
-    major = models.CharField(max_length=50)
-    grade = models.IntegerField
-    gpa = models.FloatField
-    credits = models.FloatField
+    id = forms.CharField(max_length=10)
+    contact = forms.CharField(max_length=11)
+    name = forms.CharField(max_length=20)
+    gender = forms.BooleanField
+    college = forms.CharField(max_length=50)
+    major = forms.CharField(max_length=50)
+    grade = forms.IntegerField
+    gpa = forms.FloatField
+    credits = forms.FloatField
 
 def clean_student_id(self):
     addedStudentID = self.cleaned_data['id']
     if Faculty_user.objects.filter(id = addedStudentID):
         raise forms.ValidationError('Student number existed!')
     return addedStudentID
+
+class StudentFormModify(forms.Form):
+    contact = forms.CharField(max_length=11)
+    name = forms.CharField(max_length=20)
+    gender = forms.BooleanField
+    college = forms.CharField(max_length=50)
+    major = forms.CharField(max_length=50)
+    grade = forms.IntegerField
+    gpa = forms.FloatField
+    credits = forms.FloatField
