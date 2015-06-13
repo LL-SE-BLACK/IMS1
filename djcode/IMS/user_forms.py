@@ -13,11 +13,11 @@ class FacultyForm(forms.Form):
     degree = forms.CharField(max_length=20)
     title = forms.CharField(max_length=20)
 
-def clean_faculty_id(self):
-	addedFacultyID = self.cleaned_data['id']
-	if Faculty_user.objects.filter(id = addedFacultyID):
-		raise forms.ValidationError('Faculty number existed!')
-	return addedFacultyID
+    def clean_faculty_id(self):
+	    addedFacultyID = self.cleaned_data['id']
+	    if Faculty_user.objects.filter(id = addedFacultyID):
+	    	raise forms.ValidationError('Faculty number existed!')
+	    return addedFacultyID
 
 class FacultyFormModify(forms.Form):
     contact = forms.CharField(max_length=11)
@@ -39,11 +39,11 @@ class StudentForm(forms.Form):
     gpa = forms.FloatField
     credits = forms.FloatField
 
-def clean_student_id(self):
-    addedStudentID = self.cleaned_data['id']
-    if Faculty_user.objects.filter(id = addedStudentID):
-        raise forms.ValidationError('Student number existed!')
-    return addedStudentID
+    def clean_student_id(self):
+        addedStudentID = self.cleaned_data['id']
+        if Faculty_user.objects.filter(id = addedStudentID):
+            raise forms.ValidationError('Student number existed!')
+        return addedStudentID
 
 class StudentFormModify(forms.Form):
     contact = forms.CharField(max_length=11)
