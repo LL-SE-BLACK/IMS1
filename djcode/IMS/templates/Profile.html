@@ -2,85 +2,106 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>学生界面</title>
-    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../../static/js/jquery.min.js"></script>
-    <script src="../../static/js/bootstrap.min.js"></script>
+    <title>个人信息</title>
+    <link href="../../../static/css/bootstrap.min.css" rel="stylesheet">
+    <script src="../../../static/js/jquery.min.js"></script>
+    <script src="../../../static/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <p>Panel for Student</p>
+    <p>个人信息</p>
     <br/>
 
-
     <div id="changInfo">
-        <form class="form-horizontal" action="../changeStudentInfo/" method="GET" id="changeInfo_form" onSubmit="return checkStudentInfo();">
+        <form class="form-horizontal" action="./changeUserInfo/" method="GET" id="changeInfo_form" onSubmit="return checkuserInfo();">
             {% csrf_token %}
-
               <div class="form-group">
-                <label class="col-sm-2 control-label">学号</label>
+                <label class="col-sm-2 control-label">
+                    {% if isStudent %}学号 {% endif %}
+                    {% if isFaculty or isAdmin%}工号 {% endif %}
+                </label>
                 <div class="col-sm-10">
-                    <input class="form-control-static" name="id" id="inputId"  value="{{studentInfo.id}}" readonly>
+                    <input class="form-control-static" name="id" id="inputId"  value="{{userInfo.id}}" readonly>
                 </div>
               </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">联系方式</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="contact" id="inputContact" value={{studentInfo.contact}}>
+              <input type="text" class="form-control" name="contact" id="inputContact" value={{userInfo.contact}}>
             </div>
             </div>
 
             <div class="form-group">
             <label class="col-sm-2 control-label">姓名</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" id="inputName" value={{studentInfo.name}}>
+              <input type="text" class="form-control" name="name" id="inputName" value={{userInfo.name}}>
             </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">性别</label>
                     <label class="radio-inline">
-                      <input type="radio" name="gender" id="inlineRadio1" value=1 {% if studentInfo.gender %} checked {% endif %}> 男
+                      <input type="radio" name="gender" id="inlineRadio1" value=1 {% if userInfo.gender %} checked {% endif %}> 男
                     </label>
                     <label class="radio-inline">
-                      <input type="radio" name="gender" id="inlineRadio2" value=0 {% if not studentInfo.gender %} checked {% endif %}> 女
+                      <input type="radio" name="gender" id="inlineRadio2" value=0 {% if not userInfo.gender %} checked {% endif %}> 女
                     </label>
 
             </div>
             <div class="form-group">
             <label class="col-sm-2 control-label">学院</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name='college' id="inputCollege" value={{studentInfo.college}}>
+              <input type="text" class="form-control" name='college' id="inputCollege" value={{userInfo.college}}>
             </div>
             </div>
 
-            <div class="form-group">
-            <label class="col-sm-2 control-label">专业</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name='major' id="inputMajor" value={{studentInfo.major}}>
-            </div>
-            </div>
-
-            <div class="form-group">
-            <label class="col-sm-2 control-label">年级</label>
-            <div class="col-sm-10">
-              <input class="form-control-static" name="grade" value="{{studentInfo.grade}}" id="inputGrade">
-            </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">学分</label>
+            {% if isStudent or isFaculty %}
+                <div class="form-group">
+                <label class="col-sm-2 control-label">专业</label>
                 <div class="col-sm-10">
-                    <input class="form-control-static" name="credits" id="inputCredits" value="{{studentInfo.credits}}" readonly>
+                  <input type="text" class="form-control" name='major' id="inputMajor" value={{userInfo.major}}>
                 </div>
-            </div>
+                </div>
+            {% endif %}
 
-            <div class="form-group">
-                <label class="col-sm-2 control-label">GPA</label>
+            {% if isStudent %}
+                <div class="form-group">
+                <label class="col-sm-2 control-label">年级</label>
                 <div class="col-sm-10">
-                    <input class="form-control-static" name="gpa" id="inputGPA" value="{{studentInfo.gpa}}" readonly>
+                  <input class="form-control-static" name="grade" value="{{userInfo.grade}}" id="inputGrade">
                 </div>
-            </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">学分</label>
+                    <div class="col-sm-10">
+                        <input class="form-control-static" name="credits" id="inputCredits" value="{{userInfo.credits}}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">GPA</label>
+                    <div class="col-sm-10">
+                        <input class="form-control-static" name="gpa" id="inputGPA" value="{{userInfo.gpa}}" readonly>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if isFaculty %}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Degree</label>
+                    <div class="col-sm-10">
+                        <input class="form-control-static" name="degree" id="inputDegree" value="{{userInfo.degree}}" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Title</label>
+                    <div class="col-sm-10">
+                        <input class="form-control-static" name="title" id="inputTitle" value="{{userInfo.title}}" readonly>
+                    </div>
+                </div>
+            {% endif %}
 
              <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -108,7 +129,7 @@
     </br>
 
     <div id="changPasswd">
-        <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="../changePasswd/" method="post">
+        <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="./changePasswd/" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label  class="col-sm-2 control-label">请输入密码</label>
@@ -126,7 +147,7 @@
             <p id="indicatorFormServerOnPasswd">
                 {% if passwdErrors %}
 {#                    **<ul>**#}
-{#                        **{% for error in studentInfo.passwdErrors %}**#}
+{#                        **{% for error in userInfo.passwdErrors %}**#}
 {#                        **<li>{{ error }}</li>**#}
 {#                        **{% endfor %}**#}
 {#                    **</ul>**#}
@@ -139,22 +160,29 @@
         </form>
     </div>
 
-    <a href="../logout/">Logout>>></a>
+    <a href="../../logout/">Logout>>></a>
 </body>
     <script>
-        function checkStudentInfo(){
+        function checkuserInfo(){
             var id = $('#inputId').val();
             var contact = $('#inputContact').val();
             var name = $('#inputName').val();
             var college = $('#inputCollege').val();
-            var major = $('#inputMajor').val();
-            var grade = $('#inputGrade').val();
-            var credits = $('#inputCredits').val();
-            var gpa = $('inputGPA').val();
+
+
+{#            var grade = $('#inputGrade').val();#}
+{#            var credits = $('#inputCredits').val();#}
+{#            var gpa = $('inputGPA').val();#}
+
             var valid = true;
             var indicator = $('#indicatorFromJsOnInfo');
+            indicator.html("")
+            $("#indicatorFormServerOnPasswd").html("")
 
-            if(id.length != 10 || isNaN(id)) {
+            {% if isStudent %} if(isNaN(id) || id.length != 10)  {% endif %}
+            {% if isFaculty %} if(isNaN(id) || id.length != 6)  {% endif %}
+            {% if isAdmin %} if(isNaN(id) || id.length != 3)  {% endif %}
+            {
                 indicator.append("</br> 学号为10位数字！");
                 valid = false;
             }
@@ -171,10 +199,14 @@
                 indicator.append("</br> 学院最大长度为50位！");
                 valid = false;
             }
-            if(major.length > 50 || major.length == 0) {
-                indicator.append("</br> 专业最大长度为50位！");
-                valid = false;
-            }
+
+            {% if isStudent or isFaculty %}
+                var major = $('#inputMajor').val();
+                if(major.length > 50 || major.length == 0) {
+                    indicator.append("</br> 专业最大长度为50位！");
+                    valid = false;
+                }
+            {% endif %}
 
 
             return valid;
@@ -183,10 +215,9 @@
 
 
         function checkPasswd() {
-            //TODO
             var pass1 = $('#inputPasswd').val();
             var pass2 = $('#repytePasswd').val();
-            var indicatorFromJs = $('#indicatorFromJs');
+            var indicatorFromJs = $('#indicatorFromJsOnpasswd');
             if (pass1 != pass2) {
                 indicatorFromJs.html("两次输入的密码不一致！");
                 return false;
@@ -198,6 +229,7 @@
                 }
                 else {
                     indicatorFromJs.html("");
+                    $("#indicatorFormServerOnInfo").html("")
                     return true;
 {#                    var userid = $('#idMessage').html();#}
 {#                    console.log("userid" + userid);#}
