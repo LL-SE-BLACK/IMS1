@@ -13,6 +13,8 @@ Django将数据库I/O抽象为模型（MTV），要调用IMS子系统抽象的�
 
 Ajax请求时对于csrf的使用请见示例：`https://github.com/LL-SE-BLACK/IMS1/blob/master/djcode/IMS/templates/add_user.html`
 
+如果嫌开发的时候遇到那么多403很麻烦的话……方法一，在settings.py里面把csrf MiddleWare注释掉，取消install；方法二，在需要post和get的python函数之前用`@csrf_exempt`的修饰符使其免受“保护”。
+
 ###4. user类
 用户登录、权限检查和admin组用户的信息管理全部交给Django自带的user类。在进入每个子模块的每个功能模块时，虽然已经使用了csrf中间件防止跨域url伪造攻击，都仍要检查用户登录与否、是否拥有相应权限。
 
@@ -56,13 +58,13 @@ Ajax请求时对于csrf的使用请见示例：`https://github.com/LL-SE-BLACK/I
 - `degree`: 行政级别（chairman, lead researcher, etc.）
 - `title`: 学术头衔（Professor, Assistant Prof., etc.）
 
-### *4. admin_users （暂时没有这张表）
+### 4. admin_users
 
-| id | contact | name | gender | right |
+| id | contact | name | gender | college |
 |---|---|---|---|---|
-| CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | INTEGER |
+| CHARACTER(3) | VARCHAR(11) | VARCHAR(20) | BOOLEAN | VARCHAR(50） |
 
-- `right`: 记录root赋予给各管理员用户的、各项不同的信息记录操作的权限（类似于Linux中`777`……）
+- `right`: 记录root赋予给各管理员用户的、各项不同的信息记录操作的权限（类似于Linux中`777`……）-> **这个目前不做**
 - 目前用Django自带的User类做登录和权限组管理
 
 ### 5. course_info
