@@ -27,7 +27,6 @@ def courseMain(request):
 	else:
 		return render(request, 'AccessFault.html')
 
-@login_required
 def isDigit(a):
 	for x in a:
 		if not ((x >= '0' and x <= '9') or x == '.'):
@@ -41,7 +40,6 @@ def isDigit(a):
 		else:
 			return False
 
-@login_required
 def importCheck(term, isAdmin, isFaculty, userCollege):
 	if Course_info.objects.filter(course_id = term[0]): #test duplicate add
 		return 'ALREADY EXIST'
