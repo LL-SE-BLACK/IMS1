@@ -325,4 +325,3 @@ def courseModify(request):
 					modifyIsDone = True	
 			return render(request, 'ModifyCourse.html', locals())
 	return render(request, 'AccessFault.html')
-
