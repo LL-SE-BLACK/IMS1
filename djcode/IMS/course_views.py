@@ -19,7 +19,8 @@ from django.contrib.auth.models import Group,Permission
 LEN_OF_COURSE_TABLE = 6
 
 def courseMain(request):
-	if Faculty_user.objects.filter(id = request.user.username) or Admin_user.objects.filter(id = request.user.username):
+	#if Faculty_user.objects.filter(id = request.user.username) or Admin_user.objects.filter(id = request.user.username):
+	if Admin_user.objects.filter(id = request.user.username):
 		return render(request, 'CourseMain.html')
 	else:
 		return render(request, 'AccessFault.html')
@@ -61,16 +62,19 @@ def courseAdd(request):
 	errorImport = []
 	addIsDone = False
 #===========USER GROUP CHECK========================================#
-	isAdmin = False 												#
-	isFaculty = False 												#
-	userName = request.user.username 								#
-	if Admin_user.objects.filter(id = userName): 					#
-		isAdmin = True 												#
-		userCollege = -1											#
-	elif Faculty_user.objects.filter(id = userName): 				#
-		isFaculty = True 											#
-		userInfo = Faculty_user.objects.filter(id = userName) 		#
-		userCollege = userInfo[0].college    						#
+	# isAdmin = False 												#
+	# isFaculty = False 											#
+	# userName = request.user.username 								#
+	# if Admin_user.objects.filter(id = userName): 					#
+	# 	isAdmin = True 												#
+	# 	userCollege = -1											#
+	# elif Faculty_user.objects.filter(id = userName): 				#
+	# 	isFaculty = True 											#
+	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
+	# 	userCollege = userInfo[0].college    						#
+	isAdmin = True													#
+	isFaculty = False												#
+	userCollege = -1												#
 #============END OF GROUP CHECK=====================================#
 	if request.method == 'POST':
 		if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button or first access
@@ -148,7 +152,21 @@ def courseAdd(request):
 
 def courseDelete(request):
 	errors = []
-	userName = request.user.username
+#===========USER GROUP CHECK========================================#
+	# isAdmin = False 												#
+	# isFaculty = False 											#
+	# userName = request.user.username 								#
+	# if Admin_user.objects.filter(id = userName): 					#
+	# 	isAdmin = True 												#
+	# 	userCollege = -1											#
+	# elif Faculty_user.objects.filter(id = userName): 				#
+	# 	isFaculty = True 											#
+	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
+	# 	userCollege = userInfo[0].college    						#
+	isAdmin = True													#
+	isFaculty = False												#
+	userCollege = -1												#
+#============END OF GROUP CHECK=====================================#
 	response = render(request, 'DeleteCourse.html', locals())
 	if request.method == 'POST':
 		if 'term' in request.POST:
@@ -163,21 +181,17 @@ def courseDelete(request):
 					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 				elif searchType == 'course_name':
 					coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 				#else:
 					#courses = Course_info.objects.filter(teacher = searchTerm)
@@ -196,21 +210,17 @@ def courseDelete(request):
 					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 				elif searchType == 'course_name':
 					coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 			response = render(request, 'DeleteCourse.html', locals())
 			return response
@@ -221,16 +231,19 @@ def courseDelete(request):
 def courseModify(request):
 	errors = []
 #===========USER GROUP CHECK========================================#
-	isAdmin = False 												#
-	isFaculty = False 												#
-	userName = request.user.username 								#
-	if Admin_user.objects.filter(id = userName): 					#
-		isAdmin = True 												#
-		userCollege = -1											#
-	elif Faculty_user.objects.filter(id = userName): 				#
-		isFaculty = True 											#
-		userInfo = Faculty_user.objects.filter(id = userName) 		#
-		userCollege = userInfo[0].college    						#
+	# isAdmin = False 												#
+	# isFaculty = False 											#
+	# userName = request.user.username 								#
+	# if Admin_user.objects.filter(id = userName): 					#
+	# 	isAdmin = True 												#
+	# 	userCollege = -1											#
+	# elif Faculty_user.objects.filter(id = userName): 				#
+	# 	isFaculty = True 											#
+	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
+	# 	userCollege = userInfo[0].college    						#
+	isAdmin = True													#
+	isFaculty = False												#
+	userCollege = -1												#
 #============END OF GROUP CHECK=====================================#
 	if request.method == 'POST':
 		if 'term' in request.POST: #search box
