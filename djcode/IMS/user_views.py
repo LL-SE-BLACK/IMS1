@@ -7,9 +7,11 @@ from IMS.models import Faculty_user, Student_user
 LEN_OF_FACULTY_TABLE = 8
 LEN_OF_STUDENT_TABLE = 9
 
+@login_required
 def userMain(request):
     return render(request, 'UserMain.html')
 
+@login_required
 def facultyAdd(request):
     if request.user.is_anonymous():
         return render(request, 'UserMain.html')
@@ -22,11 +24,14 @@ def facultyAdd(request):
                 fileTerms = re.split(',', request.POST.get('file'))
                 s = ""
                 for x in range(0, len(fileTerms) / LEN_OF_FACULTY_TABLE):
+                    _gender = True
+                    if fileTerms[3 + LEN_OF_FACULTY_TABLE * x] == 'F':
+                        _gender = False
                     dbQuery = Faculty_user(
                         id = fileTerms[0 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                         contact = fileTerms[1 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                         name = fileTerms[2 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
-                        gender = fileTerms[3 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
+                        gender = _gender,
                         college = fileTerms[4 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                         major = fileTerms[5 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                         degree = fileTerms[6 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
@@ -39,6 +44,7 @@ def facultyAdd(request):
                             fileTerms[0 + x * LEN_OF_FACULTY_TABLE: LEN_OF_FACULTY_TABLE + x * LEN_OF_FACULTY_TABLE])
                     else:
                         dbQuery.save()
+                        user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                 addIsDone = True
                 form = FacultyForm()
             elif request.FILES.get('file'):  # dealing with upload
@@ -66,12 +72,14 @@ def facultyAdd(request):
                         title = info['title']
                     )
                     dbQuery.save()
+                    user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                     addIsDone = True
                     form = FacultyForm()
         else:  # raw form
             form = FacultyForm()
         return render(request, 'AddFaculty.html', locals())
 
+@login_required
 def facultyDelete(request):
     errors = []
     response = render(request, 'DeleteFaculty.html', locals())
@@ -97,6 +105,7 @@ def facultyDelete(request):
         if 'deleteid' in request.POST:
             facultyId = request.POST.get('deleteid')
             Faculty_user.objects.filter(id = facultyId).delete()
+            User.objects.filter(id = facultyId).update(is_active=False, email=None)
             isDeleted = True
             if 'deleteTerm' in request.COOKIES and 'deleteType' in request.COOKIES:
                 searchTerm = request.COOKIES['deleteTerm']
@@ -108,6 +117,7 @@ def facultyDelete(request):
             response = render(request, 'DeleteFaculty.html', locals())
     return response
 
+@login_required
 def facultyModify(request):
     errors = []
     if request.method  ==   'GET':
@@ -156,7 +166,7 @@ def facultyModify(request):
                 modifyIsDone = True
     return render(request, 'ModifyFaculty.html', locals())
 
-
+@login_required
 def studentAdd(request):
     if request.user.is_anonymous():
         return render(request, 'UserMain.html')
@@ -169,11 +179,14 @@ def studentAdd(request):
                 fileTerms = re.split(',', request.POST.get('file'))
                 s = ""
                 for x in range(0, len(fileTerms) / LEN_OF_STUDENT_TABLE):
+                    _gender = True
+                    if fileTerms[3 + LEN_OF_STUDENT_TABLE * x] == 'F':
+                        _gender = False
                     dbQuery = Student_user(
                         id = fileTerms[0 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
                         contact = fileTerms[1 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
                         name = fileTerms[2 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
-                        gender = fileTerms[3 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
+                        gender = _gender,
                         college = fileTerms[4 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
                         major = fileTerms[5 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
                         grade = fileTerms[6 + LEN_OF_STUDENT_TABLE * x].encode('utf-8'),
@@ -186,6 +199,7 @@ def studentAdd(request):
                         existed.append(
                             fileTerms[0 + x * LEN_OF_STUDENT_TABLE: LEN_OF_STUDENT_TABLE + x * LEN_OF_STUDENT_TABLE])
                     else:
+                        user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                         dbQuery.save()
                 addIsDone = True
                 form = StudentForm()
@@ -215,12 +229,14 @@ def studentAdd(request):
                         credits = info['credits']
                     )
                     dbQuery.save()
+                    user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                     addIsDone = True
                     form = StudentForm()
         else:  # raw form
             form = StudentForm()
         return render(request, 'AddStudent.html', locals())
 
+@login_required
 def studentDelete(request):
     errors = []
     response = render(request, 'DeleteStudent.html', locals())
@@ -246,6 +262,7 @@ def studentDelete(request):
         if 'deleteid' in request.POST:
             studentId = request.POST.get('deleteid')
             Student_user.objects.filter(id = studentId).delete()
+            User.objects.filter(username = studentId).delete()
             isDeleted = True
             if 'deleteTerm' in request.COOKIES and 'deleteType' in request.COOKIES:
                 searchTerm = request.COOKIES['deleteTerm']
@@ -257,6 +274,7 @@ def studentDelete(request):
             response = render(request, 'DeleteStudent.html', locals())
     return response
 
+@login_required
 def studentModify(request):
     errors = []
     if request.method  ==   'GET':

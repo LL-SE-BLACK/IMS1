@@ -19,6 +19,7 @@ from django.contrib.auth.models import Group,Permission
 
 LEN_OF_COURSE_TABLE = 6
 
+@login_required
 def courseMain(request):
 	#if Faculty_user.objects.filter(id = request.user.username) or Admin_user.objects.filter(id = request.user.username):
 	if Admin_user.objects.filter(id = request.user.username):
@@ -26,6 +27,7 @@ def courseMain(request):
 	else:
 		return render(request, 'AccessFault.html')
 
+@login_required
 def isDigit(a):
 	for x in a:
 		if not ((x >= '0' and x <= '9') or x == '.'):
@@ -39,6 +41,7 @@ def isDigit(a):
 		else:
 			return False
 
+@login_required
 def importCheck(term, isAdmin, isFaculty, userCollege):
 	if Course_info.objects.filter(course_id = term[0]): #test duplicate add
 		return 'ALREADY EXIST'
@@ -58,6 +61,7 @@ def importCheck(term, isAdmin, isFaculty, userCollege):
 		return 'COLLEGE: TOO LONG'	
 	return 'YEAH'
 
+@login_required
 def courseAdd(request):
 	errors = []
 	errorImport = []
@@ -151,6 +155,7 @@ def courseAdd(request):
 		return render(request, 'AddCourse.html', locals())
 	return render(request, 'AccessFault.html')
 
+@login_required
 def courseDelete(request):
 	errors = []
 #===========USER GROUP CHECK========================================#
@@ -232,6 +237,7 @@ def courseDelete(request):
 			return response
 	return render(request, 'AccessFault.html')
 
+@login_required
 def courseModify(request):
 	errors = []
 #===========USER GROUP CHECK========================================#
