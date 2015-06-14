@@ -179,31 +179,43 @@
             indicator.html("")
             $("#indicatorFormServerOnPasswd").html("")
 
-            {% if isStudent %} if(isNaN(id) || id.length != 10)  {% endif %}
-            {% if isFaculty %} if(isNaN(id) || id.length != 6)  {% endif %}
-            {% if isAdmin %} if(isNaN(id) || id.length != 3)  {% endif %}
+            {% if isStudent %} if(isNaN(id) || id.length != 10)
             {
-                indicator.append("</br> 学号为10位数字！");
+                indicator.append("</br> 请输入学号，学号为10位数字！");
                 valid = false;
             }
+            {% endif %}
+            {% if isFaculty %} if(isNaN(id) || id.length != 6)
+            {
+                indicator.append("</br> 请输入工号，工号为6位数字！");
+                valid = false;
+            }
+            {% endif %}
+            {% if isAdmin %} if(isNaN(id) || id.length != 3)
+            {
+                indicator.append("</br> 请输入工号，工号为3位数字！");
+                valid = false;
+            }
+            {% endif %}
+
             if(contact.length > 11 || contact.length == 0 || isNaN(contact)) {
-                indicator.append("</br> 手机号码为0-11位数字！");
+                indicator.append("</br> 请输入手机号码，手机号码为1-11位数字！");
                 valid = false;
             }
             if(name.length > 20 || name.length == 0) {
                 console.log("name too long!");
-                indicator.append("</br> 姓名最大长度为20位！");
+                indicator.append("</br> 请输入姓名，姓名最大长度为20位！");
                 valid = false;
             }
             if(college.length > 50 || college.length == 0) {
-                indicator.append("</br> 学院最大长度为50位！");
+                indicator.append("</br> 请输入学院，学院最大长度为50位！");
                 valid = false;
             }
 
             {% if isStudent or isFaculty %}
                 var major = $('#inputMajor').val();
                 if(major.length > 50 || major.length == 0) {
-                    indicator.append("</br> 专业最大长度为50位！");
+                    indicator.append("</br> 请输入专业，专业最大长度为50位！");
                     valid = false;
                 }
             {% endif %}
