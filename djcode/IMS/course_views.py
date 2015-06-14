@@ -48,7 +48,7 @@ def importCheck(term, isAdmin, isFaculty, userCollege):
 		return 'ID: TOO LONG'
 	if len(term[1]) > 110:
 		return 'NAME: TOO LONG'
-	if isDigit(term[2]) != 'FLOAT':
+	if (isDigit(term[2]) != 'FLOAT') and (isDigit(term[2]) != 'INT'):
 		return 'CREDITS: FLOAT NEEDED'
 	if isDigit(term[3]) != 'INT':
 		return 'SEMESTER: INT NEEDED'
