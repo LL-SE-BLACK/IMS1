@@ -36,6 +36,9 @@
     {% endif %}
 
     <form id="submit" action="" method="post" enctype="multipart/form-data">
+        {% if facultyAdd %}
+            <p>Adding courses into {{ userCollege }} college.</p>
+        {% endif %}
         {% csrf_token %}
         <table>
             {{ form.as_table }}

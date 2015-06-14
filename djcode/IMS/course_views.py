@@ -5,7 +5,7 @@ import re
 import os
 
 from models import Class_info, Course_info, Faculty_user, Admin_user
-from course_forms import CourseForm, CourseFormModify
+from course_forms import CourseForm, CourseFormModify, CourseFormFacultyAdd, CourseFormFacultyModify
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -60,9 +60,9 @@ def courseAdd(request):
 	errors = []
 	errorImport = []
 	addIsDone = False
-	isAdmin = False
-	isFaculty = False
 #===========USER GROUP CHECK========================================#
+	isAdmin = False 												#
+	isFaculty = False 												#
 	userName = request.user.username 								#
 	if Admin_user.objects.filter(id = userName): 					#
 		isAdmin = True 												#
@@ -73,8 +73,12 @@ def courseAdd(request):
 		userCollege = userInfo[0].college    						#
 #============END OF GROUP CHECK=====================================#
 	if request.method == 'POST':
-		if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button
-			form = CourseForm()
+		if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button or first access
+			if isAdmin:
+				form = CourseForm()
+			if isFaculty:
+				facultyAdd = True
+				form = CourseFormFacultyAdd()
 		elif 'file' in request.POST and len(request.POST.get('file')) > 0: #click confirm button
 			fileTerms = re.split(',', request.POST.get('file'))
 			for x in xrange(0, len(fileTerms) / LEN_OF_COURSE_TABLE):
@@ -95,7 +99,11 @@ def courseAdd(request):
 					returnListItem.append(state)
 					errorImport.append(returnListItem)
 			addIsDone = True
-			form = CourseForm()
+			if isAdmin:
+				form = CourseForm()
+			if isFaculty:
+				facultyAdd = True
+				form = CourseFormFacultyAdd()
 		elif request.FILES.get('file'): #dealing with upload
 			fileLocation = request.FILES.get('file')
 			fileTerms = re.split(',|\n', fileLocation.read())
@@ -104,20 +112,37 @@ def courseAdd(request):
 			for x in xrange(0, len(fileTerms) / LEN_OF_COURSE_TABLE):
 				terms.append(fileTerms[0 + x * LEN_OF_COURSE_TABLE : LEN_OF_COURSE_TABLE + x * LEN_OF_COURSE_TABLE])
 		else: #regular form submit
-			form = CourseForm(request.POST)
-			if form.is_valid():
-				info = form.cleaned_data
-				dbQuery = Course_info(
-					course_id = info['course_id'],
-					name = info['course_name'],
-					credits = info['credits'],
-					semester = info['semester'],
-					textbook = info['textbook'],
-					college = info['college'],
-				)
-				dbQuery.save()
-				addIsDone = True
-				form = CourseForm()
+			if isAdmin:
+				form = CourseForm(request.POST)
+				if form.is_valid():
+					info = form.cleaned_data
+					dbQuery = Course_info(
+						course_id = info['course_id'],
+						name = info['course_name'],
+						credits = info['credits'],
+						semester = info['semester'],
+						textbook = info['textbook'],
+						college = info['college'],
+					)
+					dbQuery.save()
+					addIsDone = True
+					form = CourseForm()
+			elif isFaculty:
+				form = CourseFormFacultyAdd(request.POST)
+				if form.is_valid():
+					info = form.cleaned_data
+					dbQuery = Course_info(
+						course_id = info['course_id'],
+						name = info['course_name'],
+						credits = info['credits'],
+						semester = info['semester'],
+						textbook = info['textbook'],
+						college = userCollege,
+					)
+					dbQuery.save()
+					addIsDone = True
+					facultyAdd = True
+					form = CourseFormFacultyAdd()
 		return render(request, 'AddCourse.html', locals())
 	return render(request, 'AccessFault.html')
 
@@ -195,9 +220,20 @@ def courseDelete(request):
 
 def courseModify(request):
 	errors = []
-	userName = request.user.username
+#===========USER GROUP CHECK========================================#
+	isAdmin = False 												#
+	isFaculty = False 												#
+	userName = request.user.username 								#
+	if Admin_user.objects.filter(id = userName): 					#
+		isAdmin = True 												#
+		userCollege = -1											#
+	elif Faculty_user.objects.filter(id = userName): 				#
+		isFaculty = True 											#
+		userInfo = Faculty_user.objects.filter(id = userName) 		#
+		userCollege = userInfo[0].college    						#
+#============END OF GROUP CHECK=====================================#
 	if request.method == 'POST':
-		if 'term' in request.POST:
+		if 'term' in request.POST: #search box
 			inSearch = True
 			searchTerm = request.POST.get('term')
 			searchType = request.POST.get('type')
@@ -208,51 +244,71 @@ def courseModify(request):
 					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 				elif searchType == 'course_name':
 					coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
 					courses = []
 					for course in coursesTemp:
-						if Admin_user.objects.filter(id = userName):
+						if isAdmin:
 							courses.append(course)
-						elif Faculty_user.objects.filter(id = userName):
-							userInfo = Faculty_user.objects.filter(id = userName)
-							if userInfo[0].college == course.college:
+						elif isFaculty and (userCollege == course.college):
 								courses.append(course)
 				#else:
 					#courses = Course_info.objects.filter(teacher = searchTerm)
 			return render(request, 'ModifyCourse.html', locals())
-		elif 'modifyid' in request.POST:
+		elif 'modifyid' in request.POST: #initial info page
 			inModify = True
 			courseId = request.POST.get('modifyid')
 			term = Course_info.objects.filter(course_id = courseId)
-			form = CourseFormModify(initial = {
-				'course_name': term[0].name,
-				'credits': term[0].credits,
-				'semester': term[0].semester,
-				'textbook': term[0].textbook,
-				'college': term[0].college}
-			)
-			return render(request, 'ModifyCourse.html', locals())
-		else:
-			form = CourseFormModify(request.POST)
-			if form.is_valid():
-				info = form.cleaned_data
-				dbQuery = Course_info(
-					course_id = request.POST.get('courseId'),
-					name = info['course_name'],
-					credits = info['credits'],
-					semester = info['semester'],
-					textbook = info['textbook'],
-					college = info['college'],
+			if isAdmin:
+				form = CourseFormModify(initial = {
+					'course_name': term[0].name,
+					'credits': term[0].credits,
+					'semester': term[0].semester,
+					'textbook': term[0].textbook,
+					'college': term[0].college }
 				)
-				dbQuery.save()
-				modifyIsDone = True	
+			elif isFaculty:
+				facultyModify = True
+				form = CourseFormFacultyModify(initial = {
+					'course_name': term[0].name,
+					'credits': term[0].credits,
+					'semester': term[0].semester,
+					'textbook': term[0].textbook }
+				)
+			return render(request, 'ModifyCourse.html', locals())
+		else: #DB update after press submit on initial info page
+			if isAdmin:
+				form = CourseFormModify(request.POST)
+				if form.is_valid():
+					info = form.cleaned_data
+					dbQuery = Course_info(
+						course_id = request.POST.get('courseId'),
+						name = info['course_name'],
+						credits = info['credits'],
+						semester = info['semester'],
+						textbook = info['textbook'],
+						college = info['college'],
+					)
+					dbQuery.save()
+					modifyIsDone = True	
+			elif isFaculty:
+				form = CourseFormFacultyModify(request.POST)
+				if form.is_valid():
+					info = form.cleaned_data
+					dbQuery = Course_info(
+						course_id = request.POST.get('courseId'),
+						name = info['course_name'],
+						credits = info['credits'],
+						semester = info['semester'],
+						textbook = info['textbook'],
+						college = userCollege,
+					)
+					dbQuery.save()
+					modifyIsDone = True	
 			return render(request, 'ModifyCourse.html', locals())
 	return render(request, 'AccessFault.html')
 
