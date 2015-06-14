@@ -175,7 +175,10 @@ def courseDelete(request):
 			searchTerm = request.POST.get('term')
 			searchType = request.POST.get('type')
 			if not searchTerm:
-				errors.append('Please enter a key word')
+				if isAdmin:
+					courses = Course_info.objects.all()
+				elif isFaculty:
+					courses = Course_info.objects.filter(college = userCollege)
 				response = render(request, 'DeleteCourse.html', locals())
 			else:
 				if searchType == 'course_id':
@@ -252,7 +255,10 @@ def courseModify(request):
 			searchTerm = request.POST.get('term')
 			searchType = request.POST.get('type')
 			if not searchTerm:
-				errors.append('Please enter a key word')
+				if isAdmin:
+					courses = Course_info.objects.all()
+				elif isFaculty:
+					courses = Course_info.objects.filter(college = userCollege)
 			else:
 				if searchType == 'course_id':
 					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
