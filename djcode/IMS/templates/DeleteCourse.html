@@ -3,7 +3,7 @@
     <title>Delete Course</title>
 </head>
 <body>
-	<a href="/ims/course/">back to course management</input></a>
+	<a href="/ims/course/">back to course management</a>
 	<p></p>
 	<h1>Course Search</h1>
 	{% if errors %}
@@ -13,7 +13,8 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-    <form id = 'formSearch' action="" method="get">
+    <form id = 'formSearch' action="" method="post">
+        {% csrf_token %}
         <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="course_id">Course ID</option>
@@ -65,7 +66,7 @@
 
 <script type="text/javascript">
 	function f(a) {
-		var form = document.getElementById("formSelect");
+		var form = document.getElementById('formSelect');
 		form.deleteid.value = a;
 		form.submit();
 	}

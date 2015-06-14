@@ -3,7 +3,7 @@
     <title>Modify Course</title>
 </head>
 <body>
-	<a href="/ims/course/">back to course management</input></a>
+	<a href="/ims/course/">back to course management</a>
 	<p></p>
 	<h1>Course Search</h1>
 	{% if errors %}
@@ -13,7 +13,8 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-    <form id = 'formSearch' action="" method="get">
+    <form id = 'formSearch' action="" method="post">
+        {% csrf_token %}
         <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="course_id">Course ID</option>
@@ -31,6 +32,10 @@
     
     {% if inModify %}
     	<p>Course ID: {{ courseId }}</p>
+        <!-- TODO: 添加各自学院课程，目前多余 -->
+        {% if facultyModify %}
+            <p>College: {{ userCollege }}</p>
+        {% endif %}
  		<form id="submit" action="" method="post">
 	        {% csrf_token %}
 	        <table>

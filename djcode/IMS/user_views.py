@@ -1,7 +1,5 @@
 __author__ = 'John'
 
-import re
-
 from IMS.head import *
 from IMS.user_forms import FacultyForm, FacultyFormModify, StudentForm, StudentFormModify
 from IMS.models import Faculty_user, Student_user
@@ -13,13 +11,13 @@ def userMain(request):
     return render(request, 'UserMain.html')
 
 def facultyAdd(request):
-    if not request.user.is_anonymous():
+    if request.user.is_anonymous():
         return render(request, 'UserMain.html')
     else:
         errors = []
         existed = []
         addIsDone = False
-        if request.method  ==   'POST':
+        if request.method == 'POST':
             if 'file' in request.POST and len(request.POST.get('file')) > 0:  # click confirm button
                 fileTerms = re.split(',', request.POST.get('file'))
                 s = ""
@@ -77,7 +75,7 @@ def facultyAdd(request):
 def facultyDelete(request):
     errors = []
     response = render(request, 'DeleteFaculty.html', locals())
-    if request.method  ==   'GET':
+    if request.method == 'GET':
         if 'term' in request.GET:
             inSearch = True
             searchTerm = request.GET.get('term')
@@ -160,7 +158,7 @@ def facultyModify(request):
 
 
 def studentAdd(request):
-    if not request.user.is_anonymous():
+    if request.user.is_anonymous():
         return render(request, 'UserMain.html')
     else:
         errors = []

@@ -1,3 +1,5 @@
+<!-- #by henry -->
+
 <html>
 
 <style type="text/css">
@@ -19,7 +21,7 @@
     <title>Add course</title>
 </head>
 <body>
-    <a href="/ims/course/">back to course management</input></a>
+    <a href="/ims/course/">back to course management</a>
     <p></p>
     <h1>New Course Infomation</h1>
     
@@ -36,6 +38,10 @@
     {% endif %}
 
     <form id="submit" action="" method="post" enctype="multipart/form-data">
+        {% if facultyAdd %}
+            <p>Adding courses into {{ userCollege }} college.</p>
+            <!-- TODO: 添加各自学院课程，目前多余 -->
+        {% endif %}
         {% csrf_token %}
         <table>
             {{ form.as_table }}
@@ -74,10 +80,12 @@
         </form>
     {% endif %}
 
-    {% if isExist %}
+    {% if errorExist %}
         <p>The following are existed.</p>
+        <p style="color: red">The followings were not successfully added.</p>
         <table>
             <tr>
+                <th>FAULT</th>
                 <th>Course ID</th>
                 <th>Course Name</th>
                 <th>Credits</th>
@@ -85,8 +93,9 @@
                 <th>Textbook</th>
                 <th>College</th>
             </tr>
-        {% for term in existed %}
+        {% for term in errorImport %}
             <tr>
+                <th>{{ term.6 }}</th>
                 <th>{{ term.0 }}</th>
                 <th>{{ term.1 }}</th>
                 <th>{{ term.2 }}</th>

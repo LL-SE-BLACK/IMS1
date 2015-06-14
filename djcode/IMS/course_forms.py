@@ -19,9 +19,27 @@ class CourseForm(forms.Form):
 		return addedCouseID
 
 class CourseFormModify(forms.Form):
-
 	course_name = forms.CharField(max_length = 110)
 	credits = forms.FloatField()
 	semester = forms.IntegerField()
 	textbook = forms.CharField(max_length = 110)
 	college = forms.CharField(max_length = 50)
+
+class CourseFormFacultyAdd(forms.Form):
+	course_id = forms.CharField(max_length = 8)
+	course_name = forms.CharField(max_length = 110)
+	credits = forms.FloatField()
+	semester = forms.IntegerField()
+	textbook = forms.CharField(max_length = 110)
+
+	def clean_course_id(self):
+		addedCouseID = self.cleaned_data['course_id']
+		if Course_info.objects.filter(course_id = addedCouseID):
+			raise forms.ValidationError('Course number existed!')
+		return addedCouseID
+
+class CourseFormFacultyModify(forms.Form):
+	course_name = forms.CharField(max_length = 110)
+	credits = forms.FloatField()
+	semester = forms.IntegerField()
+	textbook = forms.CharField(max_length = 110)

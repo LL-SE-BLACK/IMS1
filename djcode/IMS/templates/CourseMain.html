@@ -5,8 +5,28 @@
 </head>
 <body>
 <h1>Choose operation</h1>
-<a href="/ims/course/add"><input type="button" value="Add"></input></a>
-<a href="/ims/course/modify"><input type="button" value="Modify"></input></a>
-<a href="/ims/course/delete"><input type="button" value="Delete"></input></a>
+<form id="add" action="/ims/course/add/" method="post">
+    {% csrf_token %}
+    <input type="button" value="Add" onclick="javascript:f('add')">
+    <input type="hidden" name="first">
+</form>
+<form id="mod" action="/ims/course/modify/" method="post" onclick="javascript:f('mod')">
+    {% csrf_token %}
+    <input type="button" value="Modify">
+    <input type="hidden" name="first">
+</form>
+<form id="del" action="/ims/course/delete/" method="post" onclick="javascript:f('del')">
+    {% csrf_token %}
+    <input type="button" value="Delete">
+    <input type="hidden" name="first">
+</form>
 </body>
 </html>
+
+<script type="text/javascript">
+	function f(a) {
+		var form = document.getElementById(a);
+		form.first.value = 1;
+		form.submit();
+	}
+</script>
