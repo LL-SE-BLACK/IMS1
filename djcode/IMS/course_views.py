@@ -19,6 +19,7 @@ from django.contrib.auth.models import Group,Permission
 
 LEN_OF_COURSE_TABLE = 6
 
+@login_required
 def courseMain(request):
 	#if Faculty_user.objects.filter(id = request.user.username) or Admin_user.objects.filter(id = request.user.username):
 	if Admin_user.objects.filter(id = request.user.username):
@@ -58,6 +59,7 @@ def importCheck(term, isAdmin, isFaculty, userCollege):
 		return 'COLLEGE: TOO LONG'	
 	return 'YEAH'
 
+@login_required
 def courseAdd(request):
 	errors = []
 	errorImport = []
@@ -151,6 +153,7 @@ def courseAdd(request):
 		return render(request, 'AddCourse.html', locals())
 	return render(request, 'AccessFault.html')
 
+@login_required
 def courseDelete(request):
 	errors = []
 #===========USER GROUP CHECK========================================#
@@ -175,7 +178,10 @@ def courseDelete(request):
 			searchTerm = request.POST.get('term')
 			searchType = request.POST.get('type')
 			if not searchTerm:
-				errors.append('Please enter a key word')
+				if isAdmin:
+					courses = Course_info.objects.all()
+				elif isFaculty:
+					courses = Course_info.objects.filter(college = userCollege)
 				response = render(request, 'DeleteCourse.html', locals())
 			else:
 				if searchType == 'course_id':
@@ -229,6 +235,7 @@ def courseDelete(request):
 			return response
 	return render(request, 'AccessFault.html')
 
+@login_required
 def courseModify(request):
 	errors = []
 #===========USER GROUP CHECK========================================#
@@ -252,7 +259,10 @@ def courseModify(request):
 			searchTerm = request.POST.get('term')
 			searchType = request.POST.get('type')
 			if not searchTerm:
-				errors.append('Please enter a key word')
+				if isAdmin:
+					courses = Course_info.objects.all()
+				elif isFaculty:
+					courses = Course_info.objects.filter(college = userCollege)
 			else:
 				if searchType == 'course_id':
 					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
