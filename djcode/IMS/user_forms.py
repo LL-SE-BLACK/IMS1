@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'Henry'
 
 __author__ = 'John'
@@ -16,10 +18,10 @@ class FacultyForm(forms.Form):
     title = forms.CharField(max_length=20)
 
     def clean_faculty_id(self):
-	    addedFacultyID = self.cleaned_data['id']
-	    if Faculty_user.objects.filter(id = addedFacultyID):
-	    	raise forms.ValidationError('Faculty number existed!')
-	    return addedFacultyID
+        addedFacultyID = self.cleaned_data['id']
+        if Faculty_user.objects.filter(id = addedFacultyID):
+            raise forms.ValidationError('Faculty number existed!')
+        return addedFacultyID
 
     def clean_gender(self):
         addedFacultyGender = self.cleaned_data['gender']
@@ -68,3 +70,4 @@ class StudentFormModify(forms.Form):
     grade = forms.IntegerField()
     gpa = forms.FloatField()
     credits = forms.FloatField()
+

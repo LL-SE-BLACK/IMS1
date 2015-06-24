@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.messages import get_messages
+from IMS.profile_forms import UserPhotoForm
 
 __author__ = 'xyh' #...
 
@@ -14,6 +15,7 @@ from profile_forms import FacultyInfoForm
 from profile_forms import AdminInfoForm
 from django.http import Http404
 from django.contrib import messages
+
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
@@ -44,6 +46,7 @@ def profile(request):
     infoErrorFlag = False
     infoErrorMessage = []
     passwdErrorFlag = False
+    photoErrorFlag = False
     # get messages from the previous request if change info or password
     storage = get_messages(request)
     for message in storage:
@@ -54,16 +57,24 @@ def profile(request):
             infoErrorMessage = message.message
         elif message.tags == "password error":
             passwdErrorFlag = True
+        elif message.tags == "photo error":
+            photoErrorFlag = True
 
     if user_type == IS_STUDENT:
-        print "render a student panel"
-        stu = Student_user.objects.get(id=user_id)
+        try:
+            stu = Student_user.objects.get(id=user_id)
+        except:
+            #return Http404("No such user matched in database")
+            print("Internal test data integrity error: no such user matched in database")
+            return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
         if infoSuccessFlag:
             return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, "infoSuccess": 1})
         elif infoErrorFlag:
             return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'infoErrors':infoErrorMessage})
         elif passwdErrorFlag:
             return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'passwdErrors':1})
+        elif photoErrorFlag:
+            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'photoErrors':1})
         else:
             return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu})
     elif user_type == IS_Faculty:
@@ -79,22 +90,31 @@ def profile(request):
             return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, 'infoErrors':infoErrorMessage})
         elif passwdErrorFlag:
             return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, 'passwdErrors':1})
+        elif photoErrorFlag:
+            return render_to_response("profile.html", {"isStudent": 1, "userInfo": faculty, 'photoErrors':1})
         else:
             return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty})
     elif user_type == IS_ADMIN:
-        admin = Admin_user.objects.get(id=user_id)
+        try:
+            admin = Admin_user.objects.get(id=user_id)
+        except:
+            #return Http404("No such user matched in database")
+            print("Internal test data integrity error: no such user matched in database")
+            return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
         if infoSuccessFlag:
             return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, "infoSuccess": 1})
         elif infoErrorFlag:
             return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, 'infoErrors':infoErrorMessage})
         elif passwdErrorFlag:
             return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, 'passwdErrors':1})
+        elif photoErrorFlag:
+            return render_to_response("profile.html", {"isStudent": 1, "userInfo": admin, 'photoErrors':1})
         else:
             return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin})
     else:
         #wrong id length
-        raise Http404("Wrong id length")
-
+        print("Wrong in Id length!")
+        return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
 
 
 #Note: has not finished
@@ -193,6 +213,67 @@ def changePasswd(request):
             # return render_to_response('profile.html', c, context_instance=RequestContext(request))
         else : # success and valid request
             return render_to_response('change_passwd_success.html')
+    else:
+        print('ERROR: not post')
+        raise Http404()
+
+
+@csrf_exempt
+def changePhoto(request):
+    print "change photo"
+    # Handle file upload
+    if request.method == 'POST':
+        print request.FILES
+        form = UserPhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            print "is valid"
+            user_id = str(request.user)  # user Id
+            user_type = getTypeOfUser(user_id)
+
+            newPhoto = form.cleaned_data['photo']
+            print newPhoto
+            if user_type == IS_STUDENT:
+                try:
+                    stu = Student_user.objects.get(id=user_id)
+                except:
+                    #return Http404("No such user matched in database")
+                    print("Internal test data integrity error: no such user matched in database")
+                    return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
+                stu.photo = newPhoto
+                stu.save()
+                return HttpResponseRedirect('../../profile')
+
+            elif user_type == IS_Faculty:
+                try:
+                    faculty = Faculty_user.objects.get(id=user_id)
+                except:
+                    #return Http404("No such user matched in database")
+                    print("Internal test data integrity error: no such user matched in database")
+                    return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
+                faculty.photo = newPhoto
+                faculty.save()
+                return HttpResponseRedirect('../../profile')
+
+            elif user_type == IS_ADMIN:
+                try:
+                    admin = Admin_user.objects.get(id=user_id)
+                except:
+                    #return Http404("No such user matched in database")
+                    print("Internal test data integrity error: no such user matched in database")
+                    return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
+                admin.photo = newPhoto
+                admin.save()
+                return HttpResponseRedirect('../../profile')
+            else:
+                #wrong id length
+                print("Wrong in Id length!")
+                return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
+        else:
+            print("Error: Form invalid!")
+            print(str(form.errors))
+            messages.error(request, str(form.errors), extra_tags="photo")
+            return HttpResponseRedirect('../../profile')
+
     else:
         print('ERROR: not post')
         raise Http404()

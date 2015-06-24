@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'IMS',
+    'djangologdb',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -49,6 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'djangologdb.middleware.LoggingMiddleware',
 )
 
 ROOT_URLCONF = 'djcode.urls'
@@ -70,7 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djcode.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -103,3 +104,31 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/'
+
+# Media file (photo of usrs).
+# By xyh
+IMS_STATIC_URL = os.path.join(os.path.join(BASE_DIR, "IMS"), 'static')
+
+# MEDIA_ROOT = os.path.join(os.path.join(IMS_STATIC_URL, 'img'), 'photo')
+MEDIA_ROOT = os.path.join(IMS_STATIC_URL, 'img')
+
+MEDIA_URL = '/home/profile/photo/'
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console':{
+#             'level':'DEBUG',
+#             'class':'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'propagate': True,
+#             'level':'DEBUG',
+#         },
+#     }
+# }

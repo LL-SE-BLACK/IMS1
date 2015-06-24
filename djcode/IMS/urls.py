@@ -16,7 +16,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from django.conf import settings
+from django.conf.urls.static import static
 from IMS import views, profile, course_views, user_views
+import os
 
 urlpatterns = [
     url(r'^$', views.loggingin),
@@ -29,6 +32,7 @@ urlpatterns = [
     url(r'^home/profile/$', profile.profile),
     url(r'^home/profile/changeUserInfo/$', profile.changeUserInfo), #by xyh
     url(r'^home/profile/changePasswd/$', profile.changePasswd), #by xyh
+    url(r'^home/profile/changePhoto/$', profile.changePhoto), #by xyh
     url(r'^course/$', course_views.courseMain), #by saltless
     url(r'^course/add/$', course_views.courseAdd), #by saltless
     url(r'^course/delete/$', course_views.courseDelete), #by saltless
@@ -41,3 +45,6 @@ urlpatterns = [
     url(r'^user/delete_student/$', user_views.studentDelete), #by Henry
     url(r'^user/modify_student/$', user_views.studentModify), #by Henry
 ]
+
+## For upload user photos
+urlpatterns += static( settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,9 +8,10 @@
     <script src="../../../static/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+    <a href="/ims/">back to homepage</a>
     <p>个人信息</p>
     <br/>
-
     <div id="changInfo">
         <form class="form-horizontal" action="./changeUserInfo/" method="GET" id="changeInfo_form" onSubmit="return checkuserInfo();">
             {% csrf_token %}
@@ -128,6 +129,22 @@
 
     </br>
 
+    <div id="changePhoto">
+        {% if userInfo.photo %}
+            <img src="/ims{{ userInfo.photo.url }}" width="200" height="200" />
+        {% endif %}
+        <form action="./changePhoto/" method="post" enctype="multipart/form-data">{% csrf_token %}
+            <p>
+                <input id="id_image" type="file" class="" name="photo" accept="image/*">
+            </p>
+            <input type="submit" value="确认修改" />
+        </form>
+        {% if photoErrors %}
+            请上传图片文件，大小不超过10M。
+        {% endif %}
+    </div>
+
+    </br>
     <div id="changPasswd">
         <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="./changePasswd/" method="post">
             {% csrf_token %}

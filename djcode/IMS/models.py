@@ -4,6 +4,20 @@ from django.db import models
 # Create your models here.
 
 #class Login_info: handled by Django User
+import os
+from django.conf import settings
+DEFAULT_PHOTO_DIR = os.path.join("photo", "default.jpg")
+
+
+def get_photo_file_name(instance, filename):
+    # print instance.id
+    # print filename
+    filename = filename.encode('utf-8')
+    newFilename = os.path.join("photo", str(instance.id)) + "." + str(filename).split('.')[-1]
+    newFullFilename = os.path.join(settings.MEDIA_ROOT, newFilename)
+    if os.path.exists(newFullFilename):
+        os.remove(newFullFilename)
+    return newFilename
 
 class Student_user(models.Model):
     '''
@@ -21,6 +35,7 @@ class Student_user(models.Model):
     gpa = models.FloatField(default=4.0)
     credits = models.FloatField(default=100.0)
     isSpecial = models.BooleanField(default=False)
+    photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
 
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, grade:%s, gpa:%f, credits:%f'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.grade, self.gpa, self.credits)
@@ -45,6 +60,8 @@ class Faculty_user(models.Model):
     degree = models.CharField(max_length=20,default='博士')
     title = models.CharField(max_length=20, default="研究员")
     isSpecial = models.BooleanField(default=False)
+    photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
+
 
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, degree:%s, title:%s'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.degree, self.title)
@@ -64,6 +81,8 @@ class Admin_user(models.Model):
     name = models.CharField(max_length=20, default="张三")
     gender = models.BooleanField(default=0)
     college = models.CharField(max_length=50, default="all") #default for superadmin
+    photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
+
 
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s'%(self.id, self.contact,self.name,self.gender, self.college)

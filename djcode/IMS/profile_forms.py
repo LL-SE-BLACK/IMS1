@@ -84,3 +84,22 @@ class AdminInfoForm(forms.Form):
             raise forms.ValidationError("不要干坏事哦！")
         return gender
 
+
+class UserPhotoForm(forms.Form):
+    photo = forms.FileField(
+        label='Select a file',
+        help_text='max. 20 megabytes'
+    )
+
+    def clean_photo(self):
+        CONTENT_TYPES = ['image']
+        MAX_UPLOAD_SIZE = 5242880 #5M
+        photo = self.cleaned_data['photo']
+        content_type = photo.content_type.split('/')[0]
+        if content_type in CONTENT_TYPES:
+            if photo._size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('上传大小限制为20M！')
+        else:
+            raise forms.ValidationError('请上传图像文件！')
+
+        return photo
