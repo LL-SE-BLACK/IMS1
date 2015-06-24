@@ -21,7 +21,6 @@ from IMS.views import startup
 from djcode import settings
 
 urlpatterns = [
-    url(r'^admin/djangologdb/', include('djangologdb.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ims/', include('IMS.urls')),
     url(r'^$', startup),

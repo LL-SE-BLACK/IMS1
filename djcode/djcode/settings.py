@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -38,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'IMS',
-    'djangologdb',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,7 +51,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'djangologdb.middleware.LoggingMiddleware',
 )
 
 ROOT_URLCONF = 'djcode.urls'
@@ -105,30 +105,95 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = '/'
 
-# Media file (photo of usrs).
+## Media file (photo of usrs).
 # By xyh
-IMS_STATIC_URL = os.path.join(os.path.join(BASE_DIR, "IMS"), 'static')
+IMS_URL = os.path.join(BASE_DIR, 'IMS')
+IMS_STATIC_URL = os.path.join(IMS_URL, 'static')
 
 # MEDIA_ROOT = os.path.join(os.path.join(IMS_STATIC_URL, 'img'), 'photo')
 MEDIA_ROOT = os.path.join(IMS_STATIC_URL, 'img')
 
 MEDIA_URL = '/home/profile/photo/'
 
+## Logging module
+# By xyh
+LOGGING_DIR = os.path.join(IMS_URL, "log")
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(name)s %(levelname)s %(asctime)s %(pathname)s:%(lineno)d %(module)s %(process)d %(thread)d: %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console':{
-#             'level':'DEBUG',
-#             'class':'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django.db.backends': {
-#             'handlers': ['console'],
-#             'propagate': True,
-#             'level':'DEBUG',
-#         },
-#     }
-# }
+    'filters': {
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'WARNING',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        },
+        'default': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGGING_DIR,'all.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'simple',
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'request_handler': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGGING_DIR,'request.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'error_handler':{
+            'level':'WARNING',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGGING_DIR,'error.log'),
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        }
+
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['request_handler', 'error_handler'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'django': {
+            'handlers': ['default','console','error_handler'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'IMS':{
+            'handlers': ['default','console','error_handler'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+
+
+    }
+}
+
+##TODO: change the email setting here
+# ADMINS = [('John', 'john@example.com'), ('Mary', 'mary@example.com')]
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'me@gmail.com'
+# EMAIL_HOST_PASSWORD = 'password'

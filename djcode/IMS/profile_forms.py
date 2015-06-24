@@ -93,7 +93,7 @@ class UserPhotoForm(forms.Form):
 
     def clean_photo(self):
         CONTENT_TYPES = ['image']
-        MAX_UPLOAD_SIZE = 5242880 #5M
+        MAX_UPLOAD_SIZE = 1024*1024*2 #2M
         photo = self.cleaned_data['photo']
         content_type = photo.content_type.split('/')[0]
         if content_type in CONTENT_TYPES:
