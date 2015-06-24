@@ -15,7 +15,7 @@ from profile_forms import FacultyInfoForm
 from profile_forms import AdminInfoForm
 from django.http import Http404
 from django.contrib import messages
-
+import logging
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
@@ -25,6 +25,8 @@ IS_STUDENT = -3
 IS_Faculty = -2
 IS_ADMIN = -1
 IS_NOTHING = 0
+
+logger = logging.getLogger("IMS")
 
 def getTypeOfUser(user_id):
     user_id_len = user_id.__len__()
@@ -122,7 +124,7 @@ def profile(request):
 @login_required
 def changeUserInfo(request):
     if request.method == 'GET':
-        print("Change User Info:")
+        logger.info("Change User Info:")
         c = {}
         c.update(csrf(request))
         user = User.objects.get(username=str(request.user))
@@ -130,7 +132,6 @@ def changeUserInfo(request):
             return HttpResponseRedirect('../home/')
         else: # user exists and valid
             user_type = getTypeOfUser(str(request.user))
-            print "user_type:" + str(user_type)
             form = None
             if user_type == IS_STUDENT:
                 form = StudentInfoForm(request.GET)
@@ -153,7 +154,7 @@ def changeUserInfo(request):
                 elif user_type == IS_ADMIN:
                     obj = Admin_user.objects.get(id=userid)
 
-                print("From: " + obj.__unicode__())
+                logger.info("From: " + obj.__unicode__())
                 obj.college = info["college"]
                 obj.contact = info['contact']
                 if info['gender'] == 1:
@@ -165,7 +166,7 @@ def changeUserInfo(request):
                     obj.grade = info['grade']
                     obj.major = info['major']
                 obj.save()
-                print("To:" + obj.__unicode__())
+                logger.info("To:" + obj.__unicode__())
                 messages.success(request, "Profile updates successfully!", extra_tags = "profile")
                 return HttpResponseRedirect('../../profile')
                 # return render_to_response('profile.html', {'studentInfo':info, 'infoSuccess':1})
