@@ -22,7 +22,7 @@ from IMS import views, profile, course_views, user_views
 import os
 
 urlpatterns = [
-    url(r'^$', views.loggingin),
+    url(r'^login/$', views.loggingin),
     #url(r'^hello/', views.startup),
     url(r'^add_user/', views.add_user),
     url(r'^user_added/', views.user_added),

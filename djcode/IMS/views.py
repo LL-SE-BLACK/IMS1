@@ -4,19 +4,41 @@ from head import *
 from models import Student_user
 from profile_forms import StudentInfoForm
 from django.http import Http404
+from django import forms
+from django.forms.util import ErrorList
 
 LEN_OF_STUDENT_ID = 10
 LEN_OF_FACULTY_ID = 6
 LEN_OF_ADMIN_ID = 3
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=20)
+    passwd = forms.CharField(max_length=20)
+
+    def clean(self):
+        cleaned_data = super(LoginForm, self).clean()
+        _username = cleaned_data.get('username', '')
+        _passwd = cleaned_data.get('passwd', '')
+        if not User.objects.filter(username=_username):
+            error_msg = ["用户不存在！"]
+            super(LoginForm, self).errors['passwd'] = ErrorList(error_msg)
+        else:
+            user = authenticate(username=_username, password=_passwd)
+            if user is None:
+                error_msg = ["密码错误!"]
+                super(LoginForm, self).errors['passwd'] = ErrorList(error_msg)
+                #raise forms.ValidationError('密码错误')
+        return cleaned_data
 
 def startup(request):
     return HttpResponseRedirect('ims/')
 
 def loggingin(request):
     if not request.user.is_authenticated():
-        print "not authenticated"
-        # return render(request, 'add_user.html')
-        return render(request, 'login.html')
+        form = LoginForm()
+        t = get_template('login.html')
+        c = RequestContext(request, {'form': form})
+        return HttpResponse(t.render(c))
     else:
         print 'authenticated'
         return HttpResponseRedirect('home/')
@@ -60,20 +82,27 @@ def user_added(request):
 
 @csrf_exempt
 def user_auth(request):
-    c = {}
-    c.update(csrf(request))
-
-    t = get_template('login.html')
-    user = authenticate(username = request.POST['userid'], password = request.POST['userpasswd'])
-    if user is not None:
-        if user.is_active: #valid, active and authenticated
-            login(request, user)
-            return HttpResponseRedirect('../home/')
-        else:
-            return HttpResponseRedirect('../', t.render(Context({'forbidden': 1}))) #user disabled, yet passwd valid
+    #c = {}
+    #c.update(csrf(request))
+    form = ""
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
     else:
-        print('nomatch')
-        return HttpResponseRedirect('../', t.render(Context({'no_match': 1}))) #username or passwd invalid, doesn't match
+        form = LoginForm()
+
+    if form.is_valid():
+        _username = form.cleaned_data['username']
+        _passwd = form.cleaned_data['passwd']
+        user = authenticate(username = _username, password = _passwd)
+        if user is not None:
+            if user.is_active: #valid, active and authenticated
+                login(request, user)
+                return HttpResponseRedirect('../home/')  #TODO: csrf
+
+    # else, back to login page
+    t = get_template('login.html')
+    c = RequestContext(request, {'form': form})
+    return HttpResponse(t.render(c))
 
 @csrf_exempt
 @login_required
