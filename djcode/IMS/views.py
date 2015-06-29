@@ -31,7 +31,7 @@ class LoginForm(forms.Form):
         return cleaned_data
 
 def startup(request):
-    return HttpResponseRedirect('ims/')
+    return HttpResponseRedirect('ims/login/')
 
 def loggingin(request):
     if not request.user.is_authenticated():
@@ -40,13 +40,13 @@ def loggingin(request):
         c = RequestContext(request, {'form': form})
         return HttpResponse(t.render(c))
     else:
-        print 'authenticated'
-        return HttpResponseRedirect('home/')
+        return HttpResponseRedirect('../home/')
 
 @login_required
 def loggingout(request):
     logout(request)
-    return render(request, 'logout.html')
+    #return render(request, 'logout.html')
+    return HttpResponseRedirect('../login/')
 
 @login_required
 def add_user(request):

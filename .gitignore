@@ -61,3 +61,5 @@ docs/_build/
 target/
 
 djcode/.idea/workspace.xml
+
+djcode/db.sqlite3
