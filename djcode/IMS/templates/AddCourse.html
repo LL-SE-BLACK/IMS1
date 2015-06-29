@@ -62,6 +62,7 @@
                     <th>Semester</th>
                     <th>Textbook</th>
                     <th>College</th>
+                    <th>Type</th>
                 </tr>
                 {% for term in terms %}
                     <tr>
@@ -71,6 +72,7 @@
                         <th>{{ term.3 }}</th>
                         <th>{{ term.4 }}</th>
                         <th>{{ term.5 }}</th>
+                        <th>{{ term.6 }}</th>
                     </tr>
                 {% endfor %}
             </table>
@@ -91,16 +93,18 @@
                 <th>Semester</th>
                 <th>Textbook</th>
                 <th>College</th>
+                <th>Type</th>
             </tr>
         {% for term in errorImport %}
             <tr>
-                <th>{{ term.6 }}</th>
+                <th>{{ term.7 }}</th>
                 <th>{{ term.0 }}</th>
                 <th>{{ term.1 }}</th>
                 <th>{{ term.2 }}</th>
                 <th>{{ term.3 }}</th>
                 <th>{{ term.4 }}</th>
                 <th>{{ term.5 }}</th>
+                <th>{{ term.6 }}</th>
             </tr>
         {% endfor %}
         </table>
@@ -113,7 +117,7 @@
         var tables = document.getElementsByTagName("th");
         var form = document.getElementById(a);
         var s = "";
-        for (var i = 6; i < tables.length; i ++) {
+        for (var i = 7; i < tables.length; i ++) {
             s += tables[i].innerText + ",";
         };
         form.file.value = s;
