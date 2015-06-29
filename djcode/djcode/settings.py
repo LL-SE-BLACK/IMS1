@@ -170,6 +170,11 @@ LOGGING = {
 
     },
     'loggers': {
+        'django.db.backends': {
+            'handlers': ['default',],
+            'level': 'DEBUG',
+            'propagate': False
+        },
         'django.request': {
             'handlers': ['request_handler', 'error_handler'],
             'level': 'DEBUG',
