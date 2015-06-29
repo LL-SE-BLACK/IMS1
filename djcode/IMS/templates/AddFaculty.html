@@ -2,9 +2,25 @@
 
 <!DOCTYPE html>
 <html>
+
+<style type="text/css">
+    ul.errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        background-color: red;
+        color: white;
+        display: block;
+        font-size: 10px;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+    }
+</style>
+
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Add course</title>
+    <title>Add faculty</title>
 </head>
 <body>
     <a href="/ims/user/">back to user management</a>
@@ -35,7 +51,7 @@
     {% if multiAdd %}
         <form id='multiAdd' action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>Sure to add following Faculties?</p>
+            <p>Sure to add following faculties?</p>
             <table>
                 <tr>
                     <th>Faculty ID</th>
@@ -66,10 +82,11 @@
         </form>
     {% endif %}
 
-    {% if isExist %}
+    {% if errorExist %}
         <p>The following are existed.</p>
         <table>
             <tr>
+                <th>FAULT</th>
                 <th>Faculty ID</th>
                 <th>Faculty Contact</th>
                 <th>Faculty Name</th>
@@ -81,6 +98,7 @@
             </tr>
         {% for term in existed %}
             <tr>
+                <th>{{ term.8 }}</th>
                 <th>{{ term.0 }}</th>
                 <th>{{ term.1 }}</th>
                 <th>{{ term.2 }}</th>
