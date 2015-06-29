@@ -1,6 +1,22 @@
 <!-- #by henry -->
 <!DOCTYPE html>
 <html>
+
+<style type="text/css">
+    ul.errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        background-color: red;
+        color: white;
+        display: block;
+        font-size: 10px;
+        margin: 0 0 3px;
+        padding: 4px 5px;
+    }
+</style>
+
 <head lang="en">
     <meta charset="UTF-8">
     <title>Add student</title>
@@ -34,7 +50,7 @@
     {% if multiAdd %}
         <form id='multiAdd' action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>Sure to add following Students?</p>
+            <p>Sure to add following students?</p>
             <table>
                 <tr>
                     <th>Student ID</th>
@@ -67,10 +83,11 @@
         </form>
     {% endif %}
 
-    {% if isExist %}
-        <p>The following are existed.</p>
+    {% if errorExist %}
+        <p style="color: red">The followings were not successfully added.</p>
         <table>
             <tr>
+                <th>FAULT</th>
                 <th>Student ID</th>
                 <th>Student Contact</th>
                 <th>Student Name</th>
@@ -83,6 +100,7 @@
             </tr>
         {% for term in existed %}
             <tr>
+                <th>{{ term.9 }}</th>
                 <th>{{ term.0 }}</th>
                 <th>{{ term.1 }}</th>
                 <th>{{ term.2 }}</th>
