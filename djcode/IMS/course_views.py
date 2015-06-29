@@ -4,7 +4,7 @@ __author__ = 'saltless'
 import re
 import os
 
-from models import Class_info, Course_info, Faculty_user, Admin_user
+from models import Class_info, Course_info,Student_user, Faculty_user, Admin_user
 from course_forms import CourseForm, CourseFormModify, CourseFormFacultyAdd, CourseFormFacultyModify
 
 from django.shortcuts import render
@@ -17,13 +17,39 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group,Permission
 
 
-LEN_OF_COURSE_TABLE = 6
+LEN_OF_COURSE_TABLE = 7
 
 @login_required
 def courseMain(request):
-	#if Faculty_user.objects.filter(id = request.user.username) or Admin_user.objects.filter(id = request.user.username):
+	canAdd = True
+	canDel = True
+	canMod = True
 	if Admin_user.objects.filter(id = request.user.username):
-		return render(request, 'CourseMain.html')
+		return render(request, 'CourseMain.html', locals())
+	elif Faculty_user.objects.filter(id = request.user.username):
+		userInfo = Faculty_user.objects.filter(id = request.user.username)
+		if userInfo[0].isSpecial:
+			if not request.user.has_perm("IMS.add_course_info"):
+				canAdd = False
+			if not request.user.has_perm("IMS.change_course_info"):
+				canMod = False
+			if not request.user.has_perm("IMS.delete_course_info"):
+				canDel = False	
+			return render(request, 'CourseMain.html', locals())
+		else:	
+			return render(request, 'AccessFault.html')
+	elif Student_user.objects.filter(id = request.user.username):
+		userInfo = Student_user.objects.filter(id = request.user.username)
+		if userInfo[0].isSpecial:
+			if not request.user.has_perm("IMS.add_course_info"):
+				canAdd = False
+			if not request.user.has_perm("IMS.change_course_info"):
+				canMod = False
+			if not request.user.has_perm("IMS.delete_course_info"):
+				canDel = False	
+			return render(request, 'CourseMain.html', locals())
+		else:	
+			return render(request, 'AccessFault.html')
 	else:
 		return render(request, 'AccessFault.html')
 
@@ -50,35 +76,71 @@ def importCheck(term, isAdmin, isFaculty, userCollege):
 	if len(term[1]) > 110:
 		return 'NAME: TOO LONG'
 	if (isDigit(term[2]) != 'FLOAT') and (isDigit(term[2]) != 'INT'):
-		return 'CREDITS: FLOAT NEEDED'
+		return 'CREDITS: FLOAT REQUIRED'
 	if isDigit(term[3]) != 'INT':
-		return 'SEMESTER: INT NEEDED'
+		return 'SEMESTER: INT REQUIRED'
 	if len(term[4]) > 110:
 		return 'TEXTBOOK: TOO LONG'
 	if len(term[5]) > 50:
 		return 'COLLEGE: TOO LONG'	
+	if isDigit(term[6]) != 'INT':
+		return 'TYPE: INT REQUIRED'
 	return 'YEAH'
+
+def getSearchResult(searchType, searchTerm, isAdmin, isFaculty, userCollege):
+	if searchType == "course_id":
+		coursesTemp = Course_info.objects.filter(course_id = searchTerm)
+	if searchType == "course_name":
+		coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
+	if searchType == "credits":
+		coursesTemp = Course_info.objects.filter(credits = searchTerm)
+	if searchType == "semester":
+		coursesTemp = Course_info.objects.filter(semester = searchTerm)
+	if searchType == "textbook":
+		coursesTemp = Course_info.objects.filter(textbook = searchTerm)
+	if searchType == "college":
+		coursesTemp = Course_info.objects.filter(college = searchTerm)
+	if searchType == "course_type":
+		coursesTemp = Course_info.objects.filter(course_type = searchTerm)
+	courses = []
+	for course in coursesTemp:
+		if isAdmin:
+			courses.append(course)
+		elif isFaculty and (userCollege == course.college):
+				courses.append(course)
+	return courses
 
 @login_required
 def courseAdd(request):
 	errors = []
 	errorImport = []
 	addIsDone = False
-#===========USER GROUP CHECK========================================#
-	# isAdmin = False 												#
-	# isFaculty = False 											#
-	# userName = request.user.username 								#
-	# if Admin_user.objects.filter(id = userName): 					#
-	# 	isAdmin = True 												#
-	# 	userCollege = -1											#
-	# elif Faculty_user.objects.filter(id = userName): 				#
-	# 	isFaculty = True 											#
-	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
-	# 	userCollege = userInfo[0].college    						#
-	isAdmin = True													#
-	isFaculty = False												#
-	userCollege = -1												#
-#============END OF GROUP CHECK=====================================#
+#===========USER GROUP CHECK========================================================#
+	isAdmin = False 																#
+	isFaculty = False 																#
+	userName = request.user.username 												#
+	if Admin_user.objects.filter(id = userName): 									#
+		userInfo = Admin_user.objects.filter(id = userName)							#
+	 	if userInfo[0].college == 'all':											#
+	 		isAdmin = True															#
+	 		userCollege = -1														#
+	 	else: 																		#
+	 		isFaculty = True 														#
+	 	 	userCollege = userInfo[0].college 										#
+	elif Faculty_user.objects.filter(id = userName):								#
+	 	userInfo = Faculty_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	elif Student_user.objects.filter(id = userName):								#
+	 	userInfo = Student_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	#isAdmin = True																	#
+	#isFaculty = False																#
+	#userCollege = -1																#
+#============END OF GROUP CHECK=====================================================#
 	if request.method == 'POST':
 		if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button or first access
 			if isAdmin:
@@ -96,13 +158,14 @@ def courseAdd(request):
 					semester = fileTerms[3 + LEN_OF_COURSE_TABLE * x].encode('utf-8'),
 					textbook = fileTerms[4 + LEN_OF_COURSE_TABLE * x].encode('utf-8'),
 					college = fileTerms[5 + LEN_OF_COURSE_TABLE * x].encode('utf-8'),
+					course_type = fileTerms[6 + LEN_OF_COURSE_TABLE * x].encode('utf-8'),
 				)
-				state = importCheck(fileTerms[0 + LEN_OF_COURSE_TABLE * x : 6 + LEN_OF_COURSE_TABLE * x], isAdmin, isFaculty, userCollege) 
+				state = importCheck(fileTerms[0 + LEN_OF_COURSE_TABLE * x : LEN_OF_COURSE_TABLE * (x + 1)], isAdmin, isFaculty, userCollege) 
 				if state == 'YEAH'.encode('utf-8'):
 					dbQuery.save()
 				else:
 					errorExist = True
-					returnListItem = fileTerms[0 + LEN_OF_COURSE_TABLE * x : 6 + LEN_OF_COURSE_TABLE * x];
+					returnListItem = fileTerms[0 + LEN_OF_COURSE_TABLE * x : LEN_OF_COURSE_TABLE * (x + 1)];
 					returnListItem.append(state)
 					errorImport.append(returnListItem)
 			addIsDone = True
@@ -130,6 +193,7 @@ def courseAdd(request):
 						semester = info['semester'],
 						textbook = info['textbook'],
 						college = info['college'],
+						course_type = info['course_type'],
 					)
 					dbQuery.save()
 					addIsDone = True
@@ -145,6 +209,7 @@ def courseAdd(request):
 						semester = info['semester'],
 						textbook = info['textbook'],
 						college = userCollege,
+						course_type = info['course_type'],
 					)
 					dbQuery.save()
 					addIsDone = True
@@ -156,21 +221,32 @@ def courseAdd(request):
 @login_required
 def courseDelete(request):
 	errors = []
-#===========USER GROUP CHECK========================================#
-	# isAdmin = False 												#
-	# isFaculty = False 											#
-	# userName = request.user.username 								#
-	# if Admin_user.objects.filter(id = userName): 					#
-	# 	isAdmin = True 												#
-	# 	userCollege = -1											#
-	# elif Faculty_user.objects.filter(id = userName): 				#
-	# 	isFaculty = True 											#
-	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
-	# 	userCollege = userInfo[0].college    						#
-	isAdmin = True													#
-	isFaculty = False												#
-	userCollege = -1												#
-#============END OF GROUP CHECK=====================================#
+#===========USER GROUP CHECK========================================================#
+	isAdmin = False 																#
+	isFaculty = False 																#
+	userName = request.user.username 												#
+	if Admin_user.objects.filter(id = userName): 									#
+		userInfo = Admin_user.objects.filter(id = userName)							#
+	 	if userInfo[0].college == 'all':											#
+	 		isAdmin = True															#
+	 		userCollege = -1														#
+	 	else: 																		#
+	 		isFaculty = True 														#
+	 	 	userCollege = userInfo[0].college 										#
+	elif Faculty_user.objects.filter(id = userName):								#
+	 	userInfo = Faculty_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	elif Student_user.objects.filter(id = userName):								#
+	 	userInfo = Student_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	#isAdmin = True																	#
+	#isFaculty = False																#
+	#userCollege = -1																#
+#============END OF GROUP CHECK=====================================================#
 	response = render(request, 'DeleteCourse.html', locals())
 	if request.method == 'POST':
 		if 'term' in request.POST:
@@ -184,24 +260,7 @@ def courseDelete(request):
 					courses = Course_info.objects.filter(college = userCollege)
 				response = render(request, 'DeleteCourse.html', locals())
 			else:
-				if searchType == 'course_id':
-					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
-					courses = []
-					for course in coursesTemp:
-						if isAdmin:
-							courses.append(course)
-						elif isFaculty and (userCollege == course.college):
-								courses.append(course)
-				elif searchType == 'course_name':
-					coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
-					courses = []
-					for course in coursesTemp:
-						if isAdmin:
-							courses.append(course)
-						elif isFaculty and (userCollege == course.college):
-								courses.append(course)
-				#else:
-					#courses = Course_info.objects.filter(teacher = searchTerm)
+				courses = getSearchResult(searchType, searchTerm, isAdmin, isFaculty, userCollege)
 				response = render(request, 'DeleteCourse.html', locals())
 				response.set_cookie('deleteTerm', searchTerm)
 				response.set_cookie('deleteType', searchType)
@@ -238,21 +297,32 @@ def courseDelete(request):
 @login_required
 def courseModify(request):
 	errors = []
-#===========USER GROUP CHECK========================================#
-	# isAdmin = False 												#
-	# isFaculty = False 											#
-	# userName = request.user.username 								#
-	# if Admin_user.objects.filter(id = userName): 					#
-	# 	isAdmin = True 												#
-	# 	userCollege = -1											#
-	# elif Faculty_user.objects.filter(id = userName): 				#
-	# 	isFaculty = True 											#
-	# 	userInfo = Faculty_user.objects.filter(id = userName) 		#
-	# 	userCollege = userInfo[0].college    						#
-	isAdmin = True													#
-	isFaculty = False												#
-	userCollege = -1												#
-#============END OF GROUP CHECK=====================================#
+#===========USER GROUP CHECK========================================================#
+	isAdmin = False 																#
+	isFaculty = False 																#
+	userName = request.user.username 												#
+	if Admin_user.objects.filter(id = userName): 									#
+		userInfo = Admin_user.objects.filter(id = userName)							#
+	 	if userInfo[0].college == 'all':											#
+	 		isAdmin = True															#
+	 		userCollege = -1														#
+	 	else: 																		#
+	 		isFaculty = True 														#
+	 	 	userCollege = userInfo[0].college 										#
+	elif Faculty_user.objects.filter(id = userName):								#
+	 	userInfo = Faculty_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	elif Student_user.objects.filter(id = userName):								#
+	 	userInfo = Student_user.objects.filter(id = userName)						#
+	 	if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+	 		isFaculty = True														#
+	 		userCollege = userInfo[0].college 										#
+	#isAdmin = True																	#
+	#isFaculty = False																#
+	#userCollege = -1																#
+#============END OF GROUP CHECK=====================================================#
 	if request.method == 'POST':
 		if 'term' in request.POST: #search box
 			inSearch = True
@@ -264,24 +334,7 @@ def courseModify(request):
 				elif isFaculty:
 					courses = Course_info.objects.filter(college = userCollege)
 			else:
-				if searchType == 'course_id':
-					coursesTemp = Course_info.objects.filter(course_id = searchTerm)
-					courses = []
-					for course in coursesTemp:
-						if isAdmin:
-							courses.append(course)
-						elif isFaculty and (userCollege == course.college):
-								courses.append(course)
-				elif searchType == 'course_name':
-					coursesTemp = Course_info.objects.filter(name__icontains = searchTerm)
-					courses = []
-					for course in coursesTemp:
-						if isAdmin:
-							courses.append(course)
-						elif isFaculty and (userCollege == course.college):
-								courses.append(course)
-				#else:
-					#courses = Course_info.objects.filter(teacher = searchTerm)
+				courses = getSearchResult(searchType, searchTerm, isAdmin, isFaculty, userCollege)
 			return render(request, 'ModifyCourse.html', locals())
 		elif 'modifyid' in request.POST: #initial info page
 			inModify = True
@@ -293,16 +346,18 @@ def courseModify(request):
 					'credits': term[0].credits,
 					'semester': term[0].semester,
 					'textbook': term[0].textbook,
-					'college': term[0].college }
-				)
+					'college': term[0].college, 
+					'course_type' : term[0].course_type
+				})
 			elif isFaculty:
 				facultyModify = True
 				form = CourseFormFacultyModify(initial = {
 					'course_name': term[0].name,
 					'credits': term[0].credits,
 					'semester': term[0].semester,
-					'textbook': term[0].textbook }
-				)
+					'textbook': term[0].textbook,
+					'course_type' : term[0].course_type
+				})
 			return render(request, 'ModifyCourse.html', locals())
 		else: #DB update after press submit on initial info page
 			if isAdmin:
@@ -316,6 +371,7 @@ def courseModify(request):
 						semester = info['semester'],
 						textbook = info['textbook'],
 						college = info['college'],
+						course_type = info['course_type'],
 					)
 					dbQuery.save()
 					modifyIsDone = True	
@@ -330,6 +386,7 @@ def courseModify(request):
 						semester = info['semester'],
 						textbook = info['textbook'],
 						college = userCollege,
+						course_type = info['course_type'],
 					)
 					dbQuery.save()
 					modifyIsDone = True	

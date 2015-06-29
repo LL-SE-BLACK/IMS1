@@ -103,7 +103,7 @@ class Course_info(models.Model):
     semester = models.IntegerField(default=0)
     textbook = models.CharField(max_length=110)
     college = models.CharField(max_length=50)
-    type = models.IntegerField(default=0) #必修、选项和通识，根据选课组要求加入
+    course_type = models.IntegerField(default=0) #必修、选项和通识，根据选课组要求加入
 
     def __str__(self):
         return self.name

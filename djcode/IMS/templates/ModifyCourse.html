@@ -19,7 +19,11 @@
         <select id="type" name="type">
   			<option value ="course_id">Course ID</option>
   			<option value ="course_name">Course Name</option>
-  			<option value="teacher">Teacher</option>
+  			<option value="credits">Credits</option>
+  			<option value="semester">Semester</option>
+  			<option value="textbook">Textbook</option>
+  			<option value="college">College</option>
+  			<option value="course_type">Type</option>
 		</select>
         <input type="submit" value="Search Couse">
     </form>
@@ -57,6 +61,7 @@
 			        	<th>Semester</th>
 			        	<th>Textbook</th>
 			        	<th>College</th>
+			        	<th>Type</th>
 			        </tr>
 			        {% for course in courses %}
 			        <tr>
@@ -66,6 +71,7 @@
 			        	<th>{{ course.semester }}</th>
 			        	<th>{{ course.textbook }}</th>
 			        	<th>{{ course.college }}</th>
+			        	<th>{{ course.course_type }}</th>
 			        	<th><input type="button" name="course" value="modify" onclick="javascript:f('{{course.course_id}}')"></th>
 			        </tr>
 			        {% endfor %}
