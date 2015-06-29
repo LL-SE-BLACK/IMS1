@@ -17,7 +17,8 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-    <form id = 'formSearch' action="" method="get">
+    <form id = 'formSearch' action="" method="post">
+    	{% csrf_token %}
         <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="id">Student ID</option>
@@ -59,7 +60,7 @@
 		                <th>Student Gpa</th>
 		                <th>Student Credits</th>
 			        </tr>
-			        {% for student in faculties %}
+			        {% for student in students %}
 			        <tr>
 			        	<th>{{ student.id }}</th>
 	                    <th>{{ student.contact }}</th>
