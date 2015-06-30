@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from head import *
-from models import Student_user
+from models import Student_user, Faculty_user, Admin_user
 from profile_forms import StudentInfoForm
 from django.http import Http404
 from django import forms
@@ -110,12 +110,14 @@ def home(request):
     user_name = str(request.user)  # user Id
     user_name_len = user_name.__len__()
     if user_name_len == LEN_OF_STUDENT_ID:
-        # stu = Student_user.objects.get(id=user_name)
-        return render_to_response('home_panel.html',{"isStudent": 1, "id" : user_name})
+        usrInfo = Student_user.objects.get(id=user_name)
+        return render_to_response('home_panel.html', {"isStudent": 1, "usrInfo": usrInfo})
     elif user_name_len == LEN_OF_FACULTY_ID:
-        return render_to_response('home_panel.html',{"isFaculty": 1, "id" : user_name})
+        usrInfo = Faculty_user.objects.get(id=user_name)
+        return render_to_response('home_panel.html', {"isFaculty": 1, "usrInfo": usrInfo})
     elif user_name_len == LEN_OF_ADMIN_ID:
-        return render_to_response('home_panel.html',{"isAdmin": 1, "id" : user_name})
+        usrInfo = Admin_user.objects.get(id=user_name)
+        return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo})
     else:
         # wrong id length
         raise Http404()

@@ -8,9 +8,25 @@
     <script src="../../../static/js/bootstrap.min.js"></script>
 </head>
 <body>
+<br/>
+<div class="container">
+    <nav class="navbar" role="navigation">
+        <div>
+            <ul class="nav nav-tabs navbar-left">
+                <li role="presentation"><a href="/ims/home/">个人首页</a></li>
+                <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
+                <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
+                <li role="presentation" class="active"><a href="/ims/home/profile/">个人信息管理</a></li>
+                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
+            </ul>
+            <ul class="nav navbar-right">
 
-    <a href="/ims/">back to homepage</a>
-    <p>个人信息</p>
+            </ul>
+        </div>
+    </nav>
+
+
+    <h1>个人信息</h1>
     <br/>
     <div id="changInfo">
         <form class="form-horizontal" action="./changeUserInfo/" method="GET" id="changeInfo_form" onSubmit="return checkuserInfo();">
@@ -176,8 +192,7 @@
             </div>
         </form>
     </div>
-
-    <a href="../../logout/">Logout>>></a>
+</div>
 </body>
     <script>
         function checkuserInfo(){

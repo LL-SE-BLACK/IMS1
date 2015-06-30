@@ -1,39 +1,77 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Course Management</title>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Course Management</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
-<a href="/ims/login/">back to homepage</a>
-<h1>Choose operation</h1>
-{% if canAdd %}
+<br/>
+
+<div class="container">
+    <nav class="navbar" role="navigation">
+        <div>
+            <ul class="nav nav-tabs navbar-left">
+                <li role="presentation"><a href="/ims/home/">个人首页</a></li>
+                <li role="presentation" class="active"><a href="#">课程信息管理</a></li>
+                <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
+                <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
+                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
+            </ul>
+            <ul class="nav navbar-right">
+
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Choose operation</h1>
+    <br/>
+    <ul class="nav nav-pills nav-stacked">
+        {% if canAdd %}
+            <li role="presentation">
+                <a href="#" onclick="javascript:f('add')">Add</a>
+            </li>
+        {% endif %}
+        {% if canMod %}
+            <li role="presentation">
+                <a href="#" onclick="javascript:f('mod')">Modify</a>
+            </li>
+        {% endif %}
+        {% if canDel %}
+            <li role="presentation">
+                <a href="#" onclick="javascript:f('del')">Delete</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<!-- hidden form area begin -->
 <form id="add" action="/ims/course/add/" method="post">
     {% csrf_token %}
-    <input type="button" value="Add" onclick="javascript:f('add')">
+    <input type="hidden" value="Add">
     <input type="hidden" name="first">
 </form>
-{% endif %}
-{% if canMod %}
-<form id="mod" action="/ims/course/modify/" method="post" onclick="javascript:f('mod')">
+<form id="mod" action="/ims/course/modify/" method="post">
     {% csrf_token %}
-    <input type="button" value="Modify">
+    <input type="hidden" value="Modify">
     <input type="hidden" name="first">
 </form>
-{% endif %}
-{% if canDel %}
-<form id="del" action="/ims/course/delete/" method="post" onclick="javascript:f('del')">
+<form id="del" action="/ims/course/delete/" method="post">
     {% csrf_token %}
-    <input type="button" value="Delete">
+    <input type="hidden" value="Delete">
     <input type="hidden" name="first">
 </form>
-{% endif %}
+<!-- hidden form area end -->
+
 </body>
 </html>
 
 <script type="text/javascript">
-	function f(a) {
-		var form = document.getElementById(a);
-		form.first.value = 1;
-		form.submit();
-	}
+    function f(a) {
+        var form = document.getElementById(a);
+        form.first.value = 1;
+        form.submit();
+    }
 </script>

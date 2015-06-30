@@ -3,34 +3,61 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>用户主页</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
-{% if isStudent %}
-    Weclome, {{ id }}同学!
-    <br/>
-    <a href="./profile">个人信息显示与修改 </a>
-{% endif %}
-{% if isFaculty %}
-    Weclome, {{ id }}老师!
-    <br/>
-    <a href="./profile">个人信息显示与修改 </a>
-    <br/>
-    <a href="">查看已开课程</a>
-    <!--  TODO 教师已开课程查看好像没写？ -->
-{% endif %}
-{% if isAdmin %}
-    Weclome, {{ id }}管理员!
-    <br/>
-    <a href="./profile">个人信息显示与修改 </a>
-    <br/>
-    <a href="../course/">课程管理</a>
-    <br/>
-    <a href="../user/">用户管理</a>
-    <!--  TODO 用户管理的权限限定 -->
-{% endif %}
+<br/>
 
-</br>
-<a href="../logout/">Logout>>></a>
+<div class="container">
+    <nav class="navbar" role="navigation">
+        <div>
+            <ul class="nav nav-tabs navbar-left">
+                <li role="presentation" class="active"><a href="#">个人首页</a></li>
+                {% if isStudent %}
+                    <li role="presentation"><a href="#">查看个人课表</a></li>
+                {% elif isFaculty %}
+                    <li role="presentation"><a href="#">查看开课情况</a></li>
+                {% elif isAdmin %}
+                    <li role="presentation"><a href="../course/">课程信息管理</a></li>
+                    <li role="presentation"><a href="../user/">用户信息管理</a></li>
+                {% endif %}
+                <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
+                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
+            </ul>
+            <ul class="nav navbar-right">
+                <li>
+                    <a href="./profile/" class="thumbnail" role="button" style="padding: 5%">
+                        <img src="/ims{{ usrInfo.photo.url }}" width="60" height="60"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    {% if isStudent %}
+        Weclome, {{ usrInfo.id }}同学!
+    {% endif %}
+    {% if isFaculty %}
+        Weclome, {{ usrInfo.id }}老师!
+        <!--  TODO 教师已开课程查看好像没写？ -->
+    {% endif %}
+    {% if isAdmin %}
+        Weclome, {{ usrInfo.id }}管理员!
+        <!--  TODO 用户管理的权限限定 -->
+    {% endif %}
+
+</div>
+
 
 </body>
 </html>
+
+<script>
+    //manually init popover
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
+</script>
