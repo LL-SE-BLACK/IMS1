@@ -105,6 +105,9 @@ class Course_info(models.Model):
     college = models.CharField(max_length=50)
     course_type = models.IntegerField(default=0) #必修、选项和通识，根据选课组要求加入
 
+    def __unicode__(self):
+        return u'course_id:%s, name:%s, credits:%f, semester:%d, textbook:%s, college:%s, course_type:%d'%(self.course_id, self.name, self.credits, self.semester, self.textbook, self.college, self.course_type)
+
     def __str__(self):
         return self.name
 
@@ -127,6 +130,9 @@ class Class_info(models.Model):
     remain = models.IntegerField(default=0) #选课剩余容量
     year = models.IntegerField(default=2015) #年份（学年）
     language = models.IntegerField(default=0) #中文、英文、双语
+
+    def __unicode__(self):
+        return u'class_id:%s, teacher:%s, time:%d, room:%s, examdate:%s, examtime:%d, examroom:%s, capacity:%d, semester:%d, remain:%d, year:%d, language:%d'%(self.class_id, self.teacher, self.time, self.room, self.examdate, self.examtime, self.examroom, self.capacity, self.semester, self.remain, self.year, self.language)
 
     def __str__(self):
         return self.id
