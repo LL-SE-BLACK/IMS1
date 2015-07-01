@@ -21,10 +21,27 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Add faculty</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <a href="/ims/user/">back to user management</a>
-    <p></p>
+<br/>
+<div class="container">
+    <nav class="navbar" role="navigation">
+        <div>
+            <ul class="nav nav-tabs navbar-left">
+                <li role="presentation"><a href="/ims/home/">个人首页</a></li>
+                <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
+                <li role="presentation" class="active"><a href="/ims/user/">用户信息管理</a></li>
+                <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
+                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
+            </ul>
+            <ul class="nav navbar-right">
+
+            </ul>
+        </div>
+    </nav>
     <h1>New Faculty Infomation</h1>
 
     {% if addIsDone %}
@@ -54,14 +71,15 @@
             <p>Sure to add following faculties?</p>
             <table>
                 <tr>
-                    <th>Faculty ID</th>
-                    <th>Faculty Contact</th>
-                    <th>Faculty Name</th>
-                    <th>Faculty Gender</th>
-                    <th>Faculty College</th>
-                    <th>Faculty Major</th>
-                    <th>Faculty Degree</th>
-                    <th>Faculty Title</th>
+                    <th>Id</th>
+                    <th>Contact</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>College</th>
+                    <th>Major</th>
+                    <th>Degree</th>
+                    <th>Title</th>
+                    <th>IsSpecial</th>
                 </tr>
                 {% for term in terms %}
                     <tr>
@@ -73,6 +91,7 @@
                         <th>{{ term.5 }}</th>
                         <th>{{ term.6 }}</th>
                         <th>{{ term.7 }}</th>
+                        <th>{{ term.8 }}</th>
                     </tr>
                 {% endfor %}
             </table>
@@ -83,18 +102,18 @@
     {% endif %}
 
     {% if errorExist %}
-        <p>The following are existed.</p>
+        <p style="color: red">The followings were not successfully added.</p>
         <table>
             <tr>
                 <th>FAULT</th>
-                <th>Faculty ID</th>
-                <th>Faculty Contact</th>
-                <th>Faculty Name</th>
-                <th>Faculty Gender</th>
-                <th>Faculty College</th>
-                <th>Faculty Major</th>
-                <th>Faculty Degree</th>
-                <th>Faculty Title</th>
+                <th>ID</th>
+                <th>Contact</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>College</th>
+                <th>Major</th>
+                <th>Degree</th>
+                <th>Title</th>
             </tr>
         {% for term in existed %}
             <tr>
