@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <title>Modify Faculty</title>
+    <title>Modify Course</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
@@ -33,7 +33,7 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-    <form id = 'formSearch' action="" method="post">
+    <form id = 'formSearch' action="" method="get">
     	{% csrf_token %}
         <input type="text" name="term">
         <select id="type" name="type">

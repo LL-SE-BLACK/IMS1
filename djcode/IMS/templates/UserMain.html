@@ -38,25 +38,16 @@
             <a href="#" onclick="javascript:f('addstudent')">AddStudent</a>
         </li>
         <li role="presentation">
-            <a href="#" onclick="javascript:f('addadmin')">AddAdmin</a>
-        </li>
-        <li role="presentation">
             <a href="#" onclick="javascript:f('modfaculty')">ModifyFaculty</a>
         </li>
         <li role="presentation">
             <a href="#" onclick="javascript:f('modstudent')">ModifyStudent</a>
         </li>
         <li role="presentation">
-            <a href="#" onclick="javascript:f('modadmin')">ModifyAdmin</a>
-        </li>
-        <li role="presentation">
             <a href="#" onclick="javascript:f('delfaculty')">DeleteFaculty</a>
         </li>
         <li role="presentation">
             <a href="#" onclick="javascript:f('delstudent')">DeleteStudent</a>
-        </li>
-        <li role="presentation">
-            <a href="#" onclick="javascript:f('deladmin')">DeleteAdmin</a>
         </li>
     </ul>
 </div>
@@ -72,11 +63,6 @@
     <input type="hidden" value="AddStudent">
     <input type="hidden" name="first">
 </form>
-<form id="addadmin" action="/ims/user/add_admin/" method="post">
-    {% csrf_token %}
-    <input type="hidden" value="AddAdmin">
-    <input type="hidden" name="first">
-</form>
 
 <form id="modfaculty" action="/ims/user/modify_faculty/" method="post">
     {% csrf_token %}
@@ -88,11 +74,6 @@
     <input type="hidden" value="ModifyStudent">
     <input type="hidden" name="first">
 </form>
-<form id="modadmin" action="/ims/user/modify_admin/" method="post">
-    {% csrf_token %}
-    <input type="hidden" value="ModifyAdmin">
-    <input type="hidden" name="first">
-</form>
 
 <form id="delfaculty" action="/ims/user/delete_faculty/" method="post">
     {% csrf_token %}
@@ -102,11 +83,6 @@
 <form id="delstudent" action="/ims/user/delete_student/" method="post">
     {% csrf_token %}
     <input type="hidden" value="DeleteStudent">
-    <input type="hidden" name="first">
-</form>
-<form id="deladmin" action="/ims/user/delete_admin/" method="post">
-    {% csrf_token %}
-    <input type="hidden" value="DeleteAdmin">
     <input type="hidden" name="first">
 </form>
 <!-- hidden form area end -->

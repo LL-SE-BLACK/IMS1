@@ -36,7 +36,8 @@
 			{% endfor %}
 		</ul>
 	{% endif %}
-    <form id = 'formSearch' action="" method="post">
+    <form id = 'formSearch' action="" method="get">
+        <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="id">ID</option>
   			<option value ="contact">Contact</option>
