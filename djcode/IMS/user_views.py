@@ -1,5 +1,6 @@
 __author__ = 'John'
 
+from head import *
 import re
 import os
 
@@ -216,6 +217,7 @@ def facultyAdd(request):
     return render(request, 'AccessFault.html')
 
 @login_required
+@csrf_exempt
 def facultyDelete(request):
     errors = []
     userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
@@ -370,6 +372,7 @@ def studentAdd(request):
     return render(request, 'AccessFault.html')
 
 @login_required
+@csrf_exempt
 def studentDelete(request):
     errors = []
     userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
@@ -521,6 +524,7 @@ def adminAdd(request):
     return render(request, 'AccessFault.html')
 
 @login_required
+@csrf_exempt
 def adminDelete(request):
     errors = []
     userCollege = Admin_user.objects.filter(id = request.user.username)[0].college

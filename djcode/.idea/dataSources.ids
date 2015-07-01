@@ -7,9 +7,10 @@
     <table name="IMS_admin_user" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="VARCHAR(3)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="contact" sqlType="VARCHAR(11)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="college" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="gender" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="photo" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
     </table>
     <table name="IMS_class_info" schema="" catalog="" type="TABLE">
@@ -22,6 +23,10 @@
       <column name="capacity" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="examtime" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="time" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="language" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="remain" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="semester" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="year" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_IMS_class_info_1" columns="course_id_id" ref-table="IMS_course_info" ref-schema="" ref-catalog="" ref-columns="course_id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_IMS_class_table_2" table="IMS_class_table" schema="" catalog="" columns="class_id_id"/>
@@ -44,6 +49,7 @@
       <column name="college" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="credits" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <column name="semester" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="course_type" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="course_id"/>
       <exported-key name="#FAKE_IMS_class_info_1" table="IMS_class_info" schema="" catalog="" columns="course_id_id"/>
     </table>
@@ -55,6 +61,8 @@
       <column name="major" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="degree" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="gender" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="isSpecial" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="photo" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="title" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
     </table>
@@ -67,15 +75,28 @@
     <table name="IMS_student_user" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="contact" sqlType="VARCHAR(11)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="college" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="major" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="credits" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <column name="gender" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="gpa" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <column name="grade" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="isSpecial" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="photo" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
       <exported-key name="#FAKE_IMS_class_table_1" table="IMS_class_table" schema="" catalog="" columns="student_id_id"/>
+    </table>
+    <table name="IMS_sys_log" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="time" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="optype" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="table" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="primkey" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="field" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="post" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="pre" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
     </table>
     <table name="auth_group" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>

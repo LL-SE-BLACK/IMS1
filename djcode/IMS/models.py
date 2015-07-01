@@ -37,17 +37,17 @@ class Student_user(models.Model):
     isSpecial = models.BooleanField(default=False)
     photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
 
-    class Meta:
-        permissions = (
-            ("manage", "Can manage faculties, students or courses")
-        )
-
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, grade:%s, gpa:%f, credits:%f'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.grade, self.gpa, self.credits)
         # return 'id:' + self.id
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        permissions = (
+            ("manage", "Can manage stu user info"),
+        )
 
 
 class Faculty_user(models.Model):
@@ -67,17 +67,17 @@ class Faculty_user(models.Model):
     isSpecial = models.BooleanField(default=False)
     photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
 
-    class Meta:
-        permissions = (
-            ("manage", "Can manage faculties, students or courses")
-        )
-
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, degree:%s, title:%s'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.degree, self.title)
         # return 'id:' + self.id
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        permissions = (
+            ("manage", "Can manage faculty user info"),
+        )
 
 class Admin_user(models.Model):
     '''
@@ -91,10 +91,6 @@ class Admin_user(models.Model):
     gender = models.BooleanField(default=0)
     college = models.CharField(max_length=50, default="all") #default for superadmin
     photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
-    class Meta:
-        permissions = (
-            ("manage", "Can manage faculties, students or courses")
-        )
 
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s'%(self.id, self.contact,self.name,self.gender, self.college)
@@ -102,6 +98,11 @@ class Admin_user(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        permissions = (
+            ("manage", "Can manage admin user info"),
+        )
 
 class Course_info(models.Model):
     '''
@@ -122,6 +123,11 @@ class Course_info(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        permissions = (
+            ("manage", "Can manage basic course info"),
+        )
 
 class Class_info(models.Model):
     '''
@@ -149,14 +155,11 @@ class Class_info(models.Model):
     def __str__(self):
         return self.id
 
+'''
 class Pre_requisites(models.Model):
-    '''
-    | id | prereq |
-    |---|---|
-    | CHARACTER(8) | CHARACTER(8) |
-    '''
     course_id = models.CharField(max_length=8)
     prereq = models.CharField(max_length=8)
+'''
 
 class Class_table(models.Model):
     '''
@@ -167,6 +170,7 @@ class Class_table(models.Model):
     student_id = models.ForeignKey(Student_user)
     class_id = models.ForeignKey(Class_info)
 
+'''
 class Sys_log(models.Model):
     time = models.CharField(max_length=20)
     optype = models.CharField(max_length=20, default='update')
@@ -175,3 +179,4 @@ class Sys_log(models.Model):
     field = models.CharField(max_length=20)
     pre = models.CharField(max_length=50, default='none')
     post = models.CharField(max_length=50, default='none')
+'''
