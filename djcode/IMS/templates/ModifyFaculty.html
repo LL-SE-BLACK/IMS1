@@ -3,29 +3,13 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <title>Modify Course</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Modify Faculty</title>
 </head>
 <body>
-<br>
-<div class="container">
-    <nav class="navbar" role="navigation">
-        <div>
-            <ul class="nav nav-tabs navbar-left">
-                <li role="presentation"><a href="/ims/home/">个人首页</a></li>
-                <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
-                <li role="presentation"  class="active"><a href="/ims/user/">用户信息管理</a></li>
-                <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
-                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
-            </ul>
-            <ul class="nav navbar-right">
-
-            </ul>
-        </div>
-    </nav>
-	<h1>Search Faculties For Modification</h1>
+	<a href="/ims/user/">back to faculty management</a>
+	<p></p>
+	<h1>Faculty Search</h1>
 	{% if errors %}
 		<ul>
 			{% for error in errors %}
@@ -37,15 +21,8 @@
     	{% csrf_token %}
         <input type="text" name="term">
         <select id="type" name="type">
-  			<option value ="id">ID</option>
-  			<option value ="contact">Contact</option>
-  			<option value ="name">Name</option>
-  			<option value ="gender">Gender</option>
-  			<option value ="college">College</option>
-  			<option value ="major">Major</option>
-  			<option value ="degree">Degree</option>
-  			<option value ="title">Title</option>
-  			<option value ="isSpecial">IsSpecial</option>
+  			<option value ="id">Faculty ID</option>
+  			<option value ="name">Faculty Name</option>
 		</select>
         <input type="submit" value="Search Faculty">
     </form>
@@ -73,15 +50,14 @@
 			    <p>Found {{ faculties | length }} faculties{{ faculties | pluralize }}.</p>
 			    <table>
 			    	<tr>
-			        	<th>Id</th>
-                    	<th>Contact</th>
-                    	<th>Name</th>
-                    	<th>Gender</th>
-                    	<th>College</th>
-                    	<th>Major</th>
-                    	<th>Degree</th>
-                    	<th>Title</th>
-                    	<th>IsSpecial</th>
+			        	<th>Faculty ID</th>
+                        <th>Faculty Contact</th>
+                        <th>Faculty Name</th>
+                        <th>Faculty Gender</th>
+                        <th>Faculty College</th>
+                        <th>Faculty Major</th>
+                        <th>Faculty Degree</th>
+                        <th>Faculty Title</th>
 			        </tr>
 			        {% for faculty in faculties %}
 			        <tr>
@@ -93,7 +69,6 @@
                         <th>{{ faculty.major }}</th>
                         <th>{{ faculty.degree }}</th>
                         <th>{{ faculty.title }}</th>
-                        <th>{{ faculty.isspecial }}</th>
 			        	<th><input type="button" name="faculty" value="modify" onclick="javascript:f('{{faculty.id}}')"></th>
 			        </tr>
 			        {% endfor %}

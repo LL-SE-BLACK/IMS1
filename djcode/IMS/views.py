@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from IMS.head import *
-from IMS.models import Student_user, Faculty_user, Admin_user
-from IMS.profile_forms import StudentInfoForm
+from head import *
+from models import Student_user, Faculty_user, Admin_user
+from profile_forms import StudentInfoForm
 from django.http import Http404
 from django import forms
 from django.forms.util import ErrorList
@@ -31,11 +31,9 @@ class LoginForm(forms.Form):
         return cleaned_data
 
 def startup(request):
-    print request.user
     return HttpResponseRedirect('ims/login/')
 
 def loggingin(request):
-    print request.user
     if not request.user.is_authenticated():
         form = LoginForm()
         t = get_template('login.html')
