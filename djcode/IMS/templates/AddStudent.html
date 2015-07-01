@@ -20,10 +20,27 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Add student</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <a href="/ims/user/">back to user management</a>
-    <p></p>
+<br/>
+<div class="container">
+    <nav class="navbar" role="navigation">
+        <div>
+            <ul class="nav nav-tabs navbar-left">
+                <li role="presentation"><a href="/ims/home/">个人首页</a></li>
+                <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
+                <li role="presentation" class="active"><a href="/ims/user/">用户信息管理</a></li>
+                <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
+                <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
+            </ul>
+            <ul class="nav navbar-right">
+
+            </ul>
+        </div>
+    </nav>
     <h1>New Student Infomation</h1>
 
     {% if addIsDone %}
@@ -53,15 +70,16 @@
             <p>Sure to add following students?</p>
             <table>
                 <tr>
-                    <th>Student ID</th>
-                    <th>Student Contact</th>
-                    <th>Student Name</th>
-                    <th>Student Gender</th>
-                    <th>Student College</th>
-                    <th>Student Major</th>
-                    <th>Student Grade</th>
-                    <th>Student Gpa</th>
-                    <th>Student Credits</th>
+                    <th>ID</th>
+                    <th>Contact</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>College</th>
+                    <th>Major</th>
+                    <th>Grade</th>
+                    <th>Gpa</th>
+                    <th>Credits</th>
+                    <th>IsSpecial</th>
                 </tr>
                 {% for term in terms %}
                     <tr>
@@ -74,6 +92,7 @@
                         <th>{{ term.6 }}</th>
                         <th>{{ term.7 }}</th>
                         <th>{{ term.8 }}</th>
+                        <th>{{ term.9 }}</th>
                     </tr>
                 {% endfor %}
             </table>
@@ -88,19 +107,20 @@
         <table>
             <tr>
                 <th>FAULT</th>
-                <th>Student ID</th>
-                <th>Student Contact</th>
-                <th>Student Name</th>
-                <th>Student Gender</th>
-                <th>Student College</th>
-                <th>Student Major</th>
-                <th>Student Grade</th>
-                <th>Student Gpa</th>
-                <th>Student Credits</th>
+                <th>ID</th>
+                <th>Contact</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>College</th>
+                <th>Major</th>
+                <th>Grade</th>
+                <th>Gpa</th>
+                <th>Credits</th>
+                <th>IsSpecial</th>
             </tr>
         {% for term in existed %}
             <tr>
-                <th>{{ term.9 }}</th>
+                <th>{{ term.10 }}</th>
                 <th>{{ term.0 }}</th>
                 <th>{{ term.1 }}</th>
                 <th>{{ term.2 }}</th>
@@ -110,6 +130,7 @@
                 <th>{{ term.6 }}</th>
                 <th>{{ term.7 }}</th>
                 <th>{{ term.8 }}</th>
+                <th>{{ term.9 }}</th>
             </tr>
         {% endfor %}
         </table>
