@@ -24,6 +24,10 @@
                     <li role="presentation"><a href="../user/">用户信息管理</a></li>
                 {% endif %}
                 <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
+                {% if isSuperAdmin %}
+                    <li role="presentation"><a href="/ims/log/">系统日志管理</a></li>
+                {% endif %}
+
                 <li role="presentation"><a href="/ims/logout/">退出登录</a></li>
             </ul>
             <ul class="nav navbar-right">
