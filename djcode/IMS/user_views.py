@@ -4,7 +4,7 @@ import re
 import os
 
 from models import Class_info, Course_info, Faculty_user, Admin_user, Student_user
-from user_forms import StudentForm, FacultyForm, StudentFormModify, FacultyFormModify
+from user_forms import StudentForm, FacultyForm, StudentFormModify, FacultyFormModify, AdminForm, AdminFormModify
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -15,8 +15,9 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group,Permission
 
-LEN_OF_FACULTY_TABLE = 8
-LEN_OF_STUDENT_TABLE = 9
+LEN_OF_FACULTY_TABLE = 9
+LEN_OF_STUDENT_TABLE = 10
+LEN_OF_ADMIN_TABLE = 5
 
 @login_required
 def userMain(request):
@@ -54,7 +55,7 @@ def importFacultyCheck(term):
     if len(term[6]) > 20:
         return 'DEGREE: TOO LONG'
     if len(term[7]) > 20:
-        return 'COLLEGE: TOO LONG'   
+        return 'TITLE: TOO LONG'
     return 'YEAH'
 
 def importStudentCheck(term):
@@ -72,12 +73,90 @@ def importStudentCheck(term):
         return 'MAJOR: TOO LONG' 
     return 'YEAH'
 
+def importAdminCheck(term):
+    if Admin_user.objects.filter(id = term[0]): #test duplicate add
+        return 'ALREADY EXIST'
+    if len(term[0]) > 6:
+        return 'ID: TOO LONG'
+    if len(term[1]) > 11:
+        return 'CONTACT: TOO LONG'
+    if len(term[2]) > 20:
+        return 'NAME: TOO LONG'
+    if len(term[4]) > 50:
+        return 'COLLEGE: TOO LONG'
+    if len(term[5]) > 50:
+        return 'MAJOR: TOO LONG'
+    return 'YEAH'
+
+def getSearchResult(searchType, searchTerm, userCollege, userType):
+    if userType == "ADMIN" :
+        if searchType == "id":
+            Temp = Admin_user.objects.filter(id = searchTerm)
+        if searchType == "contact":
+            Temp = Admin_user.objects.filter(contact__icontains = searchTerm)
+        if searchType == "name":
+            Temp = Admin_user.objects.filter(name__icontains = searchTerm)
+        if searchType == "college":
+            Temp = Admin_user.objects.filter(college__icontains = searchTerm)
+        if searchType == "major":
+            Temp = Admin_user.objects.filter(major__icontains = searchTerm)
+        results = []
+        for result in Temp:
+            results.append(result)
+        return results
+    elif userType == "FACULTY":
+        if searchType == "id":
+            Temp = Faculty_user.objects.filter(id = searchTerm)
+        if searchType == "contact":
+            Temp = Faculty_user.objects.filter(contact_icontains = searchTerm)
+        if searchType == "name":
+            Temp = Faculty_user.objects.filter(name__icontains = searchTerm)
+        if searchType == "gender":
+            Temp = Faculty_user.objects.filter(gender = searchTerm)
+        if searchType == "college":
+            Temp = Faculty_user.objects.filter(college__icontains = searchTerm)
+        if searchType == "major":
+            Temp = Faculty_user.objects.filter(major__icontains = searchTerm)
+        if searchType == "degree":
+            Temp = Faculty_user.objects.filter(degree__icontains = searchTerm)
+        if searchType == "title":
+            Temp = Faculty_user.objects.filter(title__icontains = searchTerm)
+        Temp = Temp.filter(college = userCollege)
+        results = []
+        for result in Temp:
+            results.append(result)
+        return results
+    elif userType == "STUDENT":
+        if searchType == "id":
+            Temp = Student_user.objects.filter(id = searchTerm)
+        if searchType == "contact":
+            Temp = Student_user.objects.filter(contact__icontains = searchTerm)
+        if searchType == "name":
+            Temp = Student_user.objects.filter(name__icontains = searchTerm)
+        if searchType == "gender":
+            Temp = Student_user.objects.filter(gender = searchTerm)
+        if searchType == "college":
+            Temp = Student_user.objects.filter(college__icontains = searchTerm)
+        if searchType == "major":
+            Temp = Student_user.objects.filter(major__icontains = searchTerm)
+        if searchType == "degree":
+            Temp = Student_user.objects.filter(degree__icontains = searchTerm)
+        if searchType == "title":
+            Temp = Student_user.objects.filter(gpa = searchTerm)
+        if searchType == "credits":
+            Temp = Student_user.objects.filter(credits = searchTerm)
+        Temp = Temp.filter(college = userCollege)
+        results = []
+        for result in Temp:
+            results.append(result)
+        return results
+
 @login_required
 def facultyAdd(request):
     errors = []
     errorImport = []
     existed = []
-    addIsDone = False                                              
+    addIsDone = False
 
     if request.method == 'POST':
         if request.POST.get('multiAddCancel') or request.POST.get('first'): #click cancle button or first access
@@ -127,8 +206,7 @@ def facultyAdd(request):
                     college = info['college'],
                     major = info['major'],
                     degree = info['degree'],
-                    title = info['title'],
-                    isSpecial = info['isSpecial']
+                    title = info['title']
                 )
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
@@ -140,6 +218,7 @@ def facultyAdd(request):
 @login_required
 def facultyDelete(request):
     errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
     response = render(request, 'DeleteFaculty.html', locals())
     if request.method == 'POST':
         if 'term' in request.POST:
@@ -147,21 +226,10 @@ def facultyDelete(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                faculties = Faculty_user.objects.all()
+                faculties = Faculty_user.objects.filter(college = userCollege)
                 response = render(request, 'DeleteFaculty.html', locals())
             else:
-                if searchType  ==   'id':
-                    facultiesTemp = Faculty_user.objects.filter(id = searchTerm)
-                    faculties = []
-                    for faculty in facultiesTemp:
-                        faculties.append(faculty)
-                elif searchType  ==   'name':
-                    facultiesTemp = Faculty_user.objects.filter(name__icontains = searchTerm)
-                    faculties = []
-                    for faculty in facultiesTemp:
-                        faculties.append(faculty)
-                # else:
-                #courses = Course_info.objects.filter(teacher = searchTerm)
+                faculties = getSearchResult(searchType, searchTerm, userCollege, 'FACULTY')
                 response = render(request, 'DeleteFaculty.html', locals())
                 response.set_cookie('deleteTerm', searchTerm)
                 response.set_cookie('deleteType', searchType)
@@ -193,26 +261,17 @@ def facultyDelete(request):
 @login_required
 def facultyModify(request):
     errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
     if request.method  ==   'POST':
         if 'term' in request.POST:
             inSearch = True
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                faculties = Faculty_user.objects.all()
+                faculties = Faculty_user.objects.filter(college = userCollege)
             else:
-                if searchType  ==   'id':
-                    facultiesTemp = Faculty_user.objects.filter(id = searchTerm)
-                    faculties = []
-                    for faculty in facultiesTemp:
-                        faculties.append(faculty)
-                elif searchType  ==   'name':
-                    facultiesTemp = Faculty_user.objects.filter(name__icontains = searchTerm)
-                    faculties = []
-                    for faculty in facultiesTemp:
-                        faculties.append(faculty)
-                # else:
-                #courses = Course_info.objects.filter(teacher = searchTerm)
+                faculties = getSearchResult(searchType, searchTerm, userCollege, 'FACULTY')
+            return render(request, 'ModifyFaculty.html', locals())
         elif 'modifyid' in request.POST:
             inModify = True
             facultyId = request.POST.get('modifyid')
@@ -225,7 +284,8 @@ def facultyModify(request):
                 'major': term[0].major,
                 'degree': term[0].degree,
                 'title': term[0].title}
-                                     )
+                )
+            return render(request, 'ModifyFaculty.html', locals())
         else:
             form = FacultyFormModify(request.POST)
             if form.is_valid():
@@ -312,6 +372,7 @@ def studentAdd(request):
 @login_required
 def studentDelete(request):
     errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
     response = render(request, 'DeleteStudent.html', locals())
     if request.method  ==   'POST':
         if 'term' in request.POST:
@@ -319,24 +380,14 @@ def studentDelete(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                students = Student_user.objects.all()
+                students = Student_user.objects.filter(college = userCollege)
                 response = render(request, 'DeleteStudent.html', locals())
             else:
-                if searchType  ==   'id':
-                    studentsTemp = Student_user.objects.filter(id = searchTerm)
-                    students = []
-                    for student in studentsTemp:
-                        students.appen(student)
-                elif searchType  ==   'name':
-                    studentsTemp = Student_user.objects.filter(name__icontains = searchTerm)
-                    students = []
-                    for student in studentsTemp:
-                        students.appen(student)
-                # else:
-                #courses = Course_info.objects.filter(teacher = searchTerm)
+                studens = getSearchResult(searchType, searchTerm, userCollege, 'STUDENT')
                 response = render(request, 'DeleteStudent.html', locals())
                 response.set_cookie('deleteTerm', searchTerm)
                 response.set_cookie('deleteType', searchType)
+            return response
         elif 'deleteid' in request.POST:
             studentId = request.POST.get('deleteid')
             Student_user.objects.filter(id = studentId).delete()
@@ -345,16 +396,16 @@ def studentDelete(request):
             if 'deleteTerm' in request.COOKIES and 'deleteType' in request.COOKIES:
                 searchTerm = request.COOKIES['deleteTerm']
                 searchType = request.COOKIES['deleteType']
-                if searchType  ==   'id':
+                if searchType == 'id':
                     studentsTemp = Student_user.objects.filter(id = searchTerm)
                     students = []
                     for student in studentsTemp:
-                        students.appen(student)
+                        students.append(student)
                 elif searchType  ==   'name':
                     studentsTemp = Student_user.objects.filter(name__icontains = searchTerm)
                     students = []
                     for student in studentsTemp:
-                        students.appen(student)
+                        students.append(student)
             response = render(request, 'DeleteStudent.html', locals())
             return response
         else:
@@ -364,26 +415,17 @@ def studentDelete(request):
 @login_required
 def studentModify(request):
     errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
     if request.method  ==   'POST':
         if 'term' in request.POST:
             inSearch = True
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                students = Student_user.objects.all()
+                students = Student_user.objects.filter(college = userCollege)
             else:
-                if searchType  ==   'id':
-                    studentsTemp = Student_user.objects.filter(id = searchTerm)
-                    students = []
-                    for student in studentsTemp:
-                        students.appen(student)
-                elif searchType  ==   'name':
-                    studentsTemp = Student_user.objects.filter(name__icontains = searchTerm)
-                    students = []
-                    for student in studentsTemp:
-                        students.appen(student)
-                # else:
-                #courses = Course_info.objects.filter(teacher = searchTerm)
+                students = getSearchResult(searchType, searchTerm, userCollege, 'STUDENT')
+            return render(request, 'ModifyStudent.html', locals())
         elif 'modifyid' in request.POST:
             inModify = True
             studentId = request.POST.get('modifyid')
@@ -396,8 +438,9 @@ def studentModify(request):
                 'major': term[0].major,
                 'grade': term[0].grade,
                 'gpa': term[0].gpa,
-                'credits' : term[0].credits}
-                                     )
+                'credits' : term[0].credits,
+                'isSpecial' : term[0].isSpecial}
+                )
             return render(request, 'ModifyStudent.html', locals())
         else:
             form = StudentFormModify(request.POST)
@@ -412,9 +455,151 @@ def studentModify(request):
                     major = info['major'],
                     grade = info['grade'],
                     gpa = info['gpa'],
-                    credits = info['credits']
+                    credits = info['credits'],
+                    isSpecial = info['isSpecial']
                 )
                 dbQuery.save()
                 modifyIsDone = True
             return render(request, 'ModifyStudent.html', locals())
+    return render(request, 'AccessFault.html')
+
+@login_required
+def adminAdd(request):
+    errors = []
+    errorImport = []
+    existed = []
+    addIsDone = False
+
+    if request.method == 'POST':
+        if request.POST.get('multiAddCancel') or request.POST.get('first'): #click cancle button or first access
+            form = AdminForm()
+        elif 'file' in request.POST and len(request.POST.get('file')) > 0:  # click confirm button
+            fileTerms = re.split(',', request.POST.get('file'))
+            for x in range(0, len(fileTerms) / LEN_OF_FACULTY_TABLE):
+                dbQuery = Admin_user(
+                    id = fileTerms[0 + LEN_OF_ADMIN_TABLE * x].encode('utf-8'),
+                    contact = fileTerms[1 + LEN_OF_ADMIN_TABLE * x].encode('utf-8'),
+                    name = fileTerms[2 + LEN_OF_ADMIN_TABLE * x].encode('utf-8'),
+                    gender = fileTerms[3 + LEN_OF_ADMIN_TABLE * x].encode('utf-8'),
+                    college = fileTerms[4 + LEN_OF_ADMIN_TABLE * x].encode('utf-8'),
+                )
+                state = importAdminCheck(fileTerms[0 + LEN_OF_ADMIN_TABLE * x : LEN_OF_ADMIN_TABLE + LEN_OF_ADMIN_TABLE * x])
+                if state == 'YEAH'.encode('utf-8'):
+                    dbQuery.save()
+                    user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
+                else:
+                    errorExist = True
+                    returnListItem = fileTerms[0 + LEN_OF_ADMIN_TABLE * x : LEN_OF_ADMIN_TABLE + LEN_OF_ADMIN_TABLE * x];
+                    returnListItem.append(state)
+                    errorImport.append(returnListItem)
+            addIsDone = True
+            form = FacultyForm()
+        elif request.FILES.get('file'):  # dealing with upload
+            fileLocation = request.FILES.get('file')
+            fileTerms = re.split(',|\n', fileLocation.read())
+            multiAdd = True
+            terms = []
+            for x in range(0, len(fileTerms) / LEN_OF_ADMIN_TABLE):
+                    terms.append(
+                        fileTerms[0 + x * LEN_OF_ADMIN_TABLE: LEN_OF_ADMIN_TABLE + x * LEN_OF_ADMIN_TABLE])
+        else:  # regular form submit
+            form = AdminForm(request.POST)
+            if form.is_valid():
+                info = form.cleaned_data
+                dbQuery = Admin_user(
+                    id = info['id'],
+                    contact = info['contact'],
+                    name = info['name'],
+                    gender = info['gender'],
+                    college = info['college']
+                )
+                dbQuery.save()
+                user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
+                addIsDone = True
+                form = AdminForm()
+        return render(request, 'AddAdmin.html', locals())
+    return render(request, 'AccessFault.html')
+
+@login_required
+def adminDelete(request):
+    errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    response = render(request, 'DeleteAdmin.html', locals())
+    if request.method == 'POST':
+        if 'term' in request.POST:
+            inSearch = True
+            searchTerm = request.POST.get('term')
+            searchType = request.POST.get('type')
+            if not searchTerm:
+                admins = Admin_user.objects.filter(college = userCollege)
+                response = render(request, 'DeleteAdmin.html', locals())
+            else:
+                admins = getSearchResult(searchType, searchTerm, userCollege, 'ADMIN')
+                response = render(request, 'DeleteAdmin.html', locals())
+                response.set_cookie('deleteTerm', searchTerm)
+                response.set_cookie('deleteType', searchType)
+            return response
+        elif 'deleteid' in request.POST:
+            adminId = request.POST.get('deleteid')
+            Admin_user.objects.filter(id = adminId).delete()
+            User.objects.filter(id = adminId).delete()
+            isDeleted = True
+            if 'deleteTerm' in request.COOKIES and 'deleteType' in request.COOKIES:
+                searchTerm = request.COOKIES['deleteTerm']
+                searchType = request.COOKIES['deleteType']
+                if searchType  ==   'id':
+                    adminTemp = Admin_user.objects.filter(id = searchTerm)
+                    admins = []
+                    for admin in adminTemp:
+                        admins.append(admin)
+                elif searchType  ==   'name':
+                    adminTemp = Admin_user.objects.filter(name__icontains = searchTerm)
+                    admins = []
+                    for admin in adminTemp:
+                        admins.append(admin)
+            response = render(request, 'DeleteAdmin.html', locals())
+            return response
+        else:
+            return response
+    return render(request, 'AccessFault.html')
+
+@login_required
+def adminModify(request):
+    errors = []
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    if request.method == 'POST':
+        if 'term' in request.POST:
+            inSearch = True
+            searchTerm = request.POST.get('term')
+            searchType = request.POST.get('type')
+            if not searchTerm:
+                admins = Admin_user.objects.filter(college = userCollege)
+            else:
+                admins = getSearchResult(searchType, searchTerm, userCollege, 'ADMIN')
+            return render(request, 'ModifyAdmin.html', locals())
+        elif 'modifyid' in request.POST:
+            inModify = True
+            adminId = request.POST.get('modifyid')
+            term = Admin_user.objects.filter(id = adminId)
+            form = AdminFormModify(initial = {
+                'contact': term[0].contact,
+                'name': term[0].name,
+                'gender': term[0].gender,
+                'college': term[0].college}
+                )
+            return render(request, 'ModifyAdmin.html', locals())
+        else:
+            form = AdminFormModify(request.POST)
+            if form.is_valid():
+                info = form.cleaned_data
+                dbQuery = Admin_user(
+                    id = info['id'],
+                    contact = info['contact'],
+                    name = info['name'],
+                    gender = info['gender'],
+                    college = info['college']
+                )
+                dbQuery.save()
+                modifyIsDone = True
+            return render(request, 'ModifyAdmin.html', locals())
     return render(request, 'AccessFault.html')

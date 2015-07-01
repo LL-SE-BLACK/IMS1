@@ -44,6 +44,9 @@ urlpatterns = [
     url(r'^user/add_student/$', user_views.studentAdd), #by Henry
     url(r'^user/delete_student/$', user_views.studentDelete), #by Henry
     url(r'^user/modify_student/$', user_views.studentModify), #by Henry
+    url(r'^user/add_admin/$', user_views.adminAdd), #by Henry
+    url(r'^user/delete_admin/$', user_views.adminDelete), #by Henry
+    url(r'^user/modify_admin/$', user_views.adminModify), #by Henry
 ]
 
 ## For upload user photos
