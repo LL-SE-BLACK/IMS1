@@ -15,7 +15,7 @@ class FacultyForm(forms.Form):
     major = forms.CharField(max_length=50)
     degree = forms.CharField(max_length=20)
     title = forms.CharField(max_length=20)
-    isSpecial = forms.BooleanField()
+    isSpecial = forms.BooleanField(False)
     photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
     def clean_faculty_id(self):
@@ -51,8 +51,8 @@ class StudentForm(forms.Form):
     grade = forms.IntegerField()
     gpa = forms.FloatField()
     credits = forms.FloatField()
-    isSpecial = forms.BooleanField()
-    photo = forms.FileField()
+    isSpecial = forms.BooleanField(False)
+    photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
     def clean_student_id(self):
         addedStudentID = self.cleaned_data['id']
