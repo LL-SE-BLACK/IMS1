@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
-from IMS import views, profile, course_views, user_views
+from IMS import views, profile, course_views#, user_views
 import os
 
 urlpatterns = [
@@ -37,13 +37,13 @@ urlpatterns = [
     url(r'^course/add/$', course_views.courseAdd), #by saltless
     url(r'^course/delete/$', course_views.courseDelete), #by saltless
     url(r'^course/modify/$', course_views.courseModify), #by saltless
-    url(r'^user/$', user_views.userMain), #by Henry
-    url(r'^user/add_faculty/$', user_views.facultyAdd), #by Henry
-    url(r'^user/delete_faculty/$', user_views.facultyDelete), #by Henry
-    url(r'^user/modify_faculty/$', user_views.facultyModify), #by Henry
-    url(r'^user/add_student/$', user_views.studentAdd), #by Henry
-    url(r'^user/delete_student/$', user_views.studentDelete), #by Henry
-    url(r'^user/modify_student/$', user_views.studentModify), #by Henry
+    #url(r'^user/$', user_views.userMain), #by Henry
+    #url(r'^user/add_faculty/$', user_views.facultyAdd), #by Henry
+    #url(r'^user/delete_faculty/$', user_views.facultyDelete), #by Henry
+    #url(r'^user/modify_faculty/$', user_views.facultyModify), #by Henry
+    #url(r'^user/add_student/$', user_views.studentAdd), #by Henry
+    #url(r'^user/delete_student/$', user_views.studentDelete), #by Henry
+    #url(r'^user/modify_student/$', user_views.studentModify), #by Henry
 ]
 
 ## For upload user photos
