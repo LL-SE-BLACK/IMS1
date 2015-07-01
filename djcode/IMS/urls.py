@@ -18,7 +18,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
-from IMS import views, profile, course_views, user_views
+from IMS import views, profile, course_views, user_views, log_views
 import os
 
 urlpatterns = [
@@ -33,6 +33,8 @@ urlpatterns = [
     url(r'^home/profile/changeUserInfo/$', profile.changeUserInfo), #by xyh
     url(r'^home/profile/changePasswd/$', profile.changePasswd), #by xyh
     url(r'^home/profile/changePhoto/$', profile.changePhoto), #by xyh
+    url(r'^log/$', log_views.all_log), # by xyh
+    url(r'^log/deleteLog/$', log_views.delete_all_log), # by xyh
     url(r'^course/$', course_views.courseMain), #by saltless
     url(r'^course/add/$', course_views.courseAdd), #by saltless
     url(r'^course/delete/$', course_views.courseDelete), #by saltless

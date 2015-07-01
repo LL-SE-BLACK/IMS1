@@ -151,14 +151,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
-        'request_handler': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGGING_DIR,'request.log'),
-            'maxBytes': 1024*1024*5, # 5 MB
-            'backupCount': 5,
-            'formatter':'standard',
-        },
         'error_handler':{
             'level':'WARNING',
             'class':'logging.handlers.RotatingFileHandler',
@@ -176,7 +168,7 @@ LOGGING = {
             'propagate': False
         },
         'django.request': {
-            'handlers': ['request_handler', 'error_handler'],
+            'handlers': [ 'error_handler'],
             'level': 'DEBUG',
             'propagate': False
         },
@@ -195,8 +187,8 @@ LOGGING = {
     }
 }
 
-##TODO: change the email setting here
-# ADMINS = [('John', 'john@example.com'), ('Mary', 'mary@example.com')]
+# ##TODO: change the email setting here
+# ADMINS = [('Adward_r', 'adward_r@icloud.com'), ('Xuyuhao', 'rickyxuusa@gmail.com')]
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_PORT = 587

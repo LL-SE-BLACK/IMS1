@@ -119,7 +119,10 @@ def home(request):
         return render_to_response('home_panel.html', {"isFaculty": 1, "usrInfo": usrInfo})
     elif user_name_len == LEN_OF_ADMIN_ID:
         usrInfo = Admin_user.objects.get(id=user_name)
-        return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo})
+        if usrInfo.college == "all":
+            return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo, "isSuperAdmin": 1})
+        else:
+            return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo})
     else:
         # wrong id length
         raise Http404()

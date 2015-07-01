@@ -29,7 +29,7 @@ def isDigit(a):
     for x in a:
         if not ((x >= '0' and x <= '9') or x == '.'):
             return False
-    pos = a.find('.');
+    pos = a.find('.')
     if pos < 0:
         return 'INT'
     else:
