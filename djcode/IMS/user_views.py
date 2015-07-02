@@ -119,10 +119,11 @@ def facultyAdd(request):
     errorImport = []
     existed = []
     addIsDone = False
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
 
     if request.method == 'POST':
         if request.POST.get('multiAddCancel') or request.POST.get('first'): #click cancle button or first access
-            form = FacultyForm()
+            form = FacultyForm(initial={'college' : userCollege})
         elif 'file' in request.POST and len(request.POST.get('file')) > 0:  # click confirm button
             fileTerms = re.split(',', request.POST.get('file'))
             for x in range(0, len(fileTerms) / LEN_OF_FACULTY_TABLE):
@@ -146,7 +147,7 @@ def facultyAdd(request):
                     returnListItem.append(state)
                     errorImport.append(returnListItem)
             addIsDone = True
-            form = FacultyForm()
+            form = FacultyForm(initial={'college' : userCollege})
         elif request.FILES.get('file'):  # dealing with upload
             fileLocation = request.FILES.get('file')
             fileTerms = re.split(',|\n', fileLocation.read())
@@ -172,7 +173,7 @@ def facultyAdd(request):
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                 addIsDone = True
-                form = FacultyForm()
+                form = FacultyForm(initial={'college' : userCollege})
         return render(request, 'AddFaculty.html', locals())
     return render(request, 'AccessFault.html')
 
@@ -279,10 +280,11 @@ def studentAdd(request):
     errors = []
     errorImport = []
     addIsDone = False
-        
+    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+
     if request.method  ==   'POST':
         if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button or first access
-                form = StudentForm()
+                form = StudentForm(initial = {'college' : userCollege})
         elif 'file' in request.POST and len(request.POST.get('file')) > 0:  # click confirm button
             fileTerms = re.split(',', request.POST.get('file'))
             for x in range(0, len(fileTerms) / LEN_OF_STUDENT_TABLE):
@@ -307,7 +309,7 @@ def studentAdd(request):
                     returnListItem.append(state)
                     errorImport.append(returnListItem)
             addIsDone = True
-            form = StudentForm()
+            form = StudentForm(initial = {'college' : userCollege})
         elif request.FILES.get('file'):  # dealing with upload
             fileLocation = request.FILES.get('file')
             fileTerms = re.split(',|\n', fileLocation.read())
@@ -334,7 +336,7 @@ def studentAdd(request):
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
                 addIsDone = True
-                form = StudentForm()
+                form = StudentForm(initial = {'college' : userCollege})
         return render(request, 'AddStudent.html', locals())
     return render(request, 'AccessFault.html')
 
