@@ -40,15 +40,7 @@
         <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="id">ID</option>
-  			<option value ="contact">Contact</option>
   			<option value ="name">Name</option>
-  			<option value ="gender">Gender</option>
-  			<option value ="college">College</option>
-  			<option value ="major">Major</option>
-  			<option value ="grade">Grade</option>
-  			<option value ="gpa">Gpa</option>
-  			<option value ="credits">Credits</option>
-  			<option value ="isSpecial">IsSpecial</option>
 		</select>
         <input type="submit" value="Search Student">
     </form>
@@ -73,7 +65,6 @@
                 	<th>Grade</th>
                 	<th>Gpa</th>
                 	<th>Credits</th>
-                	<th>IsSpecial</th>
 			    </tr>
 			        {% for student in students %}
 			        <tr>
@@ -86,7 +77,6 @@
 			        	<th>{{ student.grade }}</th>
 	                    <th>{{ student.gpa }}</th>
 	                    <th>{{ student.credits }}</th>
-	                    <th>{{ student.isSpecial }}</th>
 		        	<th><input type="button" name="student" value="del" onclick="javascript:f('{{student.id}}')"></th>
 		        </tr>
 		        {% endfor %}
