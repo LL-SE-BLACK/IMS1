@@ -54,7 +54,6 @@
 
     {% if inModify %}
         <p>Course ID: {{ courseId }}</p>
-        <!-- TODO: 添加各自学院课程，目前多余 -->
         {% if facultyModify %}
             <p>College: {{ userCollege }}</p>
         {% endif %}
@@ -70,8 +69,10 @@
         <form id='formSelect' action="" method="post">
             {% csrf_token %}
             {% if courses %}
-                <p>Found {{ courses | length }} course{{ courses | pluralize }}.</p>
-                <table>
+                <div class="alert alert-success">
+			        Found {{ courses | length }} course{{ courses | pluralize }}.
+                </div>
+                <table class="table table-striped table-hover">
                     <tr>
                         <th>Course ID</th>
                         <th>Course Name</th>
@@ -90,13 +91,15 @@
                             <th>{{ course.textbook }}</th>
                             <th>{{ course.college }}</th>
                             <th>{{ course.course_type }}</th>
-                            <th><input type="button" name="course" value="modify" onclick="javascript:f('{{course.course_id}}')"></th>
+                            <th><input type="button" class="btn btn-info" name="course" value="modify" onclick="javascript:f('{{course.course_id}}')"></th>
                         </tr>
                     {% endfor %}
                 </table>
             {% else %}
                 {% if inSearch %}
-                    <p>No course found.</p>
+                    <div class="alert alert-warning">
+			            No Course Found.
+                    </div>
                 {% endif %}
             {% endif %}
             <input type="hidden" name="modifyid" id="modifyid">

@@ -63,8 +63,11 @@
 	    <form id='formSelect' action="" method="post">
 	    	{% csrf_token %}
 		    {% if students %}
-			    <p>Found {{ students | length }} students{{ students | pluralize }}.</p>
-			    <table>
+                <br/>
+                <div class="alert alert-success">
+			        Found {{ students | length }} students{{ students | pluralize }}.
+                </div>
+			    <table class="table table-striped table-hover">
 			    	<tr>
 			        	<th>ID</th>
                 		<th>Contact</th>
@@ -87,13 +90,16 @@
 			        	<th>{{ student.grade }}</th>
 	                    <th>{{ student.gpa }}</th>
 	                    <th>{{ student.credits }}</th>
-			        	<th><input type="button" name="student" value="modify" onclick="javascript:f('{{student.id}}')"></th>
+			        	<th><input type="button" class="btn btn-info" name="student" value="modify" onclick="javascript:f('{{student.id}}')"></th>
 			        </tr>
 			        {% endfor %}
 			    </table>
 			{% else %}
 				{% if inSearch %}
-		    		<p>No student found.</p>
+                    <br/>
+		    		<div class="alert alert-warning">
+			            No Student Found.
+                    </div>
 				{% endif %}
 			{% endif %}
 			<input type="hidden" name="modifyid" id="modifyid">

@@ -27,65 +27,70 @@
         </div>
     </nav>
 
-	<h1>Search Admins for Deletion</h1>
-	{% if errors %}
-		<ul>
-			{% for error in errors %}
-				<p style="color: red">{{ error }}</p>
-			{% endfor %}
-		</ul>
-	{% endif %}
+    <h1>Search Admins for Deletion</h1>
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form id = 'formSearch' action="" method="post">
         <input type="text" name="term">
         <select id="type" name="type">
-  			<option value ="id">ID</option>
-  			<option value ="name">Name</option>
-		</select>
+            <option value ="id">ID</option>
+            <option value ="name">Name</option>
+        </select>
         <input type="submit" value="Search Admin">
     </form>
 
     {% if isDeleted %}
-    	<p style="color: blue;">
-            Admin deleted successfully.
-        </p>
+        <div class="alert alert-success">
+            Admins Deleted Successfully.
+        </div>
     {% endif %}
     <form id='formSelect' action="" method="post">
-    	{% csrf_token %}
-	    {% if admins %}
-		    <p>Found {{ admins | length }} admins{{ admins | pluralize }}.</p>
-		    <table>
-			    <tr>
-			       	<th>Id</th>
-                   	<th>Contact</th>
-                   	<th>Name</th>
-                   	<th>Gender</th>
-                   	<th>College</th>
-			    </tr>
-		        {% for admin in admins %}
-			    <tr>
-			    	<th>{{ admin.id }}</th>
-                    <th>{{ admin.contact }}</th>
-                    <th>{{ admin.name }}</th>
-                    <th>{{ admin.gender }}</th>
-                    <th>{{ admin.college }}</th>
-		        	<th><input type="button" name="admin" value="del" onclick="javascript:f('{{admin.id}}')"></th>
-		        </tr>
-		        {% endfor %}
-		    </table>
-		{% else %}
-			{% if inSearch %}
-	    		<p>No admin found.</p>
-			{% endif %}
-		{% endif %}
-		<input type="hidden" name="deleteid" id="deleteid">
-	</form>
+        {% csrf_token %}
+        {% if admins %}
+            <br/>
+            <div class="alert alert-success">
+                Found {{ admins | length }} admins{{ admins | pluralize }}.
+            </div>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>Id</th>
+                    <th>Contact</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>College</th>
+                </tr>
+                {% for admin in admins %}
+                    <tr>
+                        <th>{{ admin.id }}</th>
+                        <th>{{ admin.contact }}</th>
+                        <th>{{ admin.name }}</th>
+                        <th>{{ admin.gender }}</th>
+                        <th>{{ admin.college }}</th>
+                        <th><input type="button" class="btn btn-danger" name="admin" value="del" onclick="javascript:f('{{admin.id}}')"></th>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            {% if inSearch %}
+                <div class="alert alert-warning">
+                    No Admin Found.
+                </div>
+            {% endif %}
+        {% endif %}
+        <input type="hidden" name="deleteid" id="deleteid">
+    </form>
 </body>
 </html>
 
 <script type="text/javascript">
-	function f(a) {
-		var form = document.getElementById("formSelect");
-		form.deleteid.value = a;
-		form.submit();
-	}
+    function f(a) {
+        var form = document.getElementById("formSelect");
+        form.deleteid.value = a;
+        form.submit();
+    }
 </script>

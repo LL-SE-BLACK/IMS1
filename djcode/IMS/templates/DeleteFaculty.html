@@ -28,71 +28,76 @@
         </div>
     </nav>
 
-	<h1>Search Faculties for Deletion</h1>
-	{% if errors %}
-		<ul>
-			{% for error in errors %}
-				<p style="color: red">{{ error }}</p>
-			{% endfor %}
-		</ul>
-	{% endif %}
+    <h1>Search Faculties for Deletion</h1>
+    {% if errors %}
+        <ul>
+            {% for error in errors %}
+                <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form id = 'formSearch' action="" method="post">
         <input type="text" name="term">
         <select id="type" name="type">
-  			<option value ="id">ID</option>
-  			<option value ="name">Name</option>
-		</select>
+            <option value ="id">ID</option>
+            <option value ="name">Name</option>
+        </select>
         <input type="submit" value="Search Faculty">
     </form>
 
     {% if isDeleted %}
-    	<p style="color: blue;">
-            Faculty deleted successfully.
-        </p>
+        <div class="alert alert-success">
+            Faculties Deleted Successfully.
+        </div>
     {% endif %}
     <form id='formSelect' action="" method="post">
-    	{% csrf_token %}
-	    {% if faculties %}
-		    <p>Found {{ faculties | length }} faculties{{ faculties | pluralize }}.</p>
-		    <table>
-			    <tr>
-			       	<th>Id</th>
-                   	<th>Contact</th>
-                   	<th>Name</th>
-                   	<th>Gender</th>
-                   	<th>College</th>
-                   	<th>Major</th>
-                   	<th>Degree</th>
+        {% csrf_token %}
+        {% if faculties %}
+            <br/>
+            <div class="alert alert-success">
+                Found {{ faculties | length }} faculties{{ faculties | pluralize }}.
+            </div>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>Id</th>
+                    <th>Contact</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>College</th>
+                    <th>Major</th>
+                    <th>Degree</th>
                     <th>Title</th>
-			    </tr>
-		        {% for faculty in faculties %}
-			    <tr>
-			    	<th>{{ faculty.id }}</th>
-                    <th>{{ faculty.contact }}</th>
-                    <th>{{ faculty.name }}</th>
-                    <th>{{ faculty.gender }}</th>
-                    <th>{{ faculty.college }}</th>
-                    <th>{{ faculty.major }}</th>
-                    <th>{{ faculty.degree }}</th>
-                    <th>{{ faculty.title }}</th>
-		        	<th><input type="button" name="faculty" value="del" onclick="javascript:f('{{faculty.id}}')"></th>
-		        </tr>
-		        {% endfor %}
-		    </table>
-		{% else %}
-			{% if inSearch %}
-	    		<p>No faculty found.</p>
-			{% endif %}
-		{% endif %}
-		<input type="hidden" name="deleteid" id="deleteid">
-	</form>
+                </tr>
+                {% for faculty in faculties %}
+                    <tr>
+                        <th>{{ faculty.id }}</th>
+                        <th>{{ faculty.contact }}</th>
+                        <th>{{ faculty.name }}</th>
+                        <th>{{ faculty.gender }}</th>
+                        <th>{{ faculty.college }}</th>
+                        <th>{{ faculty.major }}</th>
+                        <th>{{ faculty.degree }}</th>
+                        <th>{{ faculty.title }}</th>
+                        <th><input type="button" class="btn btn-danger" name="faculty" value="del" onclick="javascript:f('{{faculty.id}}')"></th>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            {% if inSearch %}
+                <div class="alert alert-warning">
+                    No Faculty Found.
+                </div>
+            {% endif %}
+        {% endif %}
+        <input type="hidden" name="deleteid" id="deleteid">
+    </form>
 </body>
 </html>
 
 <script type="text/javascript">
-	function f(a) {
-		var form = document.getElementById("formSelect");
-		form.deleteid.value = a;
-		form.submit();
-	}
+    function f(a) {
+        var form = document.getElementById("formSelect");
+        form.deleteid.value = a;
+        form.submit();
+    }
 </script>

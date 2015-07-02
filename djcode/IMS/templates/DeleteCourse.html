@@ -47,15 +47,18 @@
     </form>
 
     {% if isDeleted %}
-        <p style="color: blue;">
-            Course deleted successfully.
-        </p>
+        <div class="alert alert-success">
+            Courses Deleted Successfully.
+        </div>
     {% endif %}
     <form id='formSelect' action="" method="post">
         {% csrf_token %}
         {% if courses %}
-            <p>Found {{ courses | length }} course{{ courses | pluralize }}.</p>
-            <table>
+            <br/>
+            <div class="alert alert-success">
+                Found {{ courses | length }} course{{ courses | pluralize }}.
+            </div>
+            <table class="table table-striped table-hover">
                 <tr>
                     <th>Course ID</th>
                     <th>Course Name</th>
@@ -74,13 +77,15 @@
                         <th>{{ course.textbook }}</th>
                         <th>{{ course.college }}</th>
                         <th>{{ course.course_type }}</th>
-                        <th><input type="button" name="course" value="del" onclick="javascript:f('{{course.course_id}}')"></th>
+                        <th><input type="button" class="btn btn-danger" name="course" value="del" onclick="javascript:f('{{course.course_id}}')"></th>
                     </tr>
                 {% endfor %}
             </table>
         {% else %}
             {% if inSearch %}
-                <p>No course found.</p>
+                <div class="alert alert-warning">
+                    No Course Found.
+                </div>
             {% endif %}
         {% endif %}
         <input type="hidden" name="deleteid" id="deleteid">
