@@ -46,7 +46,7 @@ class Student_user(models.Model):
 
     class Meta:
         permissions = (
-            ("manage", "Can manage stu user info"),
+            ("student_manage", "Can manage stu user info"),
         )
 
 
@@ -76,7 +76,7 @@ class Faculty_user(models.Model):
 
     class Meta:
         permissions = (
-            ("manage", "Can manage faculty user info"),
+            ("faculty_manage", "Can manage faculty user info"),
         )
 
 class Admin_user(models.Model):
@@ -101,7 +101,7 @@ class Admin_user(models.Model):
 
     class Meta:
         permissions = (
-            ("manage", "Can manage admin user info"),
+            ("admin_manage", "Can manage admin user info"),
         )
 
 class Course_info(models.Model):
@@ -126,7 +126,7 @@ class Course_info(models.Model):
 
     class Meta:
         permissions = (
-            ("manage", "Can manage basic course info"),
+            ("course_manage", "Can manage basic course info"),
         )
 
 class Class_info(models.Model):

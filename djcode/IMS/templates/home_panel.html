@@ -20,11 +20,19 @@
                 {% elif isFaculty %}
                     <li role="presentation"><a href="#">查看开课情况</a></li>
                 {% elif isAdmin %}
-                    <li role="presentation"><a href="../course/">课程信息管理</a></li>
-                    <li role="presentation"><a href="../user/">用户信息管理</a></li>
+                    <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
+                    <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
+                {% endif %}
+                {% if isSpecial %}
+                    {% if manageStudent or manageFaculty or manageAdmin %}
+                        <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
+                    {% endif %}
+                    {% if manageCourse %}
+                        <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
+                    {% endif %}
                 {% endif %}
                 <li role="presentation"><a href="/ims/home/profile/">个人信息管理</a></li>
-                {% if isSuperAdmin %}
+                {% if isSuper %}
                     <li role="presentation"><a href="/ims/log/">系统日志管理</a></li>
                 {% endif %}
 

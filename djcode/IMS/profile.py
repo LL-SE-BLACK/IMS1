@@ -49,6 +49,9 @@ def profile(request):
     infoErrorMessage = []
     passwdErrorFlag = False
     photoErrorFlag = False
+    #isStudent, isFaculty, isAdmin, isSuper = 0, 0, 0, 0
+    t = get_template('Profile.html')
+    c_dict = {}
     # get messages from the previous request if change info or password
     storage = get_messages(request)
     for message in storage:
@@ -65,58 +68,59 @@ def profile(request):
     if user_type == IS_STUDENT:
         try:
             stu = Student_user.objects.get(id=user_id)
+            c_dict.update({"userInfo": stu, "isStudent": 1})
+            if stu.isSpecial:
+                if request.user.has_perm('IMS.student_manage') or request.user.has_perm('IMS.faculty_manage') or request.user.has_perm('IMS.admin_manage'):
+                    c_dict.update({"manageUser": 1})
+                elif request.user.has_perm('IMS.course_manage'):
+                    c_dict.update({"manageCourse": 1})
         except:
             #return Http404("No such user matched in database")
             print("Internal test data integrity error: no such user matched in database")
             return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
-        if infoSuccessFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, "infoSuccess": 1})
-        elif infoErrorFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'infoErrors':infoErrorMessage})
-        elif passwdErrorFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'passwdErrors':1})
-        elif photoErrorFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu, 'photoErrors':1})
-        else:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": stu})
+
     elif user_type == IS_Faculty:
         try:
             faculty = Faculty_user.objects.get(id=user_id)
+            c_dict.update({"userInfo": faculty, "isFaculty": 1})
+            if faculty.isSpecial:
+                if request.user.has_perm('IMS.student_manage') or request.user.has_perm('IMS.faculty_manage') or request.user.has_perm('IMS.admin_manage'):
+                    c_dict.update({"manageUser": 1})
+                elif request.user.has_perm('IMS.course_manage'):
+                    c_dict.update({"manageCourse": 1})
         except:
             #return Http404("No such user matched in database")
             print("Internal test data integrity error: no such user matched in database")
             return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
-        if infoSuccessFlag:
-            return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, "infoSuccess": 1})
-        elif infoErrorFlag:
-            return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, 'infoErrors':infoErrorMessage})
-        elif passwdErrorFlag:
-            return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty, 'passwdErrors':1})
-        elif photoErrorFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": faculty, 'photoErrors':1})
-        else:
-            return render_to_response("profile.html", {"isFaculty": 1, "userInfo": faculty})
+
     elif user_type == IS_ADMIN:
         try:
             admin = Admin_user.objects.get(id=user_id)
+            c_dict.update({"userInfo": admin, "isAdmin": 1})
+            if admin.college=='all':
+                c_dict.update(({"isSuper": 1}))
         except:
             #return Http404("No such user matched in database")
             print("Internal test data integrity error: no such user matched in database")
             return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
-        if infoSuccessFlag:
-            return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, "infoSuccess": 1})
-        elif infoErrorFlag:
-            return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, 'infoErrors':infoErrorMessage})
-        elif passwdErrorFlag:
-            return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin, 'passwdErrors':1})
-        elif photoErrorFlag:
-            return render_to_response("profile.html", {"isStudent": 1, "userInfo": admin, 'photoErrors':1})
-        else:
-            return render_to_response("profile.html", {"isAdmin": 1, "userInfo": admin})
+
     else:
         #wrong id length
         print("Wrong in Id length!")
         return HttpResponseRedirect('../../logout/', render(request, 'logout.html'))
+
+    if infoSuccessFlag:
+        c_dict.update({'infoSuccess': 1})
+    elif infoErrorFlag:
+        c_dict.update({'infoErrors': infoErrorMessage})
+    elif passwdErrorFlag:
+        c_dict.update({'passwdErrors': 1})
+    elif photoErrorFlag:
+        c_dict.update({'photoErrors': 1})
+    else:
+        pass
+    c = RequestContext(request, c_dict)
+    return HttpResponse(t.render(c))
 
 
 #Note: has not finished
@@ -176,7 +180,6 @@ def changeUserInfo(request):
                 # return HttpResponseRedirect('profile.html', {'studentInfo':request.GET, 'infoErrors':form.errors})
                 messages.error(request, str(form.errors), extra_tags="profile")
                 return HttpResponseRedirect('../../profile')
-
 
     else:
         print 'ERROR: not GET'

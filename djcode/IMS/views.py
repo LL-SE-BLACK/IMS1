@@ -111,18 +111,38 @@ def user_auth(request):
 def home(request):
     user_name = str(request.user)  # user Id
     user_name_len = user_name.__len__()
+    isStudent, isFaculty, isAdmin, isSuper = 0, 0, 0, 0
+
     if user_name_len == LEN_OF_STUDENT_ID:
         usrInfo = Student_user.objects.get(id=user_name)
-        return render_to_response('home_panel.html', {"isStudent": 1, "usrInfo": usrInfo})
+        isStudent = 1
+        #return render_to_response('home_panel.html', {"isStudent": 1, "usrInfo": usrInfo})
     elif user_name_len == LEN_OF_FACULTY_ID:
         usrInfo = Faculty_user.objects.get(id=user_name)
-        return render_to_response('home_panel.html', {"isFaculty": 1, "usrInfo": usrInfo})
+        isFaculty = 1
+        #return render_to_response('home_panel.html', {"isFaculty": 1, "usrInfo": usrInfo})
     elif user_name_len == LEN_OF_ADMIN_ID:
         usrInfo = Admin_user.objects.get(id=user_name)
+        isAdmin = 1
         if usrInfo.college == "all":
-            return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo, "isSuperAdmin": 1})
-        else:
-            return render_to_response('home_panel.html', {"isAdmin": 1, "usrInfo": usrInfo})
+            isSuper = 1
     else:
         # wrong id length
         raise Http404()
+
+    t = get_template('home_panel.html')
+    c_dict = {"usrInfo": usrInfo, "isStudent": isStudent, "isFaculty": isFaculty,
+              "isAdmin": isAdmin, "isSuper": isSuper}
+    if not isAdmin:
+        if usrInfo.isSpecial:
+            c_dict.update({"isSpecial": 1})
+            if request.user.has_perm('IMS.student_manage'):
+                c_dict.update({"manageStudent": 1})
+            elif request.user.has_perm('IMS.faculty_manage'):
+                c_dict.update({"manageFaculty": 1})
+            elif request.user.has_perm('IMS.admin_manage'):
+                c_dict.update({"manageAdmin": 1})
+            elif request.user.has_perm('IMS.course_manage'):
+                c_dict.update({"manageCourse": 1})
+    c = RequestContext(request, c_dict)
+    return HttpResponse(t.render(c))
