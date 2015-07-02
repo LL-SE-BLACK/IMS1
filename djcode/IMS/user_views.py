@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group,Permission
 
 LEN_OF_FACULTY_TABLE = 8
@@ -245,6 +245,7 @@ def facultyModify(request):
             facultyId = request.POST.get('modifyid')
             term = Faculty_user.objects.filter(id = facultyId)
             form = FacultyFormModify(initial = {
+                'id': facultyId,
                 'contact': term[0].contact,
                 'name': term[0].name,
                 'gender': term[0].gender,
@@ -406,6 +407,7 @@ def studentModify(request):
             studentId = request.POST.get('modifyid')
             term = Student_user.objects.filter(id = studentId)
             form = StudentFormModify(initial = {
+                'id': studentId,
                 'contact': term[0].contact,
                 'name': term[0].name,
                 'gender': term[0].gender,
@@ -437,6 +439,7 @@ def studentModify(request):
     return render(request, 'AccessFault.html')
 
 @login_required
+@permission_required('IMS.admin_manage')
 def adminAdd(request):
     errors = []
     errorImport = []
@@ -488,6 +491,13 @@ def adminAdd(request):
                 )
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
+                perm1 = Permission.objects.get(codename='student_manage')
+                perm2 = Permission.objects.get(codename='faculty_manage')
+                perm3 = Permission.objects.get(codename='course_manage')
+                user.user_permissions.add(perm1, perm2, perm3)
+                if dbQuery.college == 'all':
+                    perm = Permission.objects.get(codename='admin_manage')
+                    user.user_permissions.add(perm)
                 addIsDone = True
                 form = AdminForm()
         return render(request, 'AddAdmin.html', locals())
@@ -495,6 +505,7 @@ def adminAdd(request):
 
 @login_required
 @csrf_exempt
+@permission_required('IMS.admin_manage')
 def adminDelete(request):
     errors = []
     userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
@@ -541,6 +552,7 @@ def adminDelete(request):
     return render(request, 'AccessFault.html')
 
 @login_required
+@permission_required('IMS.admin_manage')
 def adminModify(request):
     errors = []
     userCollege = Admin_user.objects.filter(id = request.user.username)[0].college

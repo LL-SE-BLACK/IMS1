@@ -18,7 +18,7 @@ class FacultyForm(forms.Form):
     isSpecial = forms.BooleanField(False)
     photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
-    def clean_faculty_id(self):
+    def clean_id(self):
 	    addedFacultyID = self.cleaned_data['id']
 	    if Faculty_user.objects.filter(id = addedFacultyID):
 	    	raise forms.ValidationError('Faculty number existed!')
@@ -31,6 +31,7 @@ class FacultyForm(forms.Form):
         return addedFacultyGender
 
 class FacultyFormModify(forms.Form):
+    id = forms.CharField(max_length=6, min_length=6)
     contact = forms.CharField(max_length=11)
     name = forms.CharField(max_length=20)
     gender = forms.BooleanField()
@@ -52,7 +53,7 @@ class StudentForm(forms.Form):
     isSpecial = forms.BooleanField(False)
     photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
-    def clean_student_id(self):
+    def clean_id(self):
         addedStudentID = self.cleaned_data['id']
         if Student_user.objects.filter(id = addedStudentID):
             raise forms.ValidationError('Student number existed!')
@@ -65,6 +66,7 @@ class StudentForm(forms.Form):
         return addedStudentGender
 
 class StudentFormModify(forms.Form):
+    id = forms.CharField(max_length=10, min_length=10)
     contact = forms.CharField(max_length=11)
     name = forms.CharField(max_length=20)
     gender = forms.BooleanField()
@@ -87,7 +89,7 @@ class AdminForm(forms.Form):
     college = forms.CharField(max_length=50) #default for superadmin
     photo = forms.FileField(initial=DEFAULT_PHOTO_DIR)
 
-    def clean_admin_id(self):
+    def clean_id(self):
 	    addedAdminID = self.cleaned_data['id']
 	    if Admin_user.objects.filter(id = addedAdminID):
 	    	raise forms.ValidationError('Admin number existed!')
