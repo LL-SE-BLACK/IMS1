@@ -79,7 +79,6 @@
                     <th>Grade</th>
                     <th>Gpa</th>
                     <th>Credits</th>
-                    <th>IsSpecial</th>
                 </tr>
                 {% for term in terms %}
                     <tr>
@@ -92,7 +91,6 @@
                         <th>{{ term.6 }}</th>
                         <th>{{ term.7 }}</th>
                         <th>{{ term.8 }}</th>
-                        <th>{{ term.9 }}</th>
                     </tr>
                 {% endfor %}
             </table>
@@ -116,7 +114,6 @@
                 <th>Grade</th>
                 <th>Gpa</th>
                 <th>Credits</th>
-                <th>IsSpecial</th>
             </tr>
         {% for term in existed %}
             <tr>
@@ -130,7 +127,6 @@
                 <th>{{ term.6 }}</th>
                 <th>{{ term.7 }}</th>
                 <th>{{ term.8 }}</th>
-                <th>{{ term.9 }}</th>
             </tr>
         {% endfor %}
         </table>

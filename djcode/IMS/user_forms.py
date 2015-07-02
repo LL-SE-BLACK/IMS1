@@ -38,8 +38,6 @@ class FacultyFormModify(forms.Form):
     major = forms.CharField(max_length=50)
     degree = forms.CharField(max_length=20)
     title = forms.CharField(max_length=20)
-    isSpecial = forms.BooleanField()
-    photo = forms.FileField()
 
 class StudentForm(forms.Form):
     id = forms.CharField(max_length=10, min_length=10)
@@ -75,8 +73,6 @@ class StudentFormModify(forms.Form):
     grade = forms.IntegerField()
     gpa = forms.FloatField()
     credits = forms.FloatField()
-    isSpecial = forms.BooleanField()
-    photo = forms.FileField()
 
 class AdminForm(forms.Form):
     '''
@@ -108,4 +104,3 @@ class AdminFormModify(forms.Form):
     name = forms.CharField(max_length=20)
     gender = forms.BooleanField()
     college = forms.CharField(max_length=50)
-    major = forms.CharField(max_length=50)

@@ -38,14 +38,7 @@
         <input type="text" name="term">
         <select id="type" name="type">
   			<option value ="id">ID</option>
-  			<option value ="contact">Contact</option>
   			<option value ="name">Name</option>
-  			<option value ="gender">Gender</option>
-  			<option value ="college">College</option>
-  			<option value ="major">Major</option>
-  			<option value ="degree">Degree</option>
-  			<option value ="title">Title</option>
-  			<option value ="isSpecial">IsSpecial</option>
 		</select>
         <input type="submit" value="Search Faculty">
     </form>
@@ -81,7 +74,6 @@
                     	<th>Major</th>
                     	<th>Degree</th>
                     	<th>Title</th>
-                    	<th>IsSpecial</th>
 			        </tr>
 			        {% for faculty in faculties %}
 			        <tr>
@@ -93,7 +85,6 @@
                         <th>{{ faculty.major }}</th>
                         <th>{{ faculty.degree }}</th>
                         <th>{{ faculty.title }}</th>
-                        <th>{{ faculty.isspecial }}</th>
 			        	<th><input type="button" name="faculty" value="modify" onclick="javascript:f('{{faculty.id}}')"></th>
 			        </tr>
 			        {% endfor %}

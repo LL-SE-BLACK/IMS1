@@ -16,8 +16,8 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group,Permission
 
-LEN_OF_FACULTY_TABLE = 9
-LEN_OF_STUDENT_TABLE = 10
+LEN_OF_FACULTY_TABLE = 8
+LEN_OF_STUDENT_TABLE = 9
 LEN_OF_ADMIN_TABLE = 5
 
 @login_required
@@ -90,67 +90,28 @@ def importAdminCheck(term):
     return 'YEAH'
 
 def getSearchResult(searchType, searchTerm, userCollege, userType):
-    if userType == "ADMIN" :
+    if userType == 'ADMIN':
         if searchType == "id":
             Temp = Admin_user.objects.filter(id = searchTerm)
-        if searchType == "contact":
-            Temp = Admin_user.objects.filter(contact__icontains = searchTerm)
         if searchType == "name":
             Temp = Admin_user.objects.filter(name__icontains = searchTerm)
-        if searchType == "college":
-            Temp = Admin_user.objects.filter(college__icontains = searchTerm)
-        if searchType == "major":
-            Temp = Admin_user.objects.filter(major__icontains = searchTerm)
-        results = []
-        for result in Temp:
-            results.append(result)
-        return results
-    elif userType == "FACULTY":
+    elif userType == 'FACULTY':
         if searchType == "id":
             Temp = Faculty_user.objects.filter(id = searchTerm)
-        if searchType == "contact":
-            Temp = Faculty_user.objects.filter(contact_icontains = searchTerm)
         if searchType == "name":
             Temp = Faculty_user.objects.filter(name__icontains = searchTerm)
-        if searchType == "gender":
-            Temp = Faculty_user.objects.filter(gender = searchTerm)
-        if searchType == "college":
-            Temp = Faculty_user.objects.filter(college__icontains = searchTerm)
-        if searchType == "major":
-            Temp = Faculty_user.objects.filter(major__icontains = searchTerm)
-        if searchType == "degree":
-            Temp = Faculty_user.objects.filter(degree__icontains = searchTerm)
-        if searchType == "title":
-            Temp = Faculty_user.objects.filter(title__icontains = searchTerm)
-        Temp = Temp.filter(college = userCollege)
-        results = []
-        for result in Temp:
-            results.append(result)
-        return results
-    elif userType == "STUDENT":
+    elif userType == 'STUDENT':
         if searchType == "id":
             Temp = Student_user.objects.filter(id = searchTerm)
-        if searchType == "contact":
-            Temp = Student_user.objects.filter(contact__icontains = searchTerm)
         if searchType == "name":
             Temp = Student_user.objects.filter(name__icontains = searchTerm)
-        if searchType == "gender":
-            Temp = Student_user.objects.filter(gender = searchTerm)
-        if searchType == "college":
-            Temp = Student_user.objects.filter(college__icontains = searchTerm)
-        if searchType == "major":
-            Temp = Student_user.objects.filter(major__icontains = searchTerm)
-        if searchType == "degree":
-            Temp = Student_user.objects.filter(degree__icontains = searchTerm)
-        if searchType == "title":
-            Temp = Student_user.objects.filter(gpa = searchTerm)
-        if searchType == "credits":
-            Temp = Student_user.objects.filter(credits = searchTerm)
+
+    if userCollege != 'all':
         Temp = Temp.filter(college = userCollege)
-        results = []
-        for result in Temp:
-            results.append(result)
-        return results
+    results = []
+    for result in Temp:
+        results.append(result)
+    return results
 
 @login_required
 def facultyAdd(request):
@@ -174,7 +135,6 @@ def facultyAdd(request):
                     major = fileTerms[5 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                     degree = fileTerms[6 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                     title = fileTerms[7 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
-                    isSpecial = fileTerms[8 + LEN_OF_FACULTY_TABLE * x].encode('utf-8'),
                 )
                 state = importFacultyCheck(fileTerms[0 + LEN_OF_FACULTY_TABLE * x : LEN_OF_FACULTY_TABLE + LEN_OF_FACULTY_TABLE * x]) 
                 if state == 'YEAH'.encode('utf-8'):
@@ -228,7 +188,10 @@ def facultyDelete(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                faculties = Faculty_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    faculties = Faculty_user.objects.filter(college = userCollege)
+                else:
+                    faculties = Faculty_user.objects.all()
                 response = render(request, 'DeleteFaculty.html', locals())
             else:
                 faculties = getSearchResult(searchType, searchTerm, userCollege, 'FACULTY')
@@ -270,7 +233,10 @@ def facultyModify(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                faculties = Faculty_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    faculties = Faculty_user.objects.filter(college = userCollege)
+                else:
+                    faculties = Faculty_user.objects.all()
             else:
                 faculties = getSearchResult(searchType, searchTerm, userCollege, 'FACULTY')
             return render(request, 'ModifyFaculty.html', locals())
@@ -383,10 +349,13 @@ def studentDelete(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                students = Student_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    students = Student_user.objects.filter(college = userCollege)
+                else:
+                    students = Student_user.objects.all()
                 response = render(request, 'DeleteStudent.html', locals())
             else:
-                studens = getSearchResult(searchType, searchTerm, userCollege, 'STUDENT')
+                students = getSearchResult(searchType, searchTerm, userCollege, 'STUDENT')
                 response = render(request, 'DeleteStudent.html', locals())
                 response.set_cookie('deleteTerm', searchTerm)
                 response.set_cookie('deleteType', searchType)
@@ -425,7 +394,10 @@ def studentModify(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                students = Student_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    students = Student_user.objects.filter(college = userCollege)
+                else:
+                    students = Student_user.objects.all()
             else:
                 students = getSearchResult(searchType, searchTerm, userCollege, 'STUDENT')
             return render(request, 'ModifyStudent.html', locals())
@@ -441,8 +413,7 @@ def studentModify(request):
                 'major': term[0].major,
                 'grade': term[0].grade,
                 'gpa': term[0].gpa,
-                'credits' : term[0].credits,
-                'isSpecial' : term[0].isSpecial}
+                'credits' : term[0].credits}
                 )
             return render(request, 'ModifyStudent.html', locals())
         else:
@@ -458,8 +429,7 @@ def studentModify(request):
                     major = info['major'],
                     grade = info['grade'],
                     gpa = info['gpa'],
-                    credits = info['credits'],
-                    isSpecial = info['isSpecial']
+                    credits = info['credits']
                 )
                 dbQuery.save()
                 modifyIsDone = True
@@ -535,7 +505,10 @@ def adminDelete(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                admins = Admin_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    admins = Admin_user.objects.filter(college = userCollege)
+                else:
+                    admins = Admin_user.objects.all()
                 response = render(request, 'DeleteAdmin.html', locals())
             else:
                 admins = getSearchResult(searchType, searchTerm, userCollege, 'ADMIN')
@@ -577,7 +550,10 @@ def adminModify(request):
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
             if not searchTerm:
-                admins = Admin_user.objects.filter(college = userCollege)
+                if userCollege != 'all':
+                    admins = Admin_user.objects.filter(college = userCollege)
+                else:
+                    admins = Admin_user.objects.all()
             else:
                 admins = getSearchResult(searchType, searchTerm, userCollege, 'ADMIN')
             return render(request, 'ModifyAdmin.html', locals())
