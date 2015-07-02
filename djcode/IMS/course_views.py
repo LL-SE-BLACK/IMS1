@@ -26,32 +26,23 @@ def courseMain(request):
     canMod = True
     if Admin_user.objects.filter(id = request.user.username):
         return render(request, 'CourseMain.html', locals())
-    elif Faculty_user.objects.filter(id = request.user.username):
-        userInfo = Faculty_user.objects.filter(id = request.user.username)
-        if userInfo[0].isSpecial:
-            if not request.user.has_perm("IMS.add_course_info"):
-                canAdd = False
-            if not request.user.has_perm("IMS.change_course_info"):
-                canMod = False
-            if not request.user.has_perm("IMS.delete_course_info"):
-                canDel = False
-            return render(request, 'CourseMain.html', locals())
-        else:
-            return render(request, 'AccessFault.html')
-    elif Student_user.objects.filter(id = request.user.username):
-        userInfo = Student_user.objects.filter(id = request.user.username)
-        if userInfo[0].isSpecial:
-            if not request.user.has_perm("IMS.add_course_info"):
-                canAdd = False
-            if not request.user.has_perm("IMS.change_course_info"):
-                canMod = False
-            if not request.user.has_perm("IMS.delete_course_info"):
-                canDel = False
-            return render(request, 'CourseMain.html', locals())
-        else:
-            return render(request, 'AccessFault.html')
     else:
-        return render(request, 'AccessFault.html')
+        userInfo = Faculty_user.objects.filter(id = request.user.username)
+        if userInfo:
+            if userInfo[0].isSpecial:
+                if not request.user.has_perm("IMS.course_manage"):
+                    canAdd, canDel, canMod = False, False, False
+                return render(request, 'CourseMain.html', locals())
+            else :
+                return render(request, 'AccessFault.html')
+        else:
+            userInfo = Student_user.objects.filter(id = request.user.username)
+            if userInfo[0].isSpecial:
+                if not request.user.has_perm("IMS.course_manage"):
+                    canAdd, canDel, canMod = False, False, False
+                return render(request, 'CourseMain.html', locals())
+            else :
+                return render(request, 'AccessFault.html')
 
 def isDigit(a):
     for x in a:
@@ -129,12 +120,12 @@ def courseAdd(request):
             userCollege = userInfo[0].college 										#
     elif Faculty_user.objects.filter(id = userName):								#
         userInfo = Faculty_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
     elif Student_user.objects.filter(id = userName):								#
         userInfo = Student_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
         #isAdmin = True																	#
@@ -235,12 +226,12 @@ def courseDelete(request):
             userCollege = userInfo[0].college 										#
     elif Faculty_user.objects.filter(id = userName):								#
         userInfo = Faculty_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
     elif Student_user.objects.filter(id = userName):								#
         userInfo = Student_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
         #isAdmin = True																	#
@@ -311,12 +302,12 @@ def courseModify(request):
             userCollege = userInfo[0].college 										#
     elif Faculty_user.objects.filter(id = userName):								#
         userInfo = Faculty_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
     elif Student_user.objects.filter(id = userName):								#
         userInfo = Student_user.objects.filter(id = userName)						#
-        if userInfo[0].isSpecial and request.user.has_perm("IMS.add_course_info"):	#
+        if userInfo[0].isSpecial and request.user.has_perm("IMS.course_manage"):	#
             isFaculty = True														#
             userCollege = userInfo[0].college 										#
         #isAdmin = True																	#

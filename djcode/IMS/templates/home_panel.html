@@ -24,10 +24,10 @@
                     <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
                 {% endif %}
                 {% if isSpecial %}
-                    {% if manageStudent or manageFaculty or manageAdmin %}
+                    {% if manageCourse %}
                         <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
                     {% endif %}
-                    {% if manageCourse %}
+                    {% if manageStudent or manageFaculty or manageAdmin %}
                         <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
                     {% endif %}
                 {% endif %}

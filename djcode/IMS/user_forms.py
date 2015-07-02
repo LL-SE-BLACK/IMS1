@@ -16,13 +16,16 @@ class FacultyForm(forms.Form):
     degree = forms.CharField(max_length=20)
     title = forms.CharField(max_length=20)
     isSpecial = forms.BooleanField(False)
+    canManageCourses = forms.BooleanField(False)
+    canManageStudents = forms.BooleanField(False)
+    canManageFaculties = forms.BooleanField(False)
     photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
     def clean_id(self):
-	    addedFacultyID = self.cleaned_data['id']
-	    if Faculty_user.objects.filter(id = addedFacultyID):
-	    	raise forms.ValidationError('Faculty number existed!')
-	    return addedFacultyID
+        addedFacultyID = self.cleaned_data['id']
+        if Faculty_user.objects.filter(id = addedFacultyID):
+            raise forms.ValidationError('Faculty number existed!')
+        return addedFacultyID
 
     def clean_gender(self):
         addedFacultyGender = self.cleaned_data['gender']
@@ -51,6 +54,9 @@ class StudentForm(forms.Form):
     gpa = forms.FloatField()
     credits = forms.FloatField()
     isSpecial = forms.BooleanField(False)
+    canManageCourses = forms.BooleanField(False)
+    canManageStudents = forms.BooleanField(False)
+    canManageFaculties = forms.BooleanField(False)
     photo = forms.FileField(initial = DEFAULT_PHOTO_DIR)
 
     def clean_id(self):
@@ -90,10 +96,10 @@ class AdminForm(forms.Form):
     photo = forms.FileField(initial=DEFAULT_PHOTO_DIR)
 
     def clean_id(self):
-	    addedAdminID = self.cleaned_data['id']
-	    if Admin_user.objects.filter(id = addedAdminID):
-	    	raise forms.ValidationError('Admin number existed!')
-	    return addedAdminID
+        addedAdminID = self.cleaned_data['id']
+        if Admin_user.objects.filter(id = addedAdminID):
+            raise forms.ValidationError('Admin number existed!')
+        return addedAdminID
 
     def clean_gender(self):
         addedAdminGender = self.cleaned_data['gender']

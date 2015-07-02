@@ -32,33 +32,39 @@
     <h1>Choose operation</h1>
     <br/>
     <ul class="nav nav-pills nav-stacked">
+        {% if canManageFaculty %}
         <li role="presentation">
             <a href="#" onclick="javascript:f('addfaculty')">AddFaculty</a>
-        </li>
-        <li role="presentation">
-            <a href="#" onclick="javascript:f('addstudent')">AddStudent</a>
-        </li>
-        <li role="presentation">
-            <a href="#" onclick="javascript:f('addadmin')">AddAdmin</a>
         </li>
         <li role="presentation">
             <a href="#" onclick="javascript:f('modfaculty')">ModifyFaculty</a>
         </li>
         <li role="presentation">
+            <a href="#" onclick="javascript:f('delfaculty')">DeleteFaculty</a>
+        </li>
+        {% endif %}
+        {% if canManageStudent %}
+        <li role="presentation">
+            <a href="#" onclick="javascript:f('addstudent')">AddStudent</a>
+        </li>
+        <li role="presentation">
             <a href="#" onclick="javascript:f('modstudent')">ModifyStudent</a>
+        </li>
+        <li role="presentation">
+            <a href="#" onclick="javascript:f('delstudent')">DeleteStudent</a>
+        </li>
+        {% endif %}
+        {% if canManageAdmin %}
+        <li role="presentation">
+            <a href="#" onclick="javascript:f('addadmin')">AddAdmin</a>
         </li>
         <li role="presentation">
             <a href="#" onclick="javascript:f('modadmin')">ModifyAdmin</a>
         </li>
         <li role="presentation">
-            <a href="#" onclick="javascript:f('delfaculty')">DeleteFaculty</a>
-        </li>
-        <li role="presentation">
-            <a href="#" onclick="javascript:f('delstudent')">DeleteStudent</a>
-        </li>
-        <li role="presentation">
             <a href="#" onclick="javascript:f('deladmin')">DeleteAdmin</a>
         </li>
+        {% endif %}
     </ul>
 </div>
 

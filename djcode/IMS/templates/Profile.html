@@ -23,10 +23,10 @@
                     <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
                 {% endif %}
                 {% if isSpecial %}
-                    {% if manageStudent or manageFaculty or manageAdmin %}
+                    {% if manageCourse %}
                         <li role="presentation"><a href="/ims/course/">课程信息管理</a></li>
                     {% endif %}
-                    {% if manageCourse %}
+                    {% if manageStudent or manageFaculty or manageAdmin %}
                         <li role="presentation"><a href="/ims/user/">用户信息管理</a></li>
                     {% endif %}
                 {% endif %}
@@ -42,264 +42,265 @@
         </div>
     </nav>
 
-
     <h1>个人信息</h1>
-    <br/>
-    <div id="changInfo">
-        <form class="form-horizontal" action="./changeUserInfo/" method="GET" id="changeInfo_form" onSubmit="return checkuserInfo();">
-            {% csrf_token %}
-              <div class="form-group">
-                <label class="col-sm-2 control-label">
-                    {% if isStudent %}学号 {% endif %}
-                    {% if isFaculty or isAdmin%}工号 {% endif %}
-                </label>
-                <div class="col-sm-10">
-                    <input class="form-control-static" name="id" id="inputId"  value="{{userInfo.id}}" readonly>
-                </div>
-              </div>
 
-            <div class="form-group">
-            <label class="col-sm-2 control-label">联系方式</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name="contact" id="inputContact" value="{{userInfo.contact}}">
+    <div class="row">
+        <div class="col-sm-3">
+            <div id="changePhoto">
+                {% if userInfo.photo %}
+                    <img src="/ims{{ userInfo.photo.url }}" width="200" height="200" />
+                {% endif %}
+                <form action="./changePhoto/" method="post" enctype="multipart/form-data">{% csrf_token %}
+                    <p>
+                        <input id="id_image" type="file" class="" name="photo" accept="image/*">
+                    </p>
+                    <input type="submit" role="button" class="btn btn-default" value="确认修改" />
+                </form>
+                {% if photoErrors %}
+                    请上传图片文件，大小不超过2M。
+                {% endif %}
             </div>
-            </div>
-
-            <div class="form-group">
-            <label class="col-sm-2 control-label">姓名</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" id="inputName" value="{{userInfo.name}}">
-            </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">性别</label>
-                    <label class="radio-inline">
-                      <input type="radio" name="gender" id="inlineRadio1" value=1 {% if userInfo.gender %} checked {% endif %}> 男
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="gender" id="inlineRadio2" value=0 {% if not userInfo.gender %} checked {% endif %}> 女
-                    </label>
-
-            </div>
-            <div class="form-group">
-            <label class="col-sm-2 control-label">学院</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" name='college' id="inputCollege" value="{{userInfo.college}}" {% if isAdmin%}  readonly {% endif %} >
-            </div>
-            </div>
-
-            {% if isStudent or isFaculty %}
-                <div class="form-group">
-                <label class="col-sm-2 control-label">专业</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" name='major' id="inputMajor" value="{{userInfo.major}}">
-                </div>
-                </div>
-            {% endif %}
-
-            {% if isStudent %}
-                <div class="form-group">
-                <label class="col-sm-2 control-label">年级</label>
-                <div class="col-sm-10">
-                  <input class="form-control-static" name="grade" value="{{userInfo.grade}}" id="inputGrade">
-                </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">学分</label>
-                    <div class="col-sm-10">
-                        <input class="form-control-static" name="credits" id="inputCredits" value="{{userInfo.credits}}" readonly>
+        </div>
+        <div class="col-sm-9">
+            <div id="changInfo">
+                <form class="form-horizontal" action="./changeUserInfo/" method="GET" id="changeInfo_form" onSubmit="return checkuserInfo();">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            {% if isStudent %}学号 {% endif %}
+                            {% if isFaculty or isAdmin%}工号 {% endif %}
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control-static" name="id" id="inputId"  value="{{userInfo.id}}" readonly>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">GPA</label>
-                    <div class="col-sm-10">
-                        <input class="form-control-static" name="gpa" id="inputGPA" value="{{userInfo.gpa}}" readonly>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">联系方式</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="contact" id="inputContact" value="{{userInfo.contact}}">
+                        </div>
                     </div>
-                </div>
-            {% endif %}
 
-            {% if isFaculty %}
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Degree</label>
-                    <div class="col-sm-10">
-                        <input class="form-control-static" name="degree" id="inputDegree" value="{{userInfo.degree}}" readonly>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">姓名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" id="inputName" value="{{userInfo.name}}">
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Title</label>
-                    <div class="col-sm-10">
-                        <input class="form-control-static" name="title" id="inputTitle" value="{{userInfo.title}}" readonly>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">性别</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="inlineRadio1" value=1 {% if userInfo.gender %} checked {% endif %}> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="inlineRadio2" value=0 {% if not userInfo.gender %} checked {% endif %}> 女
+                        </label>
+
                     </div>
-                </div>
-            {% endif %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">学院</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name='college' id="inputCollege" value="{{userInfo.college}}" {% if isAdmin%}  readonly {% endif %} >
+                        </div>
+                    </div>
 
-             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-default">确认修改</button>
-                </div>
-              </div>
-            <p id="indicatorFromJsOnInfo"></p>
-            <p id="indicatorFormServerOnInfo">
-                    {% if infoErrors %}
-                        <p style="color: red;">
-                            Please correct the error{{ infoErrors|pluralize }} below.
-                            </br>
-                            {{ infoErrors}}
-                        </p>
+                    {% if isStudent or isFaculty %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">专业</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name='major' id="inputMajor" value="{{userInfo.major}}">
+                            </div>
+                        </div>
                     {% endif %}
+
+                    {% if isStudent %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">年级</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-static" name="grade" value="{{userInfo.grade}}" id="inputGrade">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学分</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-static" name="credits" id="inputCredits" value="{{userInfo.credits}}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">GPA</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-static" name="gpa" id="inputGPA" value="{{userInfo.gpa}}" readonly>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if isFaculty %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Degree</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-static" name="degree" id="inputDegree" value="{{userInfo.degree}}" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Title</label>
+                            <div class="col-sm-10">
+                                <input class="form-control-static" name="title" id="inputTitle" value="{{userInfo.title}}" readonly>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">确认修改</button>
+                        </div>
+                    </div>
+                    <p id="indicatorFromJsOnInfo"></p>
+                    <p id="indicatorFormServerOnInfo">
+                        {% if infoErrors %}
+                            <p style="color: red;">
+                                Please correct the error{{ infoErrors|pluralize }} below.
+                                </br>
+                                {{ infoErrors}}
+                            </p>
+                        {% endif %}
                     {% if infoSuccess %}
                         <p style="color: red;">
                             修改成功！
                         </p>
                     {% endif %}
-            </p>
-        </form>
-    </div>
-
-    </br>
-
-    <div id="changePhoto">
-        {% if userInfo.photo %}
-            <img src="/ims{{ userInfo.photo.url }}" width="200" height="200" />
-        {% endif %}
-        <form action="./changePhoto/" method="post" enctype="multipart/form-data">{% csrf_token %}
-            <p>
-                <input id="id_image" type="file" class="" name="photo" accept="image/*">
-            </p>
-            <input type="submit" value="确认修改" />
-        </form>
-        {% if photoErrors %}
-            请上传图片文件，大小不超过2M。
-        {% endif %}
-    </div>
-
-    </br>
-    <div id="changPasswd">
-        <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="./changePasswd/" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label  class="col-sm-2 control-label">请输入密码</label>
-                <div class="col-sm-10">
-                  <input type="password" class="form-control" name="passwd1" id="inputPasswd" placeholder="New Password"/>
-                </div>
-              </div>
-            <div class="form-group">
-                <label  class="col-sm-2 control-label">再次输入密码</label>
-                <div class="col-sm-10">
-                  <input type="password" class="form-control" name="passwd2" id="repytePasswd" placeholder="Retype Password"/>
-                </div>
-              </div>
-            <p id="indicatorFromJsOnpasswd"></p>
-            <p id="indicatorFormServerOnPasswd">
-                {% if passwdErrors %}
-{#                    **<ul>**#}
-{#                        **{% for error in userInfo.passwdErrors %}**#}
-{#                        **<li>{{ error }}</li>**#}
-{#                        **{% endfor %}**#}
-{#                    **</ul>**#}
-                    密码长度为5-20位，两次输入请保持一致！
-                {% endif %}
-            </p>
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default" >确认修改</button>
+                    </p>
+                </form>
             </div>
-        </form>
+            <br/>
+            <div id="changPasswd">
+                <form role="form" class="form-horizontal"  id="changePasswd_form" onsubmit="return checkPasswd()" action="./changePasswd/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">请输入密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="passwd1" id="inputPasswd" placeholder="New Password"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">再次输入密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="passwd2" id="repytePasswd" placeholder="Retype Password"/>
+                        </div>
+                    </div>
+                    <p id="indicatorFromJsOnpasswd"></p>
+                    <p id="indicatorFormServerOnPasswd">
+                        {% if passwdErrors %}
+                            {#                    **<ul>**#}
+                            {#                        **{% for error in userInfo.passwdErrors %}**#}
+                            {#                        **<li>{{ error }}</li>**#}
+                            {#                        **{% endfor %}**#}
+                            {#                    **</ul>**#}
+                            密码长度为5-20位，两次输入请保持一致！
+                        {% endif %}
+                    </p>
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default" >确认修改</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>
-    <script>
-        function checkuserInfo(){
-            var id = $('#inputId').val();
-            var contact = $('#inputContact').val();
-            var name = $('#inputName').val();
-            var college = $('#inputCollege').val();
+<script>
+    function checkuserInfo(){
+        var id = $('#inputId').val();
+        var contact = $('#inputContact').val();
+        var name = $('#inputName').val();
+        var college = $('#inputCollege').val();
 
 
-{#            var grade = $('#inputGrade').val();#}
-{#            var credits = $('#inputCredits').val();#}
-{#            var gpa = $('inputGPA').val();#}
+        {#            var grade = $('#inputGrade').val();#}
+        {#            var credits = $('#inputCredits').val();#}
+        {#            var gpa = $('inputGPA').val();#}
 
-            var valid = true;
-            var indicator = $('#indicatorFromJsOnInfo');
-            indicator.html("")
-            $("#indicatorFormServerOnPasswd").html("")
+        var valid = true;
+        var indicator = $('#indicatorFromJsOnInfo');
+        indicator.html("")
+        $("#indicatorFormServerOnPasswd").html("")
 
-            {% if isStudent %} if(isNaN(id) || id.length != 10)
-            {
-                indicator.append("</br> 请输入学号，学号为10位数字！");
-                valid = false;
-            }
-            {% endif %}
-            {% if isFaculty %} if(isNaN(id) || id.length != 6)
-            {
-                indicator.append("</br> 请输入工号，工号为6位数字！");
-                valid = false;
-            }
-            {% endif %}
-            {% if isAdmin %} if(isNaN(id) || id.length != 3)
-            {
-                indicator.append("</br> 请输入工号，工号为3位数字！");
-                valid = false;
-            }
-            {% endif %}
+        {% if isStudent %} if(isNaN(id) || id.length != 10)
+        {
+            indicator.append("</br> 请输入学号，学号为10位数字！");
+            valid = false;
+        }
+        {% endif %}
+        {% if isFaculty %} if(isNaN(id) || id.length != 6)
+        {
+            indicator.append("</br> 请输入工号，工号为6位数字！");
+            valid = false;
+        }
+        {% endif %}
+        {% if isAdmin %} if(isNaN(id) || id.length != 3)
+        {
+            indicator.append("</br> 请输入工号，工号为3位数字！");
+            valid = false;
+        }
+        {% endif %}
 
-            if(contact.length > 11 || contact.length == 0 || isNaN(contact)) {
-                indicator.append("</br> 请输入手机号码，手机号码为1-11位数字！");
-                valid = false;
-            }
-            if(name.length > 20 || name.length == 0) {
-                console.log("name too long!");
-                indicator.append("</br> 请输入姓名，姓名最大长度为20位！");
-                valid = false;
-            }
-            if(college.length > 50 || college.length == 0) {
-                indicator.append("</br> 请输入学院，学院最大长度为50位！");
-                valid = false;
-            }
-
-            {% if isStudent or isFaculty %}
-                var major = $('#inputMajor').val();
-                if(major.length > 50 || major.length == 0) {
-                    indicator.append("</br> 请输入专业，专业最大长度为50位！");
-                    valid = false;
-                }
-            {% endif %}
-
-
-            return valid;
-
+        if(contact.length > 11 || contact.length == 0 || isNaN(contact)) {
+            indicator.append("</br> 请输入手机号码，手机号码为1-11位数字！");
+            valid = false;
+        }
+        if(name.length > 20 || name.length == 0) {
+            console.log("name too long!");
+            indicator.append("</br> 请输入姓名，姓名最大长度为20位！");
+            valid = false;
+        }
+        if(college.length > 50 || college.length == 0) {
+            indicator.append("</br> 请输入学院，学院最大长度为50位！");
+            valid = false;
         }
 
+        {% if isStudent or isFaculty %}
+            var major = $('#inputMajor').val();
+            if(major.length > 50 || major.length == 0) {
+                indicator.append("</br> 请输入专业，专业最大长度为50位！");
+                valid = false;
+            }
+        {% endif %}
 
-        function checkPasswd() {
-            var pass1 = $('#inputPasswd').val();
-            var pass2 = $('#repytePasswd').val();
-            var indicatorFromJs = $('#indicatorFromJsOnpasswd');
-            if (pass1 != pass2) {
-                indicatorFromJs.html("两次输入的密码不一致！");
+
+        return valid;
+
+    }
+
+
+    function checkPasswd() {
+        var pass1 = $('#inputPasswd').val();
+        var pass2 = $('#repytePasswd').val();
+        var indicatorFromJs = $('#indicatorFromJsOnpasswd');
+        if (pass1 != pass2) {
+            indicatorFromJs.html("两次输入的密码不一致！");
+            return false;
+        }
+        else {
+            if (pass1.length < 5 || pass1.length > 20) {
+                indicatorFromJs.html("密码长度在5-20之间");
                 return false;
             }
             else {
-                if (pass1.length < 5 || pass1.length > 20) {
-                    indicatorFromJs.html("密码长度在5-20之间");
-                    return false;
-                }
-                else {
-                    indicatorFromJs.html("");
-                    $("#indicatorFormServerOnInfo").html("")
-                    return true;
-{#                    var userid = $('#idMessage').html();#}
-{#                    console.log("userid" + userid);#}
-{#                    $.ajaxSetup({#}
-{#                         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }#}
-{#                    });#}
-{#                    $.post("../changePasswd/", { id: userid, passwd: pass1});#}
-                }
+                indicatorFromJs.html("");
+                $("#indicatorFormServerOnInfo").html("")
+                return true;
+                {#                    var userid = $('#idMessage').html();#}
+                {#                    console.log("userid" + userid);#}
+                {#                    $.ajaxSetup({#}
+                {#                         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }#}
+                {#                    });#}
+                {#                    $.post("../changePasswd/", { id: userid, passwd: pass1});#}
             }
         }
-    </script>
+    }
+</script>
 </html>

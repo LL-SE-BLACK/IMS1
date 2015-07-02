@@ -22,10 +22,35 @@ LEN_OF_ADMIN_TABLE = 5
 
 @login_required
 def userMain(request):
-    if Admin_user.objects.filter(id = request.user.username):
-        return render(request, 'UserMain.html')
+    canManageStudent = True
+    canManageFaculty = True
+    canManageAdmin = False
+    admin = Admin_user.objects.filter(id = request.user.username)
+    if admin:
+        if admin[0].college == 'all':
+            canManageAdmin = True
+        return render(request, 'UserMain.html', locals())
     else:
-        return render(request, 'AccessFault.html')
+        userInfo = Faculty_user.objects.filter(id = request.user.username)
+        if userInfo:
+            if userInfo[0].isSpecial:
+                if not request.user.has_perm("IMS.student_manage"):
+                    canManageStudent = False
+                if not request.user.has_perm("IMS.faculty_manage"):
+                    canManageFaculty = False
+                return render(request, 'UserMain.html', locals())
+            else:
+                return render(request, 'AccessFault.html')
+        else:
+            userInfo = Student_user.objects.filter(id = request.user.username)
+            if userInfo[0].isSpecial:
+                if not request.user.has_perm("IMS.student_manage"):
+                    canManageStudent = False
+                if not request.user.has_perm("IMS.faculty_manage"):
+                    canManageFaculty = False
+                return render(request, 'UserMain.html', locals())
+            else:
+                return render(request, 'AccessFault.html')
 
 def isDigit(a):
     for x in a:
@@ -119,7 +144,16 @@ def facultyAdd(request):
     errorImport = []
     existed = []
     addIsDone = False
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
+    isSuper = False
+    if userCollege == 'all':
+        isSuper = True
 
     if request.method == 'POST':
         if request.POST.get('multiAddCancel') or request.POST.get('first'): #click cancle button or first access
@@ -168,10 +202,22 @@ def facultyAdd(request):
                     college = info['college'],
                     major = info['major'],
                     degree = info['degree'],
-                    title = info['title']
+                    title = info['title'],
+                    isSpecial = info['isSpecial'],
+                    photo = info['photo']
                 )
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
+                if dbQuery.isSpecial:
+                    if info['canManageCourses']:
+                        perm = Permission.objects.get(codename='course_manage')
+                        user.user_permissions.add(perm)
+                    if info['canManageStudents']:
+                        perm = Permission.objects.get(codename='student_manage')
+                        user.user_permissions.add(perm)
+                    if info['canManageFaculties']:
+                        perm = Permission.objects.get(codename='faculty_manage')
+                        user.user_permissions.add(perm)
                 addIsDone = True
                 form = FacultyForm(initial={'college' : userCollege})
         return render(request, 'AddFaculty.html', locals())
@@ -181,7 +227,13 @@ def facultyAdd(request):
 @csrf_exempt
 def facultyDelete(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
     response = render(request, 'DeleteFaculty.html', locals())
     if request.method == 'POST':
         if 'term' in request.POST:
@@ -227,7 +279,13 @@ def facultyDelete(request):
 @login_required
 def facultyModify(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
     if request.method  ==   'POST':
         if 'term' in request.POST:
             inSearch = True
@@ -260,17 +318,17 @@ def facultyModify(request):
             form = FacultyFormModify(request.POST)
             if form.is_valid():
                 info = form.cleaned_data
-                dbQuery = Faculty_user(
-                    id = info['id'],
-                    contact = info['contact'],
-                    name = info['name'],
-                    gender = info['gender'],
-                    college = info['college'],
-                    major = info['major'],
-                    degree = info['degree'],
-                    title = info['title']
-                )
-                dbQuery.save()
+
+                user = Faculty_user.objects.get(id=info['id'])
+                user.contact = info['contact']
+                user.name = info['name']
+                user.gender = info['gender']
+                user.college = info['college']
+                user.major = info['major']
+                user.degree = info['degree']
+                user.title = info['title']
+                user.save()
+
                 modifyIsDone = True
             return render(request, 'ModifyFaculty.html', locals())
     return render(request, 'AccessFault.html')
@@ -280,7 +338,16 @@ def studentAdd(request):
     errors = []
     errorImport = []
     addIsDone = False
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
+    isSuper = False
+    if userCollege == 'all':
+        isSuper = True
 
     if request.method  ==   'POST':
         if request.POST.get('multiAddCancle') or request.POST.get('first'): #click cancle button or first access
@@ -331,10 +398,22 @@ def studentAdd(request):
                     major = info['major'],
                     grade = info['grade'],
                     gpa = info['gpa'],
-                    credits = info['credits']
+                    credits = info['credits'],
+                    isSpecial = info['isSpecial'],
+                    photo = info['photo']
                 )
                 dbQuery.save()
                 user = User.objects.create_user(dbQuery.id, dbQuery.id+"@zju.edu.cn", "123456")
+                if dbQuery.isSpecial:
+                    if info['canManageCourses']:
+                        perm = Permission.objects.get(codename='course_manage')
+                        user.user_permissions.add(perm)
+                    if info['canManageStudents']:
+                        perm = Permission.objects.get(codename='student_manage')
+                        user.user_permissions.add(perm)
+                    if info['canManageFaculties']:
+                        perm = Permission.objects.get(codename='faculty_manage')
+                        user.user_permissions.add(perm)
                 addIsDone = True
                 form = StudentForm(initial = {'college' : userCollege})
         return render(request, 'AddStudent.html', locals())
@@ -344,7 +423,13 @@ def studentAdd(request):
 @csrf_exempt
 def studentDelete(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
     response = render(request, 'DeleteStudent.html', locals())
     if request.method  ==   'POST':
         if 'term' in request.POST:
@@ -390,7 +475,13 @@ def studentDelete(request):
 @login_required
 def studentModify(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
     if request.method  ==   'POST':
         if 'term' in request.POST:
             inSearch = True
@@ -424,18 +515,18 @@ def studentModify(request):
             form = StudentFormModify(request.POST)
             if form.is_valid():
                 info = form.cleaned_data
-                dbQuery = Student_user(
-                    id = info['id'],
-                    contact = info['contact'],
-                    name = info['name'],
-                    gender = info['gender'],
-                    college = info['college'],
-                    major = info['major'],
-                    grade = info['grade'],
-                    gpa = info['gpa'],
-                    credits = info['credits']
-                )
-                dbQuery.save()
+
+                user = Student_user.objects.get(id=info['id'])
+                user.contact = info['contact']
+                user.name = info['name']
+                user.gender = info['gender']
+                user.college = info['college']
+                user.major = info['major']
+                user.grade = info['grade']
+                user.gpa = info['gpa']
+                user.credits = info['credits']
+                user.save()
+
                 modifyIsDone = True
             return render(request, 'ModifyStudent.html', locals())
     return render(request, 'AccessFault.html')
@@ -510,7 +601,13 @@ def adminAdd(request):
 @permission_required('IMS.admin_manage')
 def adminDelete(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    userCollege = ""
+    if Admin_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    elif Faculty_user.objects.filter(id = request.user.username):
+        userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
+    else:
+        userCollege = Student_user.objects.filter(id = request.user.username)[0].college
     response = render(request, 'DeleteAdmin.html', locals())
     if request.method == 'POST':
         if 'term' in request.POST:
@@ -557,19 +654,12 @@ def adminDelete(request):
 @permission_required('IMS.admin_manage')
 def adminModify(request):
     errors = []
-    userCollege = Admin_user.objects.filter(id = request.user.username)[0].college
     if request.method == 'POST':
         if 'term' in request.POST:
             inSearch = True
             searchTerm = request.POST.get('term')
             searchType = request.POST.get('type')
-            if not searchTerm:
-                if userCollege != 'all':
-                    admins = Admin_user.objects.filter(college = userCollege)
-                else:
-                    admins = Admin_user.objects.all()
-            else:
-                admins = getSearchResult(searchType, searchTerm, userCollege, 'ADMIN')
+            admins = Admin_user.objects.all()
             return render(request, 'ModifyAdmin.html', locals())
         elif 'modifyid' in request.POST:
             inModify = True
@@ -586,14 +676,14 @@ def adminModify(request):
             form = AdminFormModify(request.POST)
             if form.is_valid():
                 info = form.cleaned_data
-                dbQuery = Admin_user(
-                    id = info['id'],
-                    contact = info['contact'],
-                    name = info['name'],
-                    gender = info['gender'],
-                    college = info['college']
-                )
-                dbQuery.save()
+
+                user = Admin_user.objects.get(id=info['id'])
+                user.contact = info['contact']
+                user.name = info['name']
+                user.gender = info['gender']
+                user.college = info['college']
+                user.save()
+
                 modifyIsDone = True
             return render(request, 'ModifyAdmin.html', locals())
     return render(request, 'AccessFault.html')

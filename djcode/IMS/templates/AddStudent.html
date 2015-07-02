@@ -145,5 +145,8 @@
         form.file.value = s;
         form.submit();
     }
+    {% if not isSuper %}
+        $("#id_college").attr("readonly", "");
+    {% endif %}
 </script>
 </html>

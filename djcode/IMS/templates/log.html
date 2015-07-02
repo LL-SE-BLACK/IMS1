@@ -27,27 +27,34 @@
         </div>
     </nav>
 
-    <div id="deleteLog" >
-        <a href="./deleteLog">清空所有日志.</a>
-        </div>
+    <button id="deleteLog" class="btn btn-danger" role="button" onclick="delLog()">
+        清空所有日志.
+    </button>
+    <br/>
+    <br/>
 
     <div id="logPanel">
         {% for log in errorlogs %}
-            <font color="red">{{ log}} </font>
-
-            </br>
+            <div class="alert alert-warning">
+                {{ log }}
+            </div>
             </br>
         {% endfor %}
-
 
         {% for log in alllogs %}
-            {{  log }}
-            </br>
+            <div class="alert alert-info">
+                {{ log }}
+            </div>
             </br>
         {% endfor %}
-
-        </div>
+    </div>
 
 </div>
 </body>
 </html>
+
+<script>
+    function delLog() {
+        window.location.href = './deleteLog/';
+    }
+</script>

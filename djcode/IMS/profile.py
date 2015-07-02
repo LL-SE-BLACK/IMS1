@@ -216,6 +216,7 @@ def changePasswd(request):
             return HttpResponseRedirect('../../profile')
             # return render_to_response('profile.html', c, context_instance=RequestContext(request))
         else : # success and valid request
+            logout(request)
             return render_to_response('change_passwd_success.html')
     else:
         print('ERROR: not post')
