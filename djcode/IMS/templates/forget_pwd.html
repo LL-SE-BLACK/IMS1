@@ -41,22 +41,11 @@
 <div class="container">
     <div class="panel panel-info" style="opacity: 0.8">
         <div class="panel panel-heading" align="center">
-            登录
+            忘记密码
         </div>
         <div class="panel-body">
-
-            <!--<div class="form-group">
-                <label for="name">用户名</label>
-                <input type="text" class="form-control" name="username"
-                       placeholder="Your user name here...">
-            </div>
-            <div class="form-group">
-                <label for="passwd">密码</label>
-                <input type="text" class="form-control" name="passwd"
-                       placeholder="Your password here...">
-            </div> -->
             <div class="form-group" style="width: 100%;">
-                <form role="form" action="../user_auth/" method="post">
+                <form role="form" action="../reset_pwd_mail/" method="post">
                     <div class="input-group input-group-lg" style="padding-right: 5%">
                         <span class="input-group-addon">用户名</span>
                             {{ form.username }}
@@ -66,26 +55,12 @@
                             {{ form.username.errors }}
                         </div>
                     {% endif %}
-                    <br/>
-
-                    <div class="input-group input-group-lg" style="padding-right: 5%">
-                        <span class="input-group-addon"> 密 码</span>
-                        {{ form.passwd }}
-                    </div>
-                    {% if form.passwd.errors %}
-                        <div class="alert alert-danger">
-                            {{ form.passwd.errors }}
-                        </div>
-                    {% endif %}
 
                     <br/>
                     <div class="btn-group-lg" align="center">
-                        <button type="submit" class="btn btn-default">登录</button>
+                        <button type="submit" class="btn btn-default">发送重置密码邮件</button>
                     </div>
                 </form>
-                <div class="btn-group-sm" align="right">
-                    <button class="btn btn-info"><a href="/ims/forget_pwd/">忘记密码</a></button>
-                </div>
             </div>
         </div>
     </div>
@@ -97,5 +72,4 @@
     <script>
         //make the size of django-rendered forms suits form-control
         $("#id_username").attr("class", "form-control");
-        $("#id_passwd").attr({"class": "form-control", "type": "password"});
     </script>

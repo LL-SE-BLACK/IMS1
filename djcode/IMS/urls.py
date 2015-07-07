@@ -18,18 +18,17 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
-from IMS import views, profile, course_views, user_views, log_views
-import os
+from IMS import views, profile, course_views, user_views, log_views, forget_pwd
 
 urlpatterns = [
-    url(r'^login/$', views.loggingin),
+    url(r'^login/$', views.loggingin), #by adward
     #url(r'^hello/', views.startup),
-    url(r'^add_user/', views.add_user),
-    url(r'^user_added/', views.user_added),
-    url(r'^user_auth/', views.user_auth),
-    url(r'^home/$', views.home),
-    url(r'^logout/$', views.loggingout),
-    url(r'^home/profile/$', profile.profile),
+    url(r'^add_user/', views.add_user), #by adward
+    url(r'^user_added/', views.user_added), #by adward
+    url(r'^user_auth/', views.user_auth), #by adward
+    url(r'^home/$', views.home), #by adward
+    url(r'^logout/$', views.loggingout), #by adward
+    url(r'^home/profile/$', profile.profile), #by adward
     url(r'^home/profile/changeUserInfo/$', profile.changeUserInfo), #by xyh
     url(r'^home/profile/changePasswd/$', profile.changePasswd), #by xyh
     url(r'^home/profile/changePhoto/$', profile.changePhoto), #by xyh
@@ -49,6 +48,9 @@ urlpatterns = [
     url(r'^user/add_admin/$', user_views.adminAdd), #by Henry
     url(r'^user/delete_admin/$', user_views.adminDelete), #by Henry
     url(r'^user/modify_admin/$', user_views.adminModify), #by Henry
+    url(r'^forget_pwd/$', forget_pwd.forget_pwd), #by adward
+    url(r'^reset_pwd_mail/$', forget_pwd.reset_pwd_mail), #by adward
+    url(r'^reset_pwd/(?P<key>[0-9a-zA-Z]{20})/$', forget_pwd.reset_pwd), #by adward
 ]
 
 ## For upload user photos

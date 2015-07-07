@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="http://127.0.0.1:8000/static/css/bootstrap.min.css">
+    <script src="http://127.0.0.1:8000/static/js/jquery.min.js"></script>
+    <script src="http://127.0.0.1:8000/static/js/bootstrap.min.js"></script>
+
+</head>
+
+<style>
+    body {
+        font: 20px sans-serif;
+        overflow: hidden;
+    }
+    .container {
+        padding: 20%;
+        padding-top: 15%;
+        margin-right: auto;
+        margin-left: auto;
+        align-content: center;
+    }
+</style>
+
+<body>
+<div class="container">
+    <div class="panel panel-info" style="opacity: 0.8">
+        <div class="panel panel-heading" align="center">
+            用户密码找回
+        </div>
+        <div class="panel-body">
+            <div class="alert alert-info">
+                尊敬的教务管理系统用户{{ username }}，请在十分钟内点击以下连接，重置您的密码：
+            </div>
+            <div class="alert alert-danger">
+                <a href="{{ url }}">RESET</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

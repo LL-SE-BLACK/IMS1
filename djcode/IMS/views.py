@@ -2,7 +2,6 @@
 
 from IMS.head import *
 from IMS.models import Student_user, Faculty_user, Admin_user
-from IMS.profile_forms import StudentInfoForm
 from django.http import Http404
 from django import forms
 from django.forms.util import ErrorList
@@ -21,7 +20,7 @@ class LoginForm(forms.Form):
         _passwd = cleaned_data.get('passwd', '')
         if not User.objects.filter(username=_username):
             error_msg = ["用户不存在！"]
-            super(LoginForm, self).errors['passwd'] = ErrorList(error_msg)
+            super(LoginForm, self).errors['username'] = ErrorList(error_msg)
         else:
             user = authenticate(username=_username, password=_passwd)
             if user is None:
@@ -35,7 +34,7 @@ def startup(request):
     return HttpResponseRedirect('ims/login/')
 
 def loggingin(request):
-    print request.user
+    #print request.user
     if not request.user.is_authenticated():
         form = LoginForm()
         t = get_template('login.html')

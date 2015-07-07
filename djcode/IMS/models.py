@@ -180,3 +180,10 @@ class Sys_log(models.Model):
     pre = models.CharField(max_length=50, default='none')
     post = models.CharField(max_length=50, default='none')
 '''
+
+class FindPass(models.Model):
+    username = models.CharField(max_length=20)
+    activation_key = models.CharField(max_length=20)
+    timestamp = models.CharField(max_length=10) #int part
+    #date = models.DateField(auto_now_add=True)
+

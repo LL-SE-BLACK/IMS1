@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect
 from django.core.files import File
 import re
 import os
+import random
+import string
 from django.template.context import RequestContext
 from django.template.context_processors import csrf
 from django.contrib.auth.models import User

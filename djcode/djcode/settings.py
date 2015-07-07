@@ -14,9 +14,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import datetime
 
+DOMAIN_NAME = '127.0.0.1:8000'
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -187,10 +187,9 @@ LOGGING = {
     }
 }
 
-# ##TODO: change the email setting here
 # ADMINS = [('Adward_r', 'adward_r@icloud.com'), ('Xuyuhao', 'rickyxuusa@gmail.com')]
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'me@gmail.com'
-# EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.zju.edu.cn'
+EMAIL_PORT = 25 #465 for SSL
+EMAIL_HOST_USER = '3130000020@zju.edu.cn'
+EMAIL_HOST_PASSWORD = '250633'
