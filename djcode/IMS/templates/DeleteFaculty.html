@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <style>
+        .form-group {
+            padding: 1%;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,8 +32,10 @@
             </ul>
         </div>
     </nav>
+    <div class="page-header">
+        <h1>Search Faculties for Deletion</h1>
+    </div>
 
-    <h1>Search Faculties for Deletion</h1>
     {% if errors %}
         <ul>
             {% for error in errors %}
@@ -36,13 +43,23 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <form id = 'formSearch' action="" method="post">
-        <input type="text" name="term">
-        <select id="type" name="type">
-            <option value ="id">ID</option>
-            <option value ="name">Name</option>
-        </select>
-        <input type="submit" value="Search Faculty">
+
+    <form id='formSearch' action="" method="post" class="form-inline">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="key" class="sr-only"></label>
+            <input id="key" type="text" name="term" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="type" class="sr-only"></label>
+            <select id="type" name="type" class="form-control">
+                <option value ="id">ID</option>
+                <option value ="name">Name</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Search Faculty" class="form-control">
+        </div>
     </form>
 
     {% if isDeleted %}
