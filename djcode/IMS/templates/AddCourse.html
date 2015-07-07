@@ -52,7 +52,9 @@
         </div>
     </nav>
 
-    <h1>New Course Infomation</h1>
+    <div class="page-header">
+        <h1>New Course Information</h1>
+    </div>
 
     {% if addIsDone %}
         <div class="alert alert-success">
@@ -66,54 +68,29 @@
         </div>
     {% endif %}
 
-<div class="form-group" style="width: 50%">
-    <form id="submit" action="" method="post" enctype="multipart/form-data">
-        {% if facultyAdd %}
-            <p>Adding courses into {{ userCollege }} college.</p>
-        {% endif %}
-        {% csrf_token %}
-        <div class='input-group {% if form.course_id.errors %}has-warning{% endif %}'>
-            <span class='input-group-addon' id='basic-addon1'>课程代码</span>
-            {{ form.course_id }}
-        </div>
+    <div class="form-group" style="width: 50%">
+        <form id="submit_single" action="" method="post" enctype="multipart/form-data">
+            {% if facultyAdd %}
+                <p>Adding courses into {{ userCollege }} college.</p>
+            {% endif %}
+            {% csrf_token %}
 
-        <div class='input-group {% if form.course_name.errors %}has-error{% endif %}'>
-            <span class='input-group-addon' id='basic-addon2'>课程名称</span>
-            {{ form.course_name }}
-        </div>
-        <div class='input-group'>
-            <span class='input-group-addon' id='basic-addon3'>课程学分</span>
-            {{ form.credits }}
-        </div>
-        <div class='input-group'>
-            <span class='input-group-addon' id='basic-addon4'>学&emsp;&emsp;期</span>
-            {{ form.semester }}
-        </div>
-        <div class='input-group'>
-            <span class='input-group-addon' id='basic-addon5'>教材名称</span>
-            {{ form.textbook }}
-        </div>
-        <div class='input-group'>
-            <span class='input-group-addon' id='basic-addon6'>开课学院</span>
-            {{ form.college }}
-        </div>
-        <div class='input-group'>
-            <span class='input-group-addon' id='basic-addon7'>课程类型</span>
-            {{ form.course_type }}
-        </div>
-        <input type="submit" value="Add This Course" class="btn btn-default">
-    </form>
-
-    <form id="submit" action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="submit" value="Add Courses from CSV" class="btn btn-default">
-        <input type="file" name="file" value="Upload">
+            <input type="submit" value="Add This Course" class="btn btn-default">
         </form>
-</div>
+
+        <form id="submit_csv" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="submit" value="Add Courses from CSV" class="btn btn-default">
+            <br/><br/>
+            <input type="file" name="file" value="Upload" role="button">
+        </form>
+    </div>
     {% if multiAdd %}
         <form id='multiAdd' action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>Sure to add following courses?</p>
+            <div class="alert alert-info">
+                <p>Sure to add following courses?</p>
+            </div>
             <table class="table table-striped table-hover">
                 <tr>
                     <th>Course ID</th>
@@ -136,14 +113,16 @@
                     </tr>
                 {% endfor %}
             </table>
-            <input type="button" name="multiAddConform" value="Confirm" onclick="javascript:f('multiAdd')">
-            <input type="submit" name="multiAddCancle" value="Cancle">
+            <input type="button" name="multiAddConform" value="Confirm" class="btn btn-info" onclick="javascript:f('multiAdd')">
+            <input type="submit" name="multiAddCancle" value="Cancel" class="btn btn-default">
             <input type="hidden" name="file">
         </form>
     {% endif %}
 
     {% if errorExist %}
-        <p style="color: red">The followings were not successfully added.</p>
+        <div class="alert alert-danger">
+            The followings were not successfully added.
+        </div>
         <table class="table table-striped table-hover">
             <tr>
                 <th>FAULT</th>
@@ -185,15 +164,13 @@
         form.submit();
     }
 
-    //var fieldnames = ["course_id", "course_name", "credits", "semester", "textbook", "college", "course_type"];
-    //for (fn in fieldnames) {
-    //   $("#id_"+fieldnames[fn]).attr("class", "form-control");
-    //}
-    {% for field in form.fields %}
-        $("#id_{{ field }}").attr("class", "form-control");
-        //$("#id_{{ field }}").attr("required", "");
+    {% for field in form %}
+        var input_group = $("<div class='input-group {% if field.errors %}has-error{% endif %}'></div>");
+        var span = $("<span class='input-group-addon'> {{ field.label }} </span>");
+        var field_body = $('{{ field }}');
+        field_body.attr({"class": "form-control", "required": ""});
+        input_group.append(span).append(field_body);
+        $("#submit_single").append(input_group);
     {% endfor %}
-
-    $(".errorlist").attr("class", "alert alert-danger");
 
 </script>

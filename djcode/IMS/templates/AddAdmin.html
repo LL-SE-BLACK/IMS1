@@ -16,6 +16,16 @@
         margin: 0 0 3px;
         padding: 4px 5px;
     }
+
+    .input-group {
+        margin-top: 15px;
+    }
+    .btn {
+        margin-top: 15px;
+    }
+    .alert {
+        width: 50%;
+    }
 </style>
 
 <head lang="en">
@@ -42,34 +52,44 @@
             </ul>
         </div>
     </nav>
-    <h1>New Admin Infomation</h1>
+    <div class="page-header">
+        <h1>New Admin Infomation</h1>
+    </div>
 
     {% if addIsDone %}
-        <p style="color: blue;">
+        <div class="alert alert-success">
             Admin added successfully.
-        </p>
+        </div>
     {% endif %}
 
     {% if form.errors %}
-        <p style="color: red;">
+        <div class="alert alert-warning">
             Please correct the error{{ form.errors|pluralize }} below.
-        </p>
+        </div>
     {% endif %}
 
-    <form id="submit" action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit">
-        <input type="file" name="file" value="Upload" />
-    </form>
+    <div class="form-group" style="width: 50%;">
+        <form id="submit_single" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="submit" value="Add This Admin" class="btn btn-default">
+            <br/><br/>
+        </form>
+
+        <form id="submit_csv" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="submit" value="Add Admins from CSV" class="btn btn-default">
+            <br/><br/>
+            <input type="file" name="file" value="Upload" role="button">
+        </form>
+    </div>
 
     {% if multiAdd %}
         <form id='multiAdd' action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>Sure to add following admins?</p>
-            <table>
+            <div class="alert alert-info">
+                Sure to add following admins?
+            </div>
+            <table class="table table-striped table-hover">
                 <tr>
                     <th>Id</th>
                     <th>Contact</th>
@@ -87,15 +107,17 @@
                     </tr>
                 {% endfor %}
             </table>
-            <input type="button" name="multiAddConfirm" value="Confirm" onclick="javascript:f('multiAdd')">
-            <input type="submit" name="multiAddCancel" value="Cancel">
+            <input type="button" name="multiAddConfirm" value="Confirm" class="btn btn-info" onclick="javascript:f('multiAdd')">
+            <input type="submit" name="multiAddCancel" value="Cancel" class="btn btn-default">
             <input type="hidden" name="file">
         </form>
     {% endif %}
 
     {% if errorExist %}
-        <p style="color: red">The followings were not successfully added.</p>
-        <table>
+        <div class="alert alert-danger">
+            The followings were not successfully added.
+        </div>
+        <table class="table table-striped table-hover">
             <tr>
                 <th>FAULT</th>
                 <th>ID</th>
@@ -104,16 +126,16 @@
                 <th>Gender</th>
                 <th>College</th>
             </tr>
-        {% for term in existed %}
-            <tr>
-                <th>{{ term.5 }}</th>
-                <th>{{ term.0 }}</th>
-                <th>{{ term.1 }}</th>
-                <th>{{ term.2 }}</th>
-                <th>{{ term.3 }}</th>
-                <th>{{ term.4 }}</th>
-            </tr>
-        {% endfor %}
+            {% for term in existed %}
+                <tr>
+                    <th>{{ term.5 }}</th>
+                    <th>{{ term.0 }}</th>
+                    <th>{{ term.1 }}</th>
+                    <th>{{ term.2 }}</th>
+                    <th>{{ term.3 }}</th>
+                    <th>{{ term.4 }}</th>
+                </tr>
+            {% endfor %}
         </table>
     {% endif %}
 </body>
@@ -130,5 +152,21 @@
         form.file.value = s;
         form.submit();
     }
+
+    {% for field in form %}
+        var label = "{{ field.label }}";
+        if (label=="Isspecial" || label=="Canmanagecourses"
+                || label=="Canmanagestudents" || label=="Canmanagefaculties" || label=="Photo") {
+
+        }
+        else {
+            var input_group = $("<div class='input-group {% if field.errors %}has-error{% endif %}'></div>");
+            var span = $("<span class='input-group-addon'> {{ field.label }} </span>");
+            var field_body = $('{{ field }}');
+            field_body.attr({"class": "form-control", "required": ""});
+            input_group.append(span).append(field_body);
+            $("#submit_single").append(input_group);
+        }
+    {% endfor %}
 </script>
 </html>

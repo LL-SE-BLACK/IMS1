@@ -13,9 +13,6 @@ class CourseForm(forms.Form):
     college = forms.CharField(max_length = 50)
     course_type = forms.IntegerField()
 
-    required_css_class = 'has-error'
-    error_css_class = 'has-warning'
-
     def clean_course_id(self):
         addedCouseID = self.cleaned_data['course_id']
         if Course_info.objects.filter(course_id = addedCouseID):
@@ -29,9 +26,6 @@ class CourseFormFacultyAdd(forms.Form):
     semester = forms.IntegerField()
     textbook = forms.CharField(max_length = 110)
     course_type = forms.IntegerField()
-
-    required_css_class = 'has-error'
-    error_css_class = 'has-warning'
 
     def clean_course_id(self):
         addedCouseID = self.cleaned_data['course_id']
