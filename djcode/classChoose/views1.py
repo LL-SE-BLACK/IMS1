@@ -12,7 +12,7 @@ from classChoose.login import *
 from django.shortcuts import render_to_response, RequestContext
 from django.http import HttpResponse
 from django.template import loader,Context
-from classChoose.models import class_info,students_users,course_info,class_choose_info,choose_time,pingjia,buXuan_info
+from classChoose.models import class_info,Student_user,course_info,Class_table,choose_time,pingjia,buXuan_info
 from time import strftime,localtime
 from classChoose.login import *
 import http.client
@@ -142,7 +142,7 @@ def choose_class(request):
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			
-			HavenClass = class_choose_info.objects.filter(student=xh)
+			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				if Eachclass.Class.course.id==xkkh:
 					Eachclass.delete()
@@ -164,8 +164,8 @@ def choose_class(request):
 					classt1.append(classt)
 				##print week1
 				##print classt1
-				HavenClass = class_choose_info.objects.filter(student=xh)
-				student=students_users.objects.get(id=xh)
+				HavenClass = Class_table.objects.filter(student=xh)
+				student=Student_user.objects.get(id=xh)
 				#对每一门课程 检验是否冲突
 				for Eachclass in HavenClass:
 					#eachclass=class_info.objects.get(id=EachClass.Class)
@@ -189,7 +189,7 @@ def choose_class(request):
 						Csuccess=4
 				#对于每一门课程注册
 				if  Csuccess==1 and succ1==1:
-					q=class_choose_info(id=classes1.id+student.id,Class=classes1,student=student,status=0)
+					q=Class_table(id=classes1.id+student.id,Class=classes1,student=student,status=0)
 					q.save()
 					a='%r class choose success' % classes1.teacher.name
 				if Csuccess==2 and succ1==1:
@@ -202,7 +202,7 @@ def choose_class(request):
 					a='time error'
 				a1=a1+a
 			#显示信息头
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			course = course_info.objects.get(id=xkkh)
 			classes = class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
@@ -252,7 +252,7 @@ def choose_class(request):
 					class_list.append(class_dict)
 					List3.append(class_listing.id)
 			#message = 'You submitted an empty form.%r' % tem
-			HavenClass = class_choose_info.objects.filter(student=xh)
+			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				semyes=(Eachclass.Class.semester == timesem or Eachclass.Class.semester == timesem1 or Eachclass.Class.semester == timesem2)
 				if Eachclass.Class.course.id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
@@ -271,7 +271,7 @@ def choose_class(request):
 			xh = request.GET['xh']
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			course = course_info.objects.get(id=xkkh)
 			classes = class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
@@ -322,7 +322,7 @@ def choose_class(request):
 					class_dict['jId']=class_listing.id
 					class_list.append(class_dict)
 					List3.append(class_listing.id)
-			HavenClass = class_choose_info.objects.filter(student=xh)
+			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				semyes=(Eachclass.Class.semester == timesem or Eachclass.Class.semester == timesem1 or Eachclass.Class.semester == timesem2)
 				if Eachclass.Class.course.id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
@@ -368,12 +368,12 @@ def show_class(request):
 		sem1=int(sem1)
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			choose=class_choose_info.objects.filter(student=xh)
+			choose=Class_table.objects.filter(student=xh)
 			for class_listing in choose:
 				#class_listing=class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==sem or class_listing.Class.course.semester==(sem%10) or class_listing.Class.course.semester==sem1):
@@ -398,7 +398,7 @@ def show_class(request):
 					class_dict['classTime']=class_listing.Class.time
 					class_dict['classRoom']=class_listing.Class.room
 					class_dict['status']=class_listing.status
-					class_dict['teachingStyle']=eachcourse.style
+					class_dict['teachingStyle']=eachcourse.course_type
 					class_list.append(class_dict)
 			#message = 'You submitted an empty form.%d' % sem1
 			#return HttpResponse(message)
@@ -427,12 +427,12 @@ def show_class(request):
 		##print year
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			choose=class_choose_info.objects.filter(student=xh)
+			choose=Class_table.objects.filter(student=xh)
 			for class_listing in choose:
 				#class_listing=class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==12 or class_listing.Class.course.semester==1 or class_listing.Class.course.semester==2):
@@ -457,7 +457,7 @@ def show_class(request):
 					class_dict['classTime']=class_listing.Class.time
 					class_dict['classRoom']=class_listing.Class.room
 					class_dict['status']=class_listing.status
-					class_dict['teachingStyle']=eachcourse.style
+					class_dict['teachingStyle']=eachcourse.course_type
 					class_list.append(class_dict)
 			return render_to_response('showclass.html',{'pageHeader':pageheader,'classes':class_list,'year1':year3,'sem1':sem})
 			#message = 'You submitted an empty form.%r' % month2
@@ -470,7 +470,7 @@ def buxuan(request):
 		##print a
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			class_dict={}
@@ -520,7 +520,7 @@ def buxuan(request):
 	else:
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			class_dict={}
@@ -560,7 +560,7 @@ def pingjia1(request):
 		pageheader=PageHeader( )
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			for i in range(1,len(a1)):
 				a2=a1[i].split('#')
 				if a2[1]!='Undefined':
@@ -571,7 +571,7 @@ def pingjia1(request):
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			class1=class_choose_info.objects.filter(student=xh)
+			class1=Class_table.objects.filter(student=xh)
 
 			for eachclass in class1:
 				already=0
@@ -601,12 +601,12 @@ def pingjia1(request):
 	else:
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = students_users.objects.get(id=xh)
+			student = Student_user.objects.get(id=xh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			class1=class_choose_info.objects.filter(student=xh)
+			class1=Class_table.objects.filter(student=xh)
 			#print timeyear
 			#print timesem1
 			for eachclass in class1:

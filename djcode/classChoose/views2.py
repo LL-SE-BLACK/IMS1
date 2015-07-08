@@ -27,7 +27,7 @@ def templay(request):
 	print("id = " + user_id)
 	
 	#use ID to get student's info
-	user_info = students_users.objects.get(id=user_id)
+	user_info = Student_user.objects.get(id=user_id)
 	student_info = {'name': user_info.name,'id': user_info.id, 'college': user_info.college, 'major': user_info.major}
 	demand = college_demand.objects.get(college = user_info.college)
 	
@@ -54,9 +54,9 @@ def templay(request):
 				scheme_info.objects.create(id=temp, student_id=user_id, course_id=e)
 		
 		#get the course list
-		list_required = course_info.objects.filter(style=0, college=user_info.college)
-		list_optional = course_info.objects.filter(style=1, college=user_info.college)
-		list_common = course_info.objects.filter(scheme_course__student__id=user_info.id, style=2)
+		list_required = Course_info.objects.filter(course_type=0, college=user_info.college)
+		list_optional = Course_info.objects.filter(course_type=1, college=user_info.college)
+		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, course_type=2)
 		
 		#get all course list
 		list_all = list_required | list_optional
@@ -65,7 +65,7 @@ def templay(request):
 			all.append(e.id)
 		
 		#delete the courses cancelled by the student
-		list_deleted = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
+		list_deleted = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
 		print(list_deleted.values())
 		for e in list_new:
 			print(e)
@@ -90,10 +90,17 @@ def templay(request):
 		'alter2': total_optional, 'common1': demand.generalCourse_demand, 'common2': total_common}
 		
 		#get the new selected courses
-		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
+		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
 		selected = []
 		for e in list_selected:
 			selected.append(e.course_id)
+
+		list_studied = Class_table.objects.filter(student_id=user_id, status=1)
+		studied = []
+		for e in list_all:
+			for f in list_studied:
+				if e.Class_id == f.course_id:
+					studied.append(f.course_id)
 		
 		flag = '修改成功！'
 		#render
@@ -103,9 +110,9 @@ def templay(request):
 	
 	else:
 		#get the course list
-		list_required = course_info.objects.filter(style=0, college=user_info.college)
-		list_optional = course_info.objects.filter(style=1, college=user_info.college)
-		list_common = course_info.objects.filter(scheme_course__student__id=user_info.id, style=2)
+		list_required = Course_info.objects.filter(course_type=0, college=user_info.college)
+		list_optional = Course_info.objects.filter(course_type=1, college=user_info.college)
+		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, course_type=2)
 		
 		#Calculate the credits
 		selected_required = list_required.filter(scheme_course__student__id=user_id)
@@ -129,10 +136,17 @@ def templay(request):
 			all.append(e.id)
 		
 		#get original selected courses
-		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
+		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
 		selected = []
 		for e in list_selected:
 			selected.append(e.course_id)
+
+		list_studied = Class_table.objects.filter(student_id=user_id, status=1)
+		studied = []
+		for e in list_all:
+			for f in list_studied:
+				if e.Class_id == f.course_id:
+					studied.append(f.course_id)
 						
 		#render
 		return render(request, 'training plan4.html', {'student': student_info, 'necessary': list_required,\
@@ -148,7 +162,7 @@ def search(request):
 	
 	post_get = ""
 	#use ID to get student's info
-	user_info = students_users.objects.get(id=user_id)
+	user_info = Student_user.objects.get(id=user_id)
 	
 	search_list = []
 	
@@ -164,27 +178,27 @@ def search(request):
 		#clear the search list
 		search_list = []
 		
-		#get the post style
-		style = list_get[0]
+		#get the post course_type
+		course_type = list_get[0]
 		del list_get[0]
 		
 		#if request is search
-		if style == "SEARCH":
+		if course_type == "SEARCH":
 			#search through course name
 			if list_get[0] == "1":
-				filter_list = class_info.objects.filter(course__name__contains=list_get[1])
+				filter_list = Class_info.objects.filter(course__name__contains=list_get[1])
 			#search through course ID
 			elif list_get[0] == "2":
-				filter_list = class_info.objects.filter(course__id__contains=list_get[1])
+				filter_list = Class_info.objects.filter(course__id__contains=list_get[1])
 			#search through teacher name
 			elif list_get[0] == "3":
-				filter_list = class_info.objects.filter(teacher__name__contains=list_get[1])
+				filter_list = Class_info.objects.filter(teacher__name__contains=list_get[1])
 			
 			all = []
 			
 			#get the search list
 			for e in filter_list:
-				temp_list = course_info.objects.get(id=e.course_id)
+				temp_list = Course_info.objects.get(id=e.course_id)
 				temp_teacherName = e.teacher.name
 				temp_classId = e.course_id
 				temp_className = temp_list.name
@@ -201,14 +215,14 @@ def search(request):
 		
 		
 		#if request is add
-		elif style == "ADD":
-			all_list = class_info.objects.all()
+		elif course_type == "ADD":
+			all_list = Class_info.objects.all()
 		
 			all = []
 			#get the search list
 			for e in all_list:
 				try:
-					temp_list = course_info.objects.get(id=e.course_id)
+					temp_list = Course_info.objects.get(id=e.course_id)
 					temp_teacherName = e.teacher.name
 					temp_classId = e.course_id
 					temp_className = temp_list.name
@@ -234,13 +248,13 @@ def search(request):
 		return render(request, 'courseSearch2.html', {'classes': search_list, 'List': json.dumps(all), 'studentId': user_id})
 					
 	else:
-		all_list = class_info.objects.all()
+		all_list = Class_info.objects.all()
 		
 		all = []
 		#get the search list
 		for e in all_list:
 			try:
-				temp_list = course_info.objects.get(id=e.course_id)
+				temp_list = Course_info.objects.get(id=e.course_id)
 				temp_teacherName = e.teacher.name
 				temp_classId = e.course_id
 				temp_className = temp_list.name
@@ -265,18 +279,18 @@ def show_students(request):
 	forcelogout(request)
 	teacher_id = request.GET['id']
 	
-	teacher_info = faculty_users.objects.get(id=teacher_id)
+	teacher_info = Faculty_user.objects.get(id=teacher_id)
 	
-	cnum = class_info.objects.filter(teacher__name=teacher_info.name).count()
+	cnum = Class_info.objects.filter(teacher__name=teacher_info.name).count()
 	pageHeader = {'tid': teacher_id, 'name': teacher_info.name, 'cnum': cnum}
 	
-	teacher_class = class_info.objects.filter(teacher__name=teacher_info.name)
+	teacher_class = Class_info.objects.filter(teacher__name=teacher_info.name)
 	
 	all = []
 	#get the search list
 	for e in teacher_class:
 		try:
-			temp_list = course_info.objects.get(class_course__id=e.id)
+			temp_list = Course_info.objects.get(class_course__id=e.id)
 			temp_className = temp_list.name
 			temp_classSem = temp_list.semester
 			temp_classTime = e.time
@@ -299,7 +313,7 @@ def download(request):
 	class_id = request.GET['jxbid']
 	
 	print(class_id)
-	list = class_choose_info.objects.filter(Class=class_id)
+	list = Class_table.objects.filter(Class=class_id)
 	
 	print(list.values())
 	
@@ -319,7 +333,7 @@ def download(request):
 	
 	for e in list:
 		print(e.student_id)
-		student_list = students_users.objects.get(id = e.student_id)
+		student_list = Student_user.objects.get(id = e.student_id)
 		ws.write(i, 0, student_list.id)
 		ws.write(i, 1, student_list.contact)
 		ws.write(i, 2, student_list.name)
@@ -343,7 +357,7 @@ def showCourseInfo(request):
 	forcelogout(request)
 	course_id = request.GET['classId']
 	
-	getInfo = course_info.objects.get(id = course_id)
+	getInfo = Course_info.objects.get(id = course_id)
 	
 	return render(request, 'courseInfo.html', {'courseInfo': getInfo.introduce, 'courseID': getInfo.id,\
 	'courseName': getInfo.name, 'credit': getInfo.credits, 'college': getInfo.college})
@@ -354,7 +368,7 @@ def showTeacherInfo(request):
 	forcelogout(request)
 	teacherName = request.GET['teacherName']
 	
-	getInfo = faculty_users.objects.get(name = teacherName)
+	getInfo = Faculty_user.objects.get(name = teacherName)
 	
 	return render(request, 'teacherInfo.html', {'teacherName': getInfo.name, 'teacherInfo': getInfo.introduce,\
 	'phoneNum': getInfo.contact, 'college': getInfo.college, 'title': getInfo.title, 'academic': getInfo.degree,\
