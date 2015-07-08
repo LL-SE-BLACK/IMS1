@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RenameField(
-            model_name='course_info',
+            model_name='Course_info',
             old_name='id',
             new_name='course_id',
         ),
@@ -28,23 +28,23 @@ class Migration(migrations.Migration):
             new_name='course_id',
         ),
         migrations.RemoveField(
-            model_name='class_info',
+            model_name='Class_info',
             name='courseid',
         ),
         migrations.AddField(
-            model_name='class_info',
+            model_name='Class_info',
             name='class_id',
             field=models.CharField(default=0, max_length=10),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='class_info',
+            model_name='Class_info',
             name='course_id',
             field=models.ForeignKey(default=0, to='IMS.Course_info'),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='course_info',
+            model_name='Course_info',
             name='college',
             field=models.CharField(default='Default College', max_length=50),
             preserve_default=False,

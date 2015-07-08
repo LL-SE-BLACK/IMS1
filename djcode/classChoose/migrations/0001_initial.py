@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='admin_users',
+            name='Admin_users',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('contact', models.CharField(max_length=11)),
@@ -37,14 +37,14 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='class_choose_info',
+            name='Class_table',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('status', models.BooleanField(default=0)),
             ],
         ),
         migrations.CreateModel(
-            name='class_info',
+            name='Class_info',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('time', models.CharField(max_length=20)),
@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='course_info',
+            name='Course_info',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=20)),
                 ('name', models.CharField(max_length=100)),
@@ -83,7 +83,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='faculty_users',
+            name='Faculty_users',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('contact', models.CharField(max_length=11)),
@@ -100,7 +100,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('dengji', models.CharField(max_length=10)),
-                ('Class', models.ForeignKey(to='classChoose.class_info')),
+                ('Class', models.ForeignKey(to='classChoose.Class_info')),
             ],
         ),
         migrations.CreateModel(
@@ -108,11 +108,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=50)),
                 ('state', models.IntegerField(default=0)),
-                ('course', models.ForeignKey(related_name='scheme_course', to='classChoose.course_info')),
+                ('course', models.ForeignKey(related_name='scheme_course', to='classChoose.Course_info')),
             ],
         ),
         migrations.CreateModel(
-            name='students_users',
+            name='Student_user',
             fields=[
                 ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('contact', models.CharField(max_length=11)),
@@ -136,41 +136,41 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='scheme_info',
             name='student',
-            field=models.ForeignKey(to='classChoose.students_users'),
+            field=models.ForeignKey(to='classChoose.Student_user'),
         ),
         migrations.AddField(
             model_name='pingjia',
             name='student',
-            field=models.ForeignKey(to='classChoose.students_users'),
+            field=models.ForeignKey(to='classChoose.Student_user'),
         ),
         migrations.AddField(
-            model_name='class_info',
+            model_name='Class_info',
             name='course',
-            field=models.ForeignKey(related_name='class_course', to='classChoose.course_info'),
+            field=models.ForeignKey(related_name='class_course', to='classChoose.Course_info'),
         ),
         migrations.AddField(
-            model_name='class_info',
+            model_name='Class_info',
             name='teacher',
-            field=models.ForeignKey(to='classChoose.faculty_users'),
+            field=models.ForeignKey(to='classChoose.Faculty_users'),
         ),
         migrations.AddField(
-            model_name='class_choose_info',
+            model_name='Class_table',
             name='Class',
-            field=models.ForeignKey(to='classChoose.class_info'),
+            field=models.ForeignKey(to='classChoose.Class_info'),
         ),
         migrations.AddField(
-            model_name='class_choose_info',
+            model_name='Class_table',
             name='student',
-            field=models.ForeignKey(to='classChoose.students_users'),
+            field=models.ForeignKey(to='classChoose.Student_user'),
         ),
         migrations.AddField(
             model_name='buxuan_info',
             name='Class',
-            field=models.ForeignKey(to='classChoose.class_info'),
+            field=models.ForeignKey(to='classChoose.Class_info'),
         ),
         migrations.AddField(
             model_name='buxuan_info',
             name='student',
-            field=models.ForeignKey(to='classChoose.students_users'),
+            field=models.ForeignKey(to='classChoose.Student_user'),
         ),
     ]

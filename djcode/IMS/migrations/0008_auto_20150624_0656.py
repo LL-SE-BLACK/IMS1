@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='admin_user',
+            model_name='Admin_user',
             name='photo',
             field=models.FileField(default=b'photo/default.jpg', upload_to=b'photo'),
         ),
         migrations.AlterField(
-            model_name='faculty_user',
+            model_name='Faculty_user',
             name='photo',
             field=models.FileField(default=b'photo/default.jpg', upload_to=b'photo'),
         ),

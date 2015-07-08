@@ -6,6 +6,7 @@ from django.db import models
 #class Login_info: handled by Django User
 import os
 from django.conf import settings
+
 DEFAULT_PHOTO_DIR = os.path.join("photo", "default.jpg")
 
 
@@ -66,6 +67,7 @@ class Faculty_user(models.Model):
     title = models.CharField(max_length=20, default="研究员")
     isSpecial = models.BooleanField(default=False)
     photo = models.FileField(upload_to=get_photo_file_name, default=DEFAULT_PHOTO_DIR)
+    introduce = models.CharField(max_length=300, default="") #by CCS
 
     def __unicode__(self):
         return u'id:%s, contact:%s, name:%s, gender:%d, college:%s, major:%s, degree:%s, title:%s'%(self.id, self.contact,self.name,self.gender, self.college,self.major,self.degree, self.title)
@@ -117,6 +119,7 @@ class Course_info(models.Model):
     textbook = models.CharField(max_length=110)
     college = models.CharField(max_length=50)
     course_type = models.IntegerField(default=0) #必修、选项和通识，根据选课组要求加入
+    introduce = models.CharField(max_length=300, default="")
 
     def __unicode__(self):
         return u'course_id:%s, name:%s, credits:%f, semester:%d, textbook:%s, college:%s, course_type:%d'%(self.course_id, self.name, self.credits, self.semester, self.textbook, self.college, self.course_type)
@@ -135,13 +138,13 @@ class Class_info(models.Model):
     |---|---|---|---|---|---|---|---|---|
     | CHARACTER(10) | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
     '''
-    class_id = models.CharField(max_length=10)
-    course_id = models.ForeignKey(Course_info)
-    teacher = models.CharField(max_length=20)
-    time = models.IntegerField(default=0)
+    class_id = models.CharField(max_length=10, primary_key=True)
+    course_id = models.ForeignKey(Course_info, related_name='class_course')
+    teacher = models.ForeignKey(Faculty_user)
+    time = models.CharField(max_length=20) #by CCS: type integer to char
     room = models.CharField(max_length=20)
-    examdate = models.DateTimeField
-    examtime = models.IntegerField(default=0)
+    examdate = models.CharField(max_length=10)
+    examtime = models.CharField(max_length=10)
     examroom = models.CharField(max_length=20)
     capacity = models.IntegerField(default=0)
     semester = models.IntegerField(default=0) #开课学期
@@ -155,31 +158,18 @@ class Class_info(models.Model):
     def __str__(self):
         return self.id
 
-'''
-class Pre_requisites(models.Model):
-    course_id = models.CharField(max_length=8)
-    prereq = models.CharField(max_length=8)
-'''
-
 class Class_table(models.Model):
     '''
     | student_id | class_id |
     |---|---|
     | CHARACTER(10) | CHARACTER(10) |
     '''
+    id = models.CharField(max_length=10, primary_key=True)
     student_id = models.ForeignKey(Student_user)
     class_id = models.ForeignKey(Class_info)
-
-'''
-class Sys_log(models.Model):
-    time = models.CharField(max_length=20)
-    optype = models.CharField(max_length=20, default='update')
-    table = models.CharField(max_length=20)
-    primkey = models.CharField(max_length=20)
-    field = models.CharField(max_length=20)
-    pre = models.CharField(max_length=50, default='none')
-    post = models.CharField(max_length=50, default='none')
-'''
+    status = models.BooleanField(default=0)
+    def __str__(self):
+        return (self.id)
 
 class FindPass(models.Model):
     username = models.CharField(max_length=20)
