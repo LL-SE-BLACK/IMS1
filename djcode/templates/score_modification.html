@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>成绩修改</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/d3.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+      <li role="presentation"><a href="/SM/query">成绩查询</a></li>
+      <li role="presentation"><a href="/SM/commit">成绩登记</a></li>
+      <li role="presentation" class="active"><a href="/SM/modification">成绩修改</a></li>
+      <li role="presentation"><a href="/SM/logout">退出</a></li>
+    </ul>
+
+    <div class="row">
+        <div class="col-md-8">  
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>成绩修改管理</h3></div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>申请编号</th>
+                                <th>课程名称</th>
+                                <th>学生学号</th>
+                                <th>学生姓名</th>
+                                <th>原成绩</th>
+                                <th>新成绩</th>
+                                <th>理由</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id = "modifyInfoTable">
+<!--                         <tr>
+                            <td>(2012-2013-2)-04810020-0096419-1</td>
+                            <td>英语口语</td>
+                            <td>3120000064</td>
+                            <td>王五</td>
+                            <td>80</td>
+                            <td>85</td>
+                            <td>补交作业</td>
+                            <td>
+                                <button type="button" class="btn btn-success">同意</button>
+                                <button type="button" class="btn btn-danger">反对</button>
+                            </td>
+                        </tr>                
+                        <tr>
+                            <td>(2012-2013-2)-04810020-0096419-1</td>
+                            <td>英语口语</td>
+                            <td>3120000064</td>
+                            <td>王五</td>
+                            <td>80</td>
+                            <td>85</td>
+                            <td>补交作业</td>
+                            <td>
+                                <span class="label label-info">等待审核</span>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td>(2012-2013-2)-04810020-0096419-1</td>
+                            <td>英语口语</td>
+                            <td>3120000064</td>
+                            <td>王五</td>
+                            <td>80</td>
+                            <td>85</td>
+                            <td>补交作业</td>
+                            <td>
+                                <span class="label label-success">审核通过</span>
+                            </td>
+                        </tr> 
+                        <tr>
+                            <td>(2012-2013-2)-04810020-0096419-1</td>
+                            <td>英语口语</td>
+                            <td>3120000064</td>
+                            <td>王五</td>
+                            <td>80</td>
+                            <td>85</td>
+                            <td>补交作业</td>
+                            <td>
+                                <span class="label label-danger">审核不通过</span>
+                            </td>
+                        </tr>  -->
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>选择要修改的课程</h3></div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>选课课号</th>
+                            <th>课程名称</th>
+                            <th>学分</th>
+                            <th>上课时间</th>
+                            <th>修改</th>
+                        </tr>
+        <!--                 <tr>
+                            <td>(2012-2013-2)-04810020-0096419-1</td>
+                            <td>英语口语</td>
+                            <td>1.0</td>
+                            <td><button class="btn btn-default btn-sm">修改此课</button></td>
+                        </tr>                
+                        <tr>
+                            <td>(2012-2013-2)-04810020-0094359-1</td>
+                            <td>英语写作</td>
+                            <td>2.0</td>
+                            <td><button class="btn btn-default btn-sm">修改此课</button></td>
+                        </tr> -->
+                        <tbody id = "infoTable"></tbody>
+                    </table>
+                </div>
+            </div>
+<!--             <h3>该课程统计信息</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>平均分</th>
+                        <th>最低分</th>
+                        <th>最高分</th>
+                        <th>中位数</th>
+                        <th>方差</th>
+                    </tr>
+                </thead>
+                <tbody id="statInfo"></tbody>
+            </table>
+ -->
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>选择要修改的成绩</h3></div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>成绩</th>
+                            <th>绩点</th>
+                            <th>修改</th>
+                        </tr>
+                        <tbody id = "studentScore"></tbody>            
+                    </table>  
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">成绩修改表</div>
+                <div class="panel-body">
+                    <!-- TODO 送到哪啊= = -->
+                    <form id="requestForm" action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group" id="InputCourseID">
+                            <label for="InputCourseID">教学班号</label>
+                            <input name="classID" id="id_classID" type="text" class="form-control" readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="InputCourseName" >
+                            <label for="InputCourseName">课程名称</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="InputStudentID">
+                            <label for="InputStudentID">学生学号</label>
+                            <input name="studentID" id="id_studentID" type="text" class="form-control"readonly="readonly" value="">
+                        </div>                  
+                        <div class="form-group" id="InputStudentName">
+                            <label for="InputStudentName">学生姓名</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="InputOldScore">
+                            <label for="InputOldScore">原成绩</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="InputNewScore">
+                            <label for="InputNewScore">新成绩</label>
+                            <input name="newScore" id="id_newScore" type="text" class="form-control">
+                        </div>
+                        <div class="form-group" id="InputReason">
+                            <label for="InputNewScore">理由</label>
+                            <input name="modifyReason" id="id_modifyReason"  type="text" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-default" value="submit">提交修改</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+d3.json("B_query_modify_info",function(data){   // retrieve modification request from back end
+    // console.log(data);
+    // data = [ [{'new_score': 88.5, 'studentName': 'zhazha', 'messageID': 5, 'old_score': 66.5, 'studentID': '0000000001', 'status': 'reject', 'reason': '123', 'className': 'firstclass'}, {'new_score': 60.5, 'studentName': 'lalala', 'messageID': 6, 'old_score': 60.5, 'studentID': '0000000003', 'status': 'admit', 'reason': '原因是什么我也不知道', 'className': 'thirdclass'}, {'new_score': 60.5, 'studentName': 'lalala', 'messageID': 66, 'old_score': 60.5, 'studentID': '0000000003', 'status': 'pending', 'reason': '原因是什么我也不知道', 'className': 'thirdclass'}],[{'new_score': 60.5, 'studentName': 'lalala', 'messageID': 6, 'old_score': 60.5, 'studentID': '0000000003', 'status': 'pending', 'reason': 'ppp么我也不知道','className': 'thirdclass'}]];
+    d3.select('#modifyInfoTable').selectAll("tr").remove(); // remove the old information of modification
+    // // modify_list
+    // addModifyInfoTable(data[0], 'modify');
+    // // audit_list
+    // addModifyInfoTable(data[1], 'audit');
+	modifyData = data[0].map(function(d){d.type='modify';return d;});   // 发出请求的反馈结果
+    auditData = data[1].map(function(d){d.type='audit';return d;}); // 审核别人的请求
+    data = modifyData.concat(auditData);
+    console.log(data);
+    d3.select("#modifyInfoTable").selectAll("tr")   // update the information of modification request
+    .data(data)
+    .enter().append("tr")
+    .html(function(d){
+        str = '';
+        str += "<td>" + d.messageID + "</td>";
+        str += "<td>" + d.className + "</td>";
+        str += "<td>" + d.studentID + "</td>";
+        str += "<td>" + d.studentName + "</td>";
+        str += "<td>" + d.old_score + "</td>";
+        str += "<td>" + d.new_score + "</td>";
+        str += "<td>" + d.reason + "</td>";
+        str += "<td>" + generateIcon(d) + "</td>";
+        return str;
+    });    
+})
+
+function generateIcon(mess){    // generate the icons for each state of modification request
+    if(mess.type == 'modify'){
+        switch(mess.status){
+            case 'admit':
+                return '<span class="label label-success">审核通过</span>';
+            case 'reject':
+                return '<span class="label label-danger">审核不通过</span>';
+            case 'pending':
+                return '<span class="label label-info">等待审核</span>';
+            default:
+                console.log(mess.status);
+        }
+    }else if (mess.type == 'audit'){
+        switch(mess.status){
+            case 'admit':
+                return '<span class="label label-success">审核通过（我审的）</span>';
+            case 'reject':
+                return '<span class="label label-danger">审核不通过（我审的）</span>';
+			case 'final_admit':
+				return '<span class="label label-success">审核通过</span>';
+			case 'final_reject':
+				return '<span class="label label-danger">审核不通过</span>';
+            case 'pending':
+                var url = "B_sanction_result/"+mess.messageID+"/";
+                return '<a href="'+url+'1"><button type="button" class="btn btn-success">同意</button></a><a href="'+url+'0"><button type="button" class="btn btn-danger">反对</button>';
+            default:
+                console.log(mess.status);   
+        }     
+    }
+}
+
+    d3.json('/SM/B_teacher_query',function(data){   // retrieve the course informtion of logined teacher from back end
+     // console.log(data);
+        coursesInfo = data;
+        updateInfoTable(data);
+    });
+
+var coursesInfo;
+var studentScore;
+
+function updateInfoTable(data){ // update the course informtion
+
+    d3.select("#infoTable").selectAll("tr").remove();   // remove old
+    d3.select("#infoTable").selectAll("tr")
+        .data(data)
+        .enter().append("tr")
+        .html(function(d){
+            str = '';
+            str += "<td>" + d.classID + "</td>";
+            str += "<td>" + d.courseName + "</td>";
+            str += "<td>" + d.credits + "</td>";
+            str += "<td>" + d.classTime + "</td>";
+            str += "<td>" + '<button class="btn btn-default btn-sm" onclick="updateClassScore(\'' + d.classID +'\')">' + "修改此课" + "</button></td>"; // once click on the button, update the transcripts of students
+            return str;
+        });
+}
+
+function updateClassScore(classID){ // update the transcripts 
+
+    console.log(classID);
+    d3.json("/SM/B_final_class_score_query/"+classID,function(data){   // retreive data from back end
+        // console.log(data);
+        d3.select("#studentScore").selectAll("tr").remove();
+        d3.select("#studentScore").selectAll("tr")
+            .data(data)
+            .enter().append("tr")
+            .html(function (d) {
+            str = '';
+            str += "<td>" + d.studentID + "</td>";
+            str += "<td>" + d.studentName + "</td>";
+            str += "<td>" + d.score + "</td>";
+            str += "<td>" + d.gradePoint + "</td>";
+            str += '<td><button class="btn btn-default btn-sm" onclick="createForm(\'' + classID + '\' , \'' + d.studentID + '\')">修改此成绩</button></td>'; // once click on the button, generate request form
+            return str;
+        });
+        studentScore = data;
+        updateStatInfo(data);   // update the statistical information of selected class
+    })
+}
+
+function updateStatInfo(data){  // calculate mean, min, max, median and variance of students
+    var stat = [];
+    var values = data.map(function(d){return d.score;});
+    // 平均分
+    stat[0] = d3.mean(values); 
+    // 最低分
+    stat[1] = d3.min(values);
+    // 最高分
+    stat[2] = d3.max(values);
+    stat[3] = d3.median(values);
+    stat[4] = d3.variance(values);
+
+    d3.select("#statInfo").selectAll("tr").remove();   // remove old
+    d3.select("#statInfo").selectAll("tr")
+        .data([stat])
+        .enter().append("tr")
+        .html(function (d) {
+        str = d.map(function(d){return "<td>" + d.toFixed(2) + "</td>";}).join('')
+        return str;
+    });
+}
+
+function createForm(classID, studentID){    // generate a new request form
+    
+    console.log(classID);
+    console.log(studentID);
+    
+    console.log(studentScore);
+    console.log(coursesInfo);
+    var form = [];
+
+    var i;
+    var cTmp;
+    for (i = coursesInfo.length - 1; i >= 0; i--) { // 若选择修改的记录与现在显示的一致，则break 
+        cTmp = coursesInfo[i];
+        if(cTmp.classID == classID)
+            break;
+    }
+    form[0] = coursesInfo[i].classID;
+    form[1] = coursesInfo[i].courseName;
+
+    var sTmp;
+    for (i = studentScore.length - 1; i >= 0; i--) { // 若选择修改的记录与现在显示的一致，则break 
+        sTmp = studentScore[i];
+        if(sTmp.studentID == studentID)
+            break;
+    }
+    form[2] = studentScore[i].studentID;
+    form[3] = studentScore[i].studentName;
+    form[4] = studentScore[i].score;
+
+    console.log([form]);
+
+    // modify the form in html
+    document.getElementById('InputCourseID').innerHTML = '<label for="InputCourseID">教学班号</label><input type="text" class="form-control" readonly="readonly" value="' + form[0] + '">';
+    document.getElementById('InputCourseName').innerHTML = '<label for="InputCourseName">课程名称</label><input type="text" class="form-control"readonly="readonly" value="' + form[1] + '">';
+    document.getElementById('InputStudentID').innerHTML = '<label for="InputStudentID">学生学号</label><input type="text" class="form-control"readonly="readonly" value="' + form[2] + '">';
+    document.getElementById('InputStudentName').innerHTML = '<label for="InputStudentName">学生姓名</label><input type="text" class="form-control"readonly="readonly" value="' + form[3] + '">';
+    document.getElementById('InputOldScore').innerHTML = '<label for="InputOldScore">原成绩</label><input type="text" class="form-control"readonly="readonly" value="' + form[4] + '">';
+    d3.select('#requestForm').attr('action','B_score_modification/'+form[0]+'/'+form[2]);
+        
+}
+
+</script>
+
+</body>
+</html>

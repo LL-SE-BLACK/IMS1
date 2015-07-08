@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>成绩登记</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/d3.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+      <li role="presentation"><a href="/SM/query">成绩查询</a></li>
+      <li role="presentation" class="active"><a href="/SM/commit">成绩登记</a></li>
+      <li role="presentation"><a href="/SM/modification">成绩修改</a></li>
+      <li role="presentation"><a href="/SM/logout">退出</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-2">
+            <h3>尚未提交的课程</h3>
+            <ul class="nav nav-pills nav-stacked" id="courseList">
+<!--                   <li role="presentation" class="active"><a href="#">英语口语</a></li>
+                  <li role="presentation"><a href="#">英语写作</a></li>
+                  <li role="presentation"><a href="#">英美文学</a></li> -->
+            </ul>
+        </div>
+        <div class="col-md-7">     
+
+            <table class="table">
+                <tr>
+                    <th>课程代码</th>
+                    <th>课程名称</th>
+                    <th>学分</th>
+                </tr>
+                <tr id="infoTable">
+<!--                     <td>(2012-2013-2)-04810020-0096419-1</td>
+                    <td>英语口语</td>
+                    <td>1.0</td> -->
+                </tr>
+            </table>
+
+            <a id="downloadButton" href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>下载成绩单</button></a>
+            <form id="uploadButton" action="" method="post" enctype="multipart/form-data">{% csrf_token %}<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span>上传成绩单</button><input id="id_xlsx_file" name="xlsx_file" type="file" /></form>
+            <a id="commitButton" href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>正式提交</button></a>  
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>成绩</th>
+                    <th>绩点</th>
+                    <th>修改成绩</th>
+                </tr>
+                </thead>
+                <tbody id="studentTable">
+<!--                 <tr>
+                    <td>3120000001</td>
+                    <td>张三</td>
+                    <td>87</td>
+                    <td>4.20</td>
+                </tr>
+                <tr>
+                    <td>3120000002</td>
+                    <td>李四</td>
+                    <td>88</td>
+                    <td>4.30</td>
+                </tr> -->
+                </tbody>                
+            </table> 
+       </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">成绩修改工具栏</div>
+                <div class="panel-body">
+                    <form id="editScoreForm" action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group" id="EditCourseID">
+                            <label for="EditCourseID">教学班号</label>
+                            <input name="classID" id="id_classID" type="text" class="form-control" readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="EditCourseName" >
+                            <label for="EditCourseName">课程名称</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="EditStudentID">
+                            <label for="EditStudentID">学生学号</label>
+                            <input name="studentID" id="id_studentID" type="text" class="form-control"readonly="readonly" value="">
+                        </div>                  
+                        <div class="form-group" id="EditStudentName">
+                            <label for="EditStudentName">学生姓名</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="EditOldScore">
+                            <label for="EditOldScore">原成绩</label>
+                            <input type="text" class="form-control"readonly="readonly" value="">
+                        </div>
+                        <div class="form-group" id="EditNewScore">
+                            <label for="EditNewScore">新成绩</label>
+                            <input name="newScore" id="id_newScore" type="text" class="form-control">
+                        </div>
+
+                        <!--<a id="editButton" href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>提交修改</button></a>-->
+                        <button type="submit" class="btn btn-default" value="submit">提交修改</button>
+                    </form>
+                </div>
+            </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    //TODO
+    d3.json('/SM/B_teacher_temp_query/',function(data){ // 查临时表获取未commit的课程
+        console.log(data);
+        courseInfo = data;
+        updateList(data);   // 更新未提交课程的list
+    });
+
+var courseInfo;
+var theCourseInfo;
+var studentScore;
+
+function updateList(data){  // 左侧选择未commit的课程
+    d3.select("#courseList").selectAll("li").remove();
+    d3.select("#courseList").selectAll("li")
+        .data(data)
+        .enter().append("li")
+        .attr("role","presentation")
+        .html(function(d){return '<a href="#" onclick="selectCourse(\'' + d.classID +'\')">' + d.courseName + "</a>"});    // 选取后，跳转到对应课程的上传界面，call selectCourse
+
+        // .html(function(d){return '<a href="#">' + d.courseName + "</a>"});
+    // var firstCourse = d3.select("#courseList").select("li")
+    // if(firstCourse.size() >= 1){
+    //     firstCourse.attr("class","active");
+    // }
+}
+
+function selectCourse(classID){ // update
+    console.log(classID);
+    console.log(courseInfo);
+    var course;
+    for (var i = courseInfo.length - 1; i >= 0; i--) {
+        course = courseInfo[i];
+        if(course.classID == classID)
+            break;
+    }
+    if(i<0){    // exception
+        console.log("Cannot find the course");
+        return;
+    }
+    theCourseInfo = course;
+    d3.select("#downloadButton").attr("href","/SM/B_download_xlsx/" + course.classID); // download previously uploaded excel
+    d3.select("#uploadButton").attr("action","/SM/B_upload_xlsx/" + course.classID);   // upload excel
+    d3.select("#commitButton").attr("href","/SM/B_finalCommit/"+course.classID);   // commit uploading file
+    updateInfoTable(course);    // 更新当前显示的课程简要信息
+    updateStudentTable(course.classID);    // call function to update students' scores
+}
+
+function updateStudentTable(classID){
+    // TODO
+    d3.json("/SM/B_temp_class_score_query/"+classID,function(data){
+        console.log(classID);
+        studentScore = data;
+
+        d3.select("#studentTable").selectAll("tr").remove();
+        d3.select("#studentTable").selectAll("tr")
+            .data(data)
+            .enter().append("tr")
+            .html(function (d) {
+            str = '';
+            str += "<td>" + d.studentID + "</td>";  // 学号
+            str += "<td>" + d.studentName + "</td>";    // 姓名
+            str += "<td>" + d.score + "</td>";  // 分数
+            str += "<td>" + d.gradePoint + "</td>"; // 绩点 
+            str += '<td><button class="btn btn-default btn-sm" onclick="createForm(\'' + classID + '\' , \'' + d.studentID + '\')">修改</button></td>';
+            return str;
+        });
+    })
+}
+
+function updateInfoTable(course){   // 更新右上方课程信息
+    d3.select("#infoTable").selectAll("td").remove();
+    d3.select("#infoTable").selectAll("td")
+        .data([course.classID, course.courseName, course.credits]) // 显示课程号、课程名称、学分
+        .enter().append("td")
+        .text(function(d){return d});
+}
+
+
+function createForm(classID, studentID){    // generate a new request form
+    
+    console.log(classID);
+    console.log(studentID);
+    
+    console.log(studentScore);
+    console.log(courseInfo);
+
+    var form = [];
+
+    var i;
+    var cTmp;
+    for (i = courseInfo.length - 1; i >= 0; i--) { // 若选择修改的记录与现在显示的一致，则break 
+        cTmp = courseInfo[i];
+        if(theCourseInfo.classID == classID)
+            break;
+    }
+    form[0] = theCourseInfo.classID;
+    form[1] = theCourseInfo.courseName;
+
+    var sTmp;
+    for (i = studentScore.length - 1; i >= 0; i--) { // 若选择修改的记录与现在显示的一致，则break 
+        sTmp = studentScore[i];
+        if(sTmp.studentID == studentID)
+            break;
+    }
+    form[2] = studentScore[i].studentID;
+    form[3] = studentScore[i].studentName;
+    form[4] = studentScore[i].score;
+
+    console.log([form]);
+
+    // modify the form in html
+    document.getElementById('EditCourseID').innerHTML = '<label for="EditCourseID">教学班号</label><input type="text" class="form-control" readonly="readonly" value="' + form[0] + '">';
+    document.getElementById('EditCourseName').innerHTML = '<label for="EditCourseName">课程名称</label><input type="text" class="form-control"readonly="readonly" value="' + form[1] + '">';
+    document.getElementById('EditStudentID').innerHTML = '<label for="EditStudentID">学生学号</label><input type="text" class="form-control"readonly="readonly" value="' + form[2] + '">';
+    document.getElementById('EditStudentName').innerHTML = '<label for="EditStudentName">学生姓名</label><input type="text" class="form-control"readonly="readonly" value="' + form[3] + '">';
+    document.getElementById('EditOldScore').innerHTML = '<label for="EditOldScore">原成绩</label><input type="text" class="form-control"readonly="readonly" value="' + form[4] + '">';
+
+    d3.select("#editScoreForm").attr('action',"/SM/B_online_save/" + form[2] + '/' + form[0]);
+        
+}
+
+</script>
+</div>
+</body>
+</html>

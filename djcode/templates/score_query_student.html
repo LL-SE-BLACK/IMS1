@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>成绩查询</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/d3.min.js"></script>
+<style>
+
+/*body {
+  font: 10px sans-serif;
+}*/
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+
+path {
+	stroke: DodgerBlue;
+	stroke-width: 1;
+	fill: none;
+}
+
+.axis {
+	font-size: 11px;
+	fill: gray;
+}
+
+.x.axis line {
+  stroke: lightgrey;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  stroke: lightgrey;
+}
+
+.y.axis line, .y.axis path {
+  /*fill: none;*/
+  stroke: lightgrey;
+}
+
+</style>
+
+</head>
+<body>
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+      <li role="presentation"><a href="/SM/query">成绩查询</a></li>
+      <li role="presentation"><a href="/SM/program_query">培养方案</a></li>
+      <li role="presentation"><a href="/SM/logout">退出</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table">
+                <thead>
+                    <th>总学分</th>
+                    <th>平均绩点</th>
+                    <th>最低分</th>
+                    <th>最高分</th>
+                    <th>平均分</th>
+                    <th>中位数</th>
+                    <th>方差</th>
+                </thead>
+                <tbody id="infoTable"></tbody>
+            </table>
+            <table class="table table-hover" >
+                <thead>
+                    <tr>
+                        <th>课程代码</th>
+                        <th>课程名称</th>
+                        <th>学期</th>
+                        <th>成绩</th>
+                        <th>学分</th>
+                        <th>绩点</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreTable">
+          </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>成绩分布直方图</h4></div>
+                <div id="histo"></div>
+                </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4>学期GPA效力图</h4></div>
+                <div id="line"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+
+
+
+    d3.json('/SM/B_student_query',function(data){   // retrieve all the score information of logined student
+        var values = data.map(function(d){return d.score;});
+//        GPA[0] = [1, 3];
+//        GPA[1] = [2, 4.5];
+//        GPA[2] = [4, 2];
+        calcTermGPA(data);
+        updateTable(data);  // call funttion to update the student scores
+        drawHisto(values);  // call function to update the histogram
+
+        drawLine(GPA);  // call function to update the histogram
+
+        updateInfo(data,values);    // call function to update its statistical information
+        console.log(data);
+    });
+
+    var GPA = [];
+
+function calcTermGPA(data){
+
+    var totalSemester = 10;
+    var sumGP = [];
+    var totalCredit = [];
+    for(i = 1 ;i <= totalSemester; i++) {
+        sumGP[i] = 0;
+        totalCredit[i] = 0;
+    }
+
+    data.forEach( function(d){
+        sumGP[Number(d.semester)] += d.credit * d.gradePoint;
+        totalCredit[Number(d.semester)] += d.credit;
+    });
+
+    for(i = 1 ;i <= totalSemester; i++) {
+        if(sumGP[i] != 0)
+            GPA.push([i, sumGP[i]/totalCredit[i]]);
+    }
+    console.log(GPA);
+
+}
+
+function getSemester(semester){    // generate the icons for each state of modification request
+    switch(semester){
+        case 1:
+            return '2012-2013秋冬';
+        case 2:
+            return '2012-2013春夏';
+        case 3:
+            return '2013-2014秋冬';
+        case 4:
+            return '2013-2014春夏';
+        case 5:
+            return '2014-2015秋冬';
+        case 6:
+            return '2014-2015春夏';
+        case 7:
+            return '2015-2016秋冬';
+        case 8:
+            return '2015-2016春夏';
+    }
+}
+
+function updateInfo(data,values){   //update the student scores
+    var info = [];
+    var totalCredit = 0, totalGradePoint = 0;
+    // 总学分    
+    for (var i = data.length - 1; i >= 0; i--) {    // calculate GPA
+        var d = data[i];
+        totalCredit += d.credit;
+        totalGradePoint += d.credit * d.score;
+    };
+    info[0] = totalCredit;
+    // 最低分
+    info[2] = d3.min(values);
+    // 最高分
+    info[3] = d3.max(values);
+    // 平均分
+    // info[4] = d3.mean(values);
+    info[4] = (totalCredit == 0) ? 0 : totalGradePoint / totalCredit
+    // 平均绩点
+    tmp_score = info[4];
+    var tmp_gpa;
+    if(tmp_score < 60)
+        tmp_gpa = 0;
+    else{
+        tmp_gpa = (tmp_score - 60) / 10 + 1.5;
+        if(tmp_gpa > 5)
+            tmp_gpa = 5;       
+    }
+    info[1] = tmp_gpa;
+    // 中位数
+    info[5] = d3.median(values);
+    // 方差
+    info[6] = d3.variance(values);
+
+    console.log(info);
+    d3.select("#infoTable").selectAll("tr").remove();   // remove old score information
+    d3.select("#infoTable").selectAll("tr")
+        .data([info])
+        .enter().append("tr")
+        .html(function (d) {
+        str = d.map(function(d){return "<td>" + dispNum(d) + "</td>";}).join('')  // 2位小数
+        return str;
+    });
+}
+function dispNum(d){
+    var str;
+    try{
+        str = d.toFixed(2);
+    }catch(err){
+        console.log(err);
+        str = '无统计信息';
+    }
+    return str;
+}
+function updateTable(data) { // update student's transcript 
+    d3.select("#scoreTable").selectAll("tr").remove();
+    d3.select("#scoreTable").selectAll("tr")
+        .data(data)
+        .enter().append("tr")
+        .html(function (d) {
+        str = '';
+        str += "<td>" + d.courseID + "</td>";   // 课程号
+        str += "<td>" + d.courseName + "</td>";     // 课程名称
+        str += "<td>" + getSemester(d.semester) + "</td>"; //学期
+        str += "<td>" + d.score + "</td>";  // 成绩
+        str += "<td>" + d.credit + "</td>"; // 学分
+        str += "<td>" + d.gradePoint + "</td>"; // 绩点
+        return str;
+    });
+}
+</script>
+
+<script type="text/javascript">
+    // Generate a Bates distribution of 10 random variables.
+function drawHisto (values) {   // draw histogram of the distribution of scores
+
+// var values = d3.range(1000).map(d3.random.bates(10));
+
+
+// A formatter for counts.
+var formatCount = d3.format(",.0f");
+
+// var margin = {top: 10, right: 30, bottom: 30, left: 30},
+//     width = 960 - margin.left - margin.right,
+//     height = 500 - margin.top - margin.bottom;
+
+var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    width = 500 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+// console.log(d3.extent(values));
+var x = d3.scale.linear()
+    // .domain([0, 1])
+    // .domain(d3.extent(values))
+    .domain([0,100])
+    .range([0, width]);
+
+// Generate a histogram using twenty uniformly-spaced bins.
+var data = d3.layout.histogram()
+    .bins(x.ticks(20))
+    (values);
+
+var y = d3.scale.linear()
+    .domain([0, d3.max(data, function(d) { return d.y; })])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var svg = d3.select("#histo").append("svg") // set margin
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var bar = svg.selectAll(".bar")     // set bar group
+    .data(data)
+  .enter().append("g")
+    .attr("class", "bar")
+    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+bar.append("rect")  // draw the rectangle representing data
+    .attr("x", 1)
+    .attr("width", x(data[0].dx) - 1)
+    .attr("height", function(d) { return height - y(d.y); });
+
+bar.append("text")  // set label
+    .attr("dy", ".75em")
+    .attr("y", 6)
+    .attr("x", x(data[0].dx) / 2)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return formatCount(d.y); });
+
+svg.append("g") // set axis
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+}
+
+
+function drawLine(values) {
+
+var formatCount = d3.format(",.0f");
+
+var margin = {top: 10, right: 30, bottom: 30, left: 30},
+    width = 500 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+    console.log(values);
+    xMin = d3.min(values, function(d) { return d[0]; });
+    xMax = d3.max(values, function(d) { return d[0]; });
+    yMin = d3.min(values, function(d) { return d[1]; });
+    yMax = d3.max(values, function(d) { return d[1]; });
+
+var xScale = d3.scale.linear().domain([xMin - 0.2, xMax + 0.2]).range([0, width]);
+var yScale = d3.scale.linear().domain([yMin - 0.1, yMax + 0.1]).range([height, 0]);
+
+// add line function here
+var line = d3.svg.line()
+    .x(function(d, i) {
+        return xScale(Number(d[0])); //利用尺度運算資料索引，傳回x的位置
+    })
+    .y(function(d) { 
+        return yScale(d[1]); //利用尺度運算資料的值，傳回y的位置
+    });
+
+//增加一個SVG元素
+var svg = d3.select('#line').append('svg')
+    .attr('width', width + margin.left + margin.right) //將左右補滿
+    .attr('height', height + margin.top + margin.bottom) //上下補滿
+    .append('g') //增加一個群組g
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+var xAxis = d3.svg.axis().scale(xScale).ticks(xMax-xMin+1).orient('bottom');
+
+// x axis
+svg.append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(xAxis);
+
+// y axis
+var yAxisLeft = d3.svg.axis().scale(yScale).ticks(5).orient('left');
+
+// SVG加入y轴
+svg.append('g')
+    .attr('class', 'y axis')
+    .attr('transform', 'translate(0,0)')
+    .call(yAxisLeft);
+            
+svg.append('path').attr('d', line(values));//將資料套用d3.svg.line()
+
+}
+</script>
+</body>
+</html>
