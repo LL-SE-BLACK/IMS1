@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://v3.bootcss.com/examples/dashboard/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>教务管理系统-->教学班选择</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <style type="text/css"></style></head>
+
+  <body>
+    <div class="page-header">
+      <p class="text-center"><small>学号：<strong>{{pageHeader.sid}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名：<strong>{{pageHeader.name}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程代码：<strong>{{pageHeader.cid}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程名称：<strong>{{pageHeader.cname}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;学分：<strong>{{pageHeader.credit}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
+      </p>
+    </div>
+
+    <div id = "table"></div>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width:30%">课程名称</th>
+          <th style="width:30%">上课教师</th>
+          <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评分</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for list in classes %}
+          <tr>
+            <td>{{list.courseName}}</td>
+            <td>{{list.teacherName}}</td>
+            <td>
+              <div id={{list.jID}}>
+                <label class="radio list-inline">
+                  <input type="radio" name={{list.jID}} value="1">1
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name={{list.jID}} value="2">2
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name={{list.jID}} value="3">3
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name={{list.jID}} value="4">4
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name={{list.jID}} value="5">5
+                </label>
+            </div>
+            </td>
+          </tr>
+        {%  endfor %}
+      </tbody>
+    </table>
+    <div class = "text-center">
+      <input id = "submitData" class="btn btn-default" type="submit" value="提交">
+    </div>
+
+    <form method = 'POST' id = 'submitForm' >
+	    {% csrf_token %}
+      <input type="hidden" name="hiddenInput" value="null" id="choosed"/>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">确定提交</h4>
+          </div>
+          <div class="modal-body">
+            确定提交评价？
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "chooseClass" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script language="javascript">
+
+      $('#submitData').on('click', function() {        
+        $('#myModal').modal('show');
+      })
+
+      $('#chooseClass').on('click', function() { 
+        var list = {{List|safe}}
+        var choosedClass = ""
+		
+        for (var i = list.length - 1; i >= 0; i--) {
+            var score = $('#' + list[i] + ' input:radio:checked').val();
+            choosedClass = choosedClass + "$" + list[i] + "#" + score;
+        }
+        //document.getElementByName('hiddenInput').value = choosedClass;
+		    document.getElementById('choosed').value = choosedClass;
+        document.getElementById('submitForm').submit();
+      })
+    </script>
+
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" preserveAspectRatio="none" style="visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs></defs><text x="0" y="10" style="font-weight:bold;font-size:10pt;font-family:Arial, Helvetica, Open Sans, sans-serif;dominant-baseline:middle">200x200</text></svg></body><div></div></html>
