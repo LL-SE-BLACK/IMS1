@@ -1,0 +1,59 @@
+{%extends "base.html"%} 
+{%block title%}Classroom Inquiry{%endblock%}
+{%block content%} 
+        <div class="col-lg-10" style="background-color: #fafafa;  min-width:800px;">
+
+          <div class="col-md-10 column">
+            <div class="tabbable" id="tabs-12518">
+              <div style="width:350px; height:50px;">
+                <ul class="nav nav-tabs">
+                  <li class="active">
+                    <a href="#panel-303742" data-toggle="tab">Search</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div class="tab-pane active" id="panel-303742">
+                  <br/>
+                  <div class="jumbotron well">
+                    {%if roomschedule%}
+                    <table class="table">
+                    <h2 class="form-signin-heading">room schedule</h2><br>
+                    <thead>
+                      <tr>
+                        <th>course id</th>
+                        <th>teacher</th>
+                        <th>time</th>
+                        <th>classroom</th>
+                        <th>capacity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {%for class in roomschedule%}
+                      <tr>
+                       <td>{{class.course_id}}</td>
+                       <td>{{class.teacher}}</td>
+                       <td>{{class.classTime}}</td>
+                       <td>{{class.classroom}}</td>
+                       <td>{{class.capacity}}</td>
+                     </tr>
+                     {% endfor %}
+                     
+                   </tbody>
+
+                 </table>
+                    {%endif%}
+                    <form action="classroom_inquiry" method="post" class="form-signin" target="_top">
+                      <h2 class="form-signin-heading">Basic information</h2><br>
+                      <input type="text" name="classroom_id" class="form-control" placeholder="Classroom ID" />
+                      <br/>
+                      <input class="btn btn-lg btn-primary btn-block" type="submit" value="Search" />
+                    </form>
+                              
+                  </div><!--jumbotron well-->
+                </div><!--tab-pane-->
+              </div><!--tab content-->
+            </div><!--tabbable-->
+          </div><!--col-md-10 column-->
+        </div><!--col-lg-10-->
+{%endblock%}

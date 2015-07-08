@@ -1,0 +1,14 @@
+{%extends "base.html"%} 
+{%block title%}Automatically course scheduling{%endblock%}
+{%block content%} 
+      <div class="col-md-10">
+        <div class="col-md-4">
+        </div>
+        <form action="automatic" method="post"><!-- //开始排课 -->
+          {{sch_result}}
+		  <input type="hidden" value="true" name="start"/>
+          <button type="submit" class="btn btn-lg btn-danger" style="font-size: 3em;position: relative; bottom: -150px;">Start</button>
+        </form>
+      </div>
+      
+{%endblock%}

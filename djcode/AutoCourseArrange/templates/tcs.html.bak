@@ -1,0 +1,105 @@
+{%extends "base.html"%} 
+
+{%block title%}Teacher Courses{%endblock%}
+{%block content%} 
+<div class="col-lg-10" style="background-color: #fafafa;  min-width:800px;">
+
+          <div class="col-md-10 column">
+            <div class="tabbable" id="tabs-12518">
+              <div style="width:350px; height:50px;">
+                <ul class="nav nav-tabs">
+                  
+                  <li class="active">
+                    <a href="#panel-303742" data-toggle="tab">Check</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div class="tab-pane active" id="panel-303742">
+                  <br/>
+                  <div class="jumbotron well">
+                    <table class="table">
+                    <h2 class="form-signin-heading">schedule</h2><br>
+                    <thead>
+                        <th>time</th>
+                        <th>Mon.</th>
+                        <th>Tue.</th>
+                        <th>Wed.</th>
+                        <th>Thr.</th>
+                        <th>Fri.</th>
+                        <th>Sat.</th>
+                        <th>Sun.</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      
+                      <tr>
+                       <td>1-2</td>
+                       {%for class in schedule.0%}
+                       {%if class == False%}
+                       <td>None</td>
+                       {%else%}
+                       <td>Class:{{class.course_id}}<br>Room:
+                        {{class.classroom}}</td>
+                       {%endif%}
+                       {% endfor %}
+                     </tr>
+                     <tr>
+                       <td>3-5</td>
+                       {%for class in schedule.1%}
+                       {%if class == False%}
+                       <td>None</td>
+                       {%else%}
+                       <td>Class:{{class.course_id}}<br>classroom:
+                        {{class.classroom}}</td>
+                       {%endif%}
+                       {% endfor %}
+                     </tr>
+                     <tr>
+                       <td>6-8</td>
+                       {%for class in schedule.2%}
+                       {%if class == False%}
+                       <td>None</td>
+                       {%else%}
+                       <td>Class:{{class.course_id}}<br>classroom:
+                        {{class.classroom}}</td>
+                       {%endif%}
+                       {% endfor %}
+                     </tr>
+                     <tr>
+                       <td>9-10</td>
+                       {%for class in schedule.3%}
+                       {%if class == False%}
+                       <td>None</td>
+                       {%else%}
+                       <td>Class:{{class.course_id}}<br>classroom:
+                        {{class.classroom}}</td>
+                       {%endif%}
+                       {% endfor %}
+                     </tr>
+                     <tr>
+                       <td>11-13</td>
+                       {%for class in schedule.4%}
+                       {%if class == False%}
+                       <td>None</td>
+                       {%else%}
+                       <td>Class:{{class.course_id}}<br>classroom:
+                        {{class.classroom}}</td>
+                       {%endif%}
+                       {% endfor %}
+                     </tr>
+                     
+                     
+                   </tbody>
+
+                 </table>
+
+                  </div><!--jumbotron well-->
+                </div><!--tab-pane-->
+              </div><!--tab content-->
+            </div><!--tabbable-->
+          </div><!--col-md-10 column-->
+        </div><!--col-lg-10-->
+{%endblock%}

@@ -1,0 +1,146 @@
+{%extends "base.html"%} 
+
+{%block title%}Course Operation{%endblock%}
+{%block content%} 
+    <div class="col-lg-10" style="background-color: #fafafa;  min-width:800px;">
+
+      <div class="col-md-10 column">
+        <div class="tabbable" id="tabs-12518">
+          <div style="width:350px; height:50px;">
+            <ul class="nav nav-tabs">
+              <!-- <li class="active">
+                <a href="#panel-303742" data-toggle="tab">Add Course</a>
+              </li>
+              <li>
+                <a href="#panel-393776" data-toggle="tab">Delete Course</a>
+              </li> -->
+              <li>
+                <a href="#panel-303748" data-toggle="tab">Add Class</a>
+              </li>
+              <li>
+                <a href="#panel-303749" data-toggle="tab">Delete Class</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content">
+            <!-- <div class="tab-pane active" id="panel-303742">
+              <br/>
+              <div class="jumbotron well">
+                <form action="add_cz" method="post" class="form-signin" role="form">
+                  //添加课程信息
+                  <p>{{add1_result}}</p>
+                  <h2 class="form-signin-heading">Basic information</h2><br>
+                  <input name="cz_ID" type="text" class="form-control" placeholder="Course ID" required autofocus>
+                  <input name="cz_Name" type="text" class="form-control" placeholder="Course Name" required>
+                  <input name="cz_Time" type="text" class="form-control" placeholder="Course Time(per week)" required>
+                  <input name="cz_Credits" type="text" class="form-control" placeholder="Course Credits" required>
+                  <input name="cz_Term" type="text" class="form-control" placeholder="Course Term" required>
+                  <input name="cz_Testbook" type="text" class="form-control" placeholder="Course Testbook" required>
+                  <input name="cz_College" type="text" class="form-control" placeholder="Course College" required>
+                  
+                 
+                 <br/>
+                 <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+               </form>
+             </div>jumbotron well
+                       </div>tab-pane
+                       <div class="tab-pane" id="panel-393776">
+            <br/>
+            <div class="jumbotron well">
+              <form action="del_cz" method="post" class="form-signin" role="form">//删除教室信息
+                <p>{{del1_result}}</p>
+                <h2 class="form-signin-heading">Basic information</h2><br>
+                <input name="cz_ID" type="text" class="form-control" placeholder="Course ID" required autofocus>
+            
+                <hr>
+            
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+              </form>
+            </div>jumbotron well
+                      </div>tabpane active class -->
+          <div class="tab-pane active" id="panel-303748">
+            <br/>
+            <div class="jumbotron well">
+              <form action="add_cl" method="post" class="form-signin" role="form"><!--//添加开课-->
+                  
+                  {%if not add2_result %}
+                  <script type="text/JavaScript">
+                    alert("add error:conflict");
+                  </script>
+                  {%endif%}
+                  <h2 class="form-signin-heading">Basic information</h2><br>
+                  <input name="cuz_ID" type="text" class="form-control" placeholder="Course ID" required autofocus>
+                  <input name="cl_ID" type="text" class="form-control" placeholder="Class ID" required >
+                  
+                  <select name="cl_Time1" class="form-control"required>
+                     <option value="" selected="selected">Class Time1(void)</option>
+                     <option value="1">Mon.</option>
+                     <option value="2">Tue.</option>
+                     <option value="3">Wed.</option>
+                     <option value="4">Thu.</option>
+                     <option value="5">Fri.</option>
+                     <option value="6">Sat.</option>
+                     <option value="7">Sun.</option>
+                   </select>
+                   <select name="cl_Hour1" class="form-control"required>
+                     <option value="" selected="selected">Class Hour1(void)</option>
+                     <option value="1">1-2</option>
+                     <option value="2">3-4</option>
+                     <option value="3">3-5</option>
+                     <option value="4">6-8</option>
+                     <option value="5">7-8</option>
+                     <option value="6">9-10</option>
+                     <option value="7">11-13</option>
+                     <option value="8">12-13</option>
+                   </select>
+                   <select name="cl_Time2" class="form-control">
+                     <option value="" selected="selected">Class Time(void)2</option>
+                     <option value="1">Mon.</option>
+                     <option value="2">Tue.</option>
+                     <option value="3">Wed.</option>
+                     <option value="4">Thu.</option>
+                     <option value="5">Fri.</option>
+                     <option value="6">Sat.</option>
+                     <option value="7">Sun.</option>
+                   </select>
+                   <select name="cl_Hour2" class="form-control">
+                     <option value="" selected="selected">Class Hour(void)2</option>
+                     <option value="1">1-2</option>
+                     <option value="2">3-4</option>
+                     <option value="3">3-5</option>
+                     <option value="4">6-8</option>
+                     <option value="5">7-8</option>
+                     <option value="6">9-10</option>
+                     <option value="7">11-13</option>
+                     <option value="8">12-13</option>
+                   </select>
+                  <input name="cl_Capa" type="text" class="form-control" placeholder="Class Capacity" required>
+                  <select name="cl_Term" class="form-control" required>
+                   <option value="2015-2016 Fall-Winter" selected="selected">2015-2016 Fall-Winter</option>
+                 </select>
+                 <input name="cl_room" type="text" class="form-control" placeholder="Classroom" required>
+                 <hr> 
+                 <input name="teac_ID" type="text" class="form-control" placeholder="Teacher ID" required>
+                 <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+               </form>
+            </div><!--jumbotron well-->
+          </div><!--tab-pane-->
+          <div class="tab-pane" id="panel-303749">
+            <br/>
+            <div class="jumbotron well">
+              <form action="del_cl" method="post" class="form-signin" role="form"><!-- //删除教室信息 -->
+                <p>{{del2_result}}</p>
+                <h2 class="form-signin-heading">Basic information</h2><br>
+                <input name="cl_ID" type="text" class="form-control" placeholder="Class ID" required autofocus>
+
+                <hr>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+              </form>
+            </div><!--jumbotron well-->
+          </div><!--tabpane active class-->
+        </div><!--tab content-->
+      </div><!--tabbable-->
+    </div><!--col-md-10 column-->
+  </div><!--col-lg-10-->
+{%endblock%}

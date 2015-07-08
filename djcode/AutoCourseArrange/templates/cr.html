@@ -1,0 +1,88 @@
+{%extends "base.html"%} 
+
+{%block title%}Teaching Resource Management{%endblock%}
+{%block content%} 
+    <div class="col-lg-10" style="background-color: #fafafa;  min-width:800px;">
+
+      <div class="col-md-10 column">
+        <div class="tabbable" id="tabs-12518">
+          <div style="width:350px; height:50px;">
+            <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="#panel-303742" data-toggle="tab">Add</a>
+              </li>
+              <li>
+                <a href="#panel-393776" data-toggle="tab">Delete</a>
+              </li>
+              <li>
+                <a href="#panel-303748" data-toggle="tab">Modify</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content">
+            <div class="tab-pane active" id="panel-303742">
+              <br/>
+              <div class="jumbotron well">
+                <form action="add" method="post" class="form-signin" role="form">
+                  <!-- //添加教室信息-->
+                  <p>{{add_result}}</p>
+                  <h2 class="form-signin-heading">Basic information</h2><br>
+                  <input name="cr_ID" type="text" class="form-control" placeholder="Classroom ID" required autofocus>
+                  <input name="cr_Name" type="text" class="form-control" placeholder="Classroom Name" required>
+                  <!--input name="cr_Type" type="text" class="form-control" placeholder="Classroom Type" required-->
+                  <select name="cr_Type" class="form-control" required>
+                   <option value="Classroom" selected="selected">Classroom</option>
+                   <option value="Playground">Playground</option>
+                   <option value="Electrical Lab">Electrical Lab</option>
+                   <option value="Computer Lab">Computer Lab</option>
+                   <option value="Language Classroom">Language Classroom</option>
+                 </select>
+                 <hr>
+                 <input name="cr_capa" type="text" class="form-control" placeholder="Capacity" required>
+                 <!--input name="cr_camp" type="text" class="form-control" placeholder="Campus" required-->
+                 <select name="cr_camp" class="form-control" required>
+                   <option value="Zijin'gang" selected="selected">Zijin'gang</option>
+                   <option value="Yuquan">Yuquan</option>
+                   <option value="Xixi">Xixi</option>
+                   <option value="Huajiachi">Huajiachi</option>
+                   <option value="Zhijiang">Zhijiang</option>
+                 </select>
+                 <br/>
+                 <button class="btn btn-lg btn-primary btn-block" type="submit">Add</button>
+               </form>
+             </div><!--jumbotron well-->
+           </div><!--tab-pane-->
+           <div class="tab-pane" id="panel-393776">
+            <br/>
+            <div class="jumbotron well">
+              <form action="del" method="post" class="form-signin" role="form"><!-- //删除教室信息 -->
+                <p>{{del_result}}</p>
+                <h2 class="form-signin-heading">Basic information</h2><br>
+                <input name="cr_ID" type="text" class="form-control" placeholder="Classroom ID" required autofocus>
+
+                <hr>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+              </form>
+            </div><!--jumbotron well-->
+          </div><!--tabpane active class-->
+          <div class="tab-pane" id="panel-303748">
+            <br/>
+            <div class="jumbotron well">
+              <form action="mod" method="post" class="form-signin" role="form"><!-- //修改教室信息 -->
+                <p>{{mod_result}}</p>
+                <h2 class="form-signin-heading">Basic information</h2><br>
+                <input name="cr_ID" type="text" class="form-control" placeholder="Classroom ID" required autofocus>
+
+                <hr>
+                <input name="cr_capa" type="text" class="form-control" placeholder="Capacity" required>
+                <br/>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Modify</button>
+              </form>
+            </div><!--jumbotron well-->
+          </div><!--tab-pane-->
+        </div><!--tab content-->
+      </div><!--tabbable-->
+    </div><!--col-md-10 column-->
+  </div><!--col-lg-10-->
+{%endblock%}

@@ -1,0 +1,54 @@
+{%extends "base.html"%} 
+
+{%block title%}Teacher Courses{%endblock%}
+{%block content%} 
+<div class="col-lg-10" style="background-color: #fafafa;  min-width:800px;">
+
+          <div class="col-md-10 column">
+            <div class="tabbable" id="tabs-12518">
+              <div style="width:350px; height:50px;">
+                <ul class="nav nav-tabs">
+                  
+                  <li class="active">
+                    <a href="#panel-303742" data-toggle="tab">Check</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div class="tab-pane active" id="panel-303742">
+                  <br/>
+                  <div class="jumbotron well">
+                    <table class="table">
+                    <h2 class="form-signin-heading">schedule</h2><br>
+                    <thead>
+                       <tr>
+                        <th>course id</th>
+                        <th>teacher</th>
+                        <th>time</th>
+                        <th>classroom</th>
+                        <th>capacity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {%for class in schedule%}
+                      <tr>
+                       <td>{{class.course_id}}</td>
+                       <td>{{class.teacher}}</td>
+                       <td>{{class.classTime}}</td>
+                       <td>{{class.classroom}}</td>
+                       <td>{{class.capacity}}</td>
+                     </tr>
+                     
+                     {% endfor %}
+                     
+                   </tbody>
+
+                 </table>
+
+                  </div><!--jumbotron well-->
+                </div><!--tab-pane-->
+              </div><!--tab content-->
+            </div><!--tabbable-->
+          </div><!--col-md-10 column-->
+        </div><!--col-lg-10-->
+{%endblock%}
