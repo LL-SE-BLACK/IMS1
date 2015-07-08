@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    
+    
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>选课管理</title>
+  
+    <!-- Bootstrap -->
+
+  
+    <!-- 引入下面两个库让 IE8 支持 HTML5 元素 -->
+    <!-- 警告: Respond.js 通过 file:// 浏览的时候不能正常工作！-->
+    <!--[if lt IE 9]>
+      <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+      <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	    
+	
+	<script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+ </head>
+ 
+	<body>
+	<div class="container">
+	
+			<nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+		<span class="sr-only">切换导航</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">选课子系统</a>
+	</div>
+	<div class="collapse navbar-collapse" id="example-navbar-collapse">
+		<ul class="nav navbar-nav">
+		
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					培养方案模块 <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a id = "set_training_plan"href="http://127.0.0.1:8000/trainning_plan">培养方案制定</a></li>
+					<li class="divider">
+					<li><a id = "check_training_plan" href="http://127.0.0.1:8000/show_plan">查看培养方案</a></li>
+					
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					选课模块 <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a id = "choose_class"href="http://127.0.0.1:8000/choose_class">选课</a></li>
+					<li class="divider">
+					<li><a id = "class_search"href="http://127.0.0.1:8000/course_search">选课搜索引擎</a></li>
+					<li class="divider">
+					<li><a id = "check_class_table"href="http://127.0.0.1:8000/show_class">查看课表</a></li>
+					
+				</ul>
+			</li>
+			<li><a id = "teacher_model"href="#">教师模块</a>
+			<li><a id = "admin_model"href="http://127.0.0.1:8000/admin_page1">管理员模块</a>
+			<li><a id = "return_daohang"href="#">返回导航</a>
+			
+			
+			
+			
+			
+	</div>
+	</nav>
+	
+		<h2>课程管理模块</h2>
+		<p>
+			课程名称： <strong>{{class.name}} </strong>  课程代码： <strong>{{class.id}} </strong>   任课教师：<strong>{{class.teacher_name}}</strong>
+		</p>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered">
+			<caption>本课程学生列表</caption>
+			<thead>
+			<tr>
+				
+				<th>学生姓名</th>
+				<th>学号</th>
+				<th>性别</th>
+				<th>学院</th>
+				<th>专业</th>
+				<th>删除学生</th>
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% block content %}  
+			{% for student in students %}  
+			<tr>
+			 <td>{{student.name}}</td>
+			 <td>{{student.id}}</td>
+			 <td>{{student.gender}}</td>
+			 <td>{{student.college}}</td>
+			 <td>{{student.major}}</td>
+			 <td>				
+				<input id = {{student.id}} type="checkbox">
+			 </td>
+			
+			</tr>
+			{% endfor %}  
+			{% endblock %}
+			</tbody>
+			</table>
+		</div>
+		
+		 <div class="btn-group" method="POST">
+			<input id = "submitData" class="btn btn-default" type="submit" value="提交">
+			<button type="button" class="btn btn-default">直接退出</button>
+		</div>
+		
+		
+		<div id="addstudent">
+			<label for="name">请输入学生学号</label>
+			<form method = 'POST' id = 'addStudentForm' >
+			{% csrf_token %}
+				<input type="text"  name="add_id" placeholder="请输入学号">
+				<input type="hidden" name="tag" value=1 id="tag1"/>
+				
+			</form>
+			<button type="button" id="submitData2"  class="btn btn-default" >
+				提交
+			</button>
+			
+		</div>
+		
+	
+	
+	</div>
+	
+	
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">确定删除这些学生？</h4>
+          </div>
+          <div class="modal-body">
+            删除这些学生？
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "chooseClass" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">操作结果</h4>
+          </div>
+          <div class="modal-body">
+            {{flag}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "chooseClass2" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	
+	
+	
+	
+		<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">确定添加这个学生？</h4>
+          </div>
+          <div class="modal-body">
+            添加这些学生？
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "add_confirm" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	
+	<div class="modal fade" id="myModal12" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">操作结果</h4>
+          </div>
+          <div class="modal-body">
+            {{flag2}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "add_confirm2" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<form method = 'POST' id = 'submitForm' >
+	{% csrf_token %}
+		<input type="hidden" name="hiddenInput" value="null" id="choosed"/>
+		<input type="hidden" name="tag" value=2 id="tag2"/>
+    </form>
+			
+			
+
+			
+			
+		
+	
+	
+	
+	<script language="javascript">
+	
+		$('#submitData').on('click', function() { 
+			
+			$('#myModal').modal('show');
+		})
+		$('#chooseClass').on('click', function() { 
+        var list = {{List|safe}}
+        var choosedClass = ""
+		
+        for (var i = list.length - 1; i >= 0; i--) {
+          if($('#' + list[i]).is(':checked')) {
+            choosedClass = choosedClass + list[i] + "A";
+          }
+        };
+        //document.getElementByName('hiddenInput').value = choosedClass;
+		document.getElementById('choosed').value = choosedClass;
+        document.getElementById('submitForm').submit();
+      })
+	
+	
+		$('#submitData2').on('click', function() { 
+			
+			$('#myModal2').modal('show');
+		})
+		$('#add_confirm').on('click', function() { 
+        
+        document.getElementById('addStudentForm').submit();
+      })
+	  
+		
+		
+		var t
+		var showed = 0
+		
+		function repeatt() {
+		
+		var content = "{{flag}}"
+		var content2 = "{{flag2}}"
+		
+		
+		if (content != "" && showed == 0) {
+			showed = 1;
+			$('#myModal1').modal('show');
+		} 
+		if (content2 != "" && showed == 0) {
+			showed = 1;
+			$('#myModal12').modal('show');
+		} 
+		t = setTimeout("repeatt()", 1000)
+		window.onload = repeatt;
+	  }
+	 var LocString = String(window.document.location.href); 
+		function getQueryStr(str) { 
+			var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(LocString), tmp; 
+			if (tmp = rs) { 
+			return tmp[2]; 
+			} 
+			// parameter cannot be found 
+			return ""; 
+		} 
+		
+		var div = document.getElementById('set_training_plan'); 
+		div.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id")); 
+		var div2 = document.getElementById('check_training_plan'); 
+		div2.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id")); 
+		var div3 = document.getElementById('class_search'); 
+		div3.setAttribute("href", "http://127.0.0.1:8000/course_search/?id="+getQueryStr("id")); 
+		var div4 = document.getElementById('check_class_table'); 
+		div4.setAttribute("href", "http://127.0.0.1:8000/show_class/?xh="+getQueryStr("id")); 
+		var div5 = document.getElementById('teacher_model'); 
+		div5.setAttribute("href", "http://127.0.0.1:8000/teacher_model/?id="+getQueryStr("id")); 
+		var div6 = document.getElementById('admin_model'); 
+		div6.setAttribute("href", "http://127.0.0.1:8000/ad1/?id="+getQueryStr("id")); 
+		var div7 = document.getElementById('return_daohang'); 
+		div7.setAttribute("href", "http://127.0.0.1:8000/daohang/?id="+getQueryStr("id")); 
+		var div8 = document.getElementById('choose_class'); 
+		div8.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id"));  
+	</script>
+
+	</body>
+</html>

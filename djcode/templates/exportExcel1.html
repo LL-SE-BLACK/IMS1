@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://v3.bootcss.com/examples/dashboard/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>教务管理系统-->导出学生名单</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <style type="text/css"></style></head>
+
+  <body onload = repeatt()>
+  <nav class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-navbar-collapse">
+		<span class="sr-only">切换导航</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#">选课子系统</a>
+	</div>
+	<div class="collapse navbar-collapse" id="example-navbar-collapse">
+		<ul class="nav navbar-nav">
+		
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					培养方案模块 <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a id = "set_training_plan"href="http://127.0.0.1:8000/trainning_plan">培养方案制定</a></li>
+					<li class="divider">
+					<li><a id = "check_training_plan" href="http://127.0.0.1:8000/show_plan">查看培养方案</a></li>
+					
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					选课模块 <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a id = "choose_class"href="http://127.0.0.1:8000/choose_class">选课</a></li>
+					<li class="divider">
+					<li><a id = "class_search"href="http://127.0.0.1:8000/course_search">选课搜索引擎</a></li>
+					<li class="divider">
+					<li><a id = "check_class_table"href="http://127.0.0.1:8000/show_class">查看课表</a></li>
+					
+				</ul>
+			</li>
+			<li><a id = "teacher_model"href="#">教师模块</a>
+			<li><a id = "admin_model"href="http://127.0.0.1:8000/admin_page1">管理员模块</a>
+			<li><a id = "return_daohang"href="#">返回导航</a>
+			
+			
+			
+			
+			
+	</div>
+	</nav>
+	
+    <div class="page-header">
+      <p class="text-center"><small>教师工号：<strong>{{pageHeader.tid}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;姓名：<strong>{{pageHeader.name}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程数量：<strong>{{pageHeader.cnum}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small>
+      </p>
+    </div>
+
+    <div id = "table"></div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>课程名称</th>
+          <th>上课学期</th>
+          <th>上课时间</th>
+          <th>上课地点</th>
+          <th>导出学生名单</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for class in classes %}
+          <tr>
+            <td>{{class.courseName}}</td>
+            <td>{{class.classTime1}}</td>
+            <td>{{class.classTime2}}</td>
+            <td>{{class.classRoom}}</td>
+            <td><a href="http://127.0.0.1:8000/download/?jsgh={{pageHeader.tid}}&jxbid={{class.jId}}">点击下载</a></td>
+          </tr>
+        {%  endfor %}
+      </tbody>
+    </table>
+    
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" preserveAspectRatio="none" style="visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs></defs><text x="0" y="10" style="font-weight:bold;font-size:10pt;font-family:Arial, Helvetica, Open Sans, sans-serif;dominant-baseline:middle">200x200</text></svg>
+	<script>
+        var LocString = String(window.document.location.href); 
+		function getQueryStr(str) { 
+			var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(LocString), tmp; 
+			if (tmp = rs) { 
+			return tmp[2]; 
+			} 
+			// parameter cannot be found 
+			return ""; 
+		} 
+		
+		var div = document.getElementById('set_training_plan'); 
+		div.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id")); 
+		var div2 = document.getElementById('check_training_plan'); 
+		div2.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id")); 
+		var div3 = document.getElementById('class_search'); 
+		div3.setAttribute("href", "http://127.0.0.1:8000/course_search/?id="+getQueryStr("id")); 
+		var div4 = document.getElementById('check_class_table'); 
+		div4.setAttribute("href", "http://127.0.0.1:8000/show_class/?xh="+getQueryStr("id")); 
+		var div5 = document.getElementById('teacher_model'); 
+		div5.setAttribute("href", "http://127.0.0.1:8000/teacher_model/?id="+getQueryStr("id")); 
+		var div6 = document.getElementById('admin_model'); 
+		div6.setAttribute("href", "http://127.0.0.1:8000/ad1/?id="+getQueryStr("id")); 
+		var div7 = document.getElementById('return_daohang'); 
+		div7.setAttribute("href", "http://127.0.0.1:8000/daohang/?id="+getQueryStr("id")); 
+		var div8 = document.getElementById('choose_class'); 
+		div8.setAttribute("href", "http://127.0.0.1:8000/trainning_plan/?id="+getQueryStr("id"));  
+    </script>
+
+</body><div></div></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)http://v3.bootcss.com/examples/dashboard/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>教务管理系统-->教学班选择</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+  <style type="text/css"></style></head>
+
+  <body onload = repeatt()>
+    <div class="page-header">
+      <p class="text-center">课程代码：<strong>{{cid}}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;课程名称：<strong>{{cname}}</strong>
+      </p>
+    </div>
+
+    <div id = "table"></div>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width:10%">学号</th>
+          
+          
+          <th>补选理由</th>
+          <th style="width:10%">允许补选</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for list in buXuan %}
+          <tr>
+            <td>{{list.student.id}}</td>
+            
+            
+            <td>{{list.reason}}</td>
+            <td><input id = {{list.student.id}} type="checkbox"></td>
+          </tr>
+        {%  endfor %}
+      </tbody>
+    </table>
+    <div class = "text-center">
+      <input id = "submitData" class="btn btn-default" type="submit" value="添加">
+    </div>
+
+    <form method = 'POST' id = 'submitForm' >
+	    {% csrf_token %}
+      <input type="hidden" name="add_id" value="null" id="choosed"/>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">确定补选</h4>
+          </div>
+          <div class="modal-body">
+            确定添加学生？
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "chooseClass" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">补选结果</h4>
+          </div>
+          <div class="modal-body">
+            补选成功
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id = "chooseClass" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+	
+    <script language="javascript">
+
+      $('#submitData').on('click', function() {        
+        $('#myModal').modal('show');
+      })
+
+      $('#chooseClass').on('click', function() { 
+        var list = {{List|safe}}
+        var choosedClass = ""
+		
+        for (var i = list.length - 1; i >= 0; i--) {
+          if($('#' + list[i]).is(':checked')) {
+            choosedClass = choosedClass + list[i] + "#";
+          }
+        };
+        //document.getElementByName('hiddenInput').value = choosedClass;
+		document.getElementById('choosed').value = choosedClass;
+        document.getElementById('submitForm').submit();
+      })
+	  var t
+	  var showed = 0
+	  function repeatt() {
+		
+		var content = "{{flag}}"
+		
+		
+		if (content != "" && showed == 0) {
+			showed = 1;
+			$('#myModal1').modal('show');
+		} 
+		t = setTimeout("repeatt()", 1000)
+		window.onload = repeatt;
+	  }	  
+      
+    </script>
+
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" preserveAspectRatio="none" style="visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs></defs><text x="0" y="10" style="font-weight:bold;font-size:10pt;font-family:Arial, Helvetica, Open Sans, sans-serif;dominant-baseline:middle">200x200</text></svg></body><div></div></html>

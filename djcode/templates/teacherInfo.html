@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)http://v3.bootcss.com/examples/jumbotron-narrow/# -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>教务管理系统-->教师信息</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="http://v3.bootcss.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="./ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style type="text/css"></style></head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="javascirpt:closeWindow()">关闭</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">教师信息</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h1>{{teacherName}}</h1>
+        <p class="lead">{{teacherInfo}}</p>
+      </div>
+
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h3>联系电话</h3>
+          <p>{{phoneNum}}</p>
+
+          <h3>学院</h3>
+          <p>{{college}}</p>
+
+          <h3>职称</h3>
+          <p>{{title}}</p>
+        </div>
+
+        <div class="col-lg-6">
+          <h3>Email</h3>
+          <p>{{email}}</p>
+
+          <h3>学历</h3>
+          <p>{{academic}}</p>
+
+          <h3>学科方向</h3>
+          <p>{{researchContent}}</p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>© 选课组</p>
+      </footer>
+
+    </div> <!-- /container -->
+    <script>
+      function closeWindow() {
+        open(' ', '_self').close();
+      }
+    </script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+   
+  
+
+</body><div></div></html>
