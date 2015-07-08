@@ -34,18 +34,18 @@ def  add_done(class_ID,student_ID):
     flag=""
     #class_ID = request.POST.get('class_id_hidden')
     #student_ID = request.POST.get('add_id')
-    qset = (Q(Class__id = class_ID)&Q(student__id = student_ID))
+    qset = (Q(class_id__class_id = class_ID)&Q(student_id__id = student_ID))
     n = Class_table.objects.filter(qset).count()
     if n==0:
         add_info = Class_table()
-        Class = Class_info.objects.get(id=class_ID)
+        Class = Class_info.objects.get(class_id=class_ID)
         print(Class)
         student = Student_user.objects.get(id=student_ID)
         print(student)
         #add_info.id = '%d' %(random.randint(1, 100))
         add_info.id = class_ID+student_ID
-        add_info.Class = Class     #query Class_info by class_id
-        add_info.student = student     #query Student_user by student_id
+        add_info.class_id = Class     #query Class_info by class_id
+        add_info.student_id = student     #query Student_user by student_id
         add_info.status = 1
         print (add_info)
         flag = add_info.save()
@@ -72,7 +72,7 @@ def  delete_done(class_ID,students_ID_list):
     #delete_info = Class_table.objects.filter(class_id=class_ID,student_id=student_ID)
     print (len(students_ID_list))
     for i in range(0,len(students_ID_list)-1):
-        qset = (Q(Class__id=class_ID)&Q(student__id=students_ID_list[i]))
+        qset = (Q(class_id__class_id=class_ID)&Q(student_id__id=students_ID_list[i]))
         delete_info = Class_table.objects.get(qset)
         delete_info.delete()
     if i==len(students_ID_list)-1:
@@ -91,8 +91,8 @@ def select_students_list(class_ID):
     forcelogout(request)
     #print (class_ID)
     #print (Class_table.objects.all())
-    qset = (Q(Class__id = class_ID)&Q(status = 1))
-    choose_list = Class_table.objects.filter(qset).order_by('student__id') #Class_table和Student_user的交集
+    qset = (Q(class_id__class_id = class_ID)&Q(status = 1))
+    choose_list = Class_table.objects.filter(qset).order_by('student_id__id') #Class_table和Student_user的交集
     #print (choose_list)
     students_id_list = list()
     students_list = list()
@@ -102,8 +102,8 @@ def select_students_list(class_ID):
     for choose in choose_list:
         #print ("a")
         #print (choose_list[i].student.id)
-        students_id_list.append(choose.student.id)
-        students_list.append(Student_user.objects.get(id=choose.student.id))
+        students_id_list.append(choose.student_id.student_id)
+        students_list.append(Student_user.objects.get(id=choose.student_id.id))
     return (students_list,students_id_list)
 
 @login_required(login_url="/login/")
@@ -118,8 +118,8 @@ def sift(Time,classes_list,admin_college):
             #print("classes_list:")
             #print (classes_list)
             for Class in classes_list: #for every class
-                number = (Class_info.objects.get(id=Class.id)).capacity
-                qset = (Q(Class__id = Class.id)&Q(status = 0))
+                number = (Class_info.objects.get(class_id=Class.class_id)).capacity
+                qset = (Q(class_id__class_id = Class.class_id)&Q(status = 0))
                 choose_list = Class_table.objects.filter(qset)
                 if(len(choose_list)==0):  #if no students choose
                     break
@@ -141,15 +141,15 @@ def sift(Time,classes_list,admin_college):
                         print (choose_list)
                         for i in range(0,len(choose_list)):
                             print ("in for")
-                            if choose_list[i].student.college==admin_college: #the same college as admin plus 1
+                            if choose_list[i].student_id.college==admin_college: #the same college as admin plus 1
                                 score=2
-                                if choose_list[i].student.grade==4:        #the last year students plus 1
+                                if choose_list[i].student_id.grade==4:        #the last year students plus 1
                                     score = score+1
                                 else:
                                     score = score+0
                             else:
                                 score=0
-                                if choose_list[i].student.grade==4:        #the last year students plus 1
+                                if choose_list[i].student_id.grade==4:        #the last year students plus 1
                                     score = score+1
                                 else:
                                     score = score+0
@@ -195,33 +195,33 @@ def  admin_index(request):
     admin1 = Admin_users(id="1",contact="123",name="zch",college="123")
     admin1.save()
 
-    student1 = Student_user(id="1",contact="123456",name="XiaoMing",gender=0,college="123",major="jisuanji",grade=4,gpa=4.5,credits=99.5)
-    student1.save()
-    student2 = Student_user(id="2",contact="123456",name="XiaoHong",gender=1,college="123",major="jisuanji",grade=2,gpa=4.7,credits=100.5)
-    student2.save()
-    student3 = Student_user(id="3",contact="123456",name="XiaoLi",gender=1,college="1234",major="xindian",grade=4,gpa=4.8,credits=110.5)
-    student3.save()
+    #student1 = Student_user(id="1",contact="123456",name="XiaoMing",gender=0,college="123",major="jisuanji",grade=4,gpa=4.5,credits=99.5)
+    #student1.save()
+    #student2 = Student_user(id="2",contact="123456",name="XiaoHong",gender=1,college="123",major="jisuanji",grade=2,gpa=4.7,credits=100.5)
+    #student2.save()
+    #student3 = Student_user(id="3",contact="123456",name="XiaoLi",gender=1,college="1234",major="xindian",grade=4,gpa=4.8,credits=110.5)
+    #student3.save()
 
-    course1 = Course_info(id="1",name="DM",college="123",credits=2.0,semester=1,textbook= 'Data mining',style=1,introduce = "呵呵")
-    course1.save()
-    course2 = Course_info(id="2",name="SE",college="123",credits=2.0,semester=2,textbook= 'Software engineering',style=1)
-    course2.save()
-    course3 = Course_info(id="3",name="QiPa",college="123",credits=4.0,semester=1,textbook= 'QiPa',style=2)
-    course3.save()
+    #course1 = Course_info(id="1",name="DM",college="123",credits=2.0,semester=1,textbook= 'Data mining',style=1,introduce = "呵呵")
+    #course1.save()
+    #course2 = Course_info(id="2",name="SE",college="123",credits=2.0,semester=2,textbook= 'Software engineering',style=1)
+    #course2.save()
+    #course3 = Course_info(id="3",name="QiPa",college="123",credits=4.0,semester=1,textbook= 'QiPa',style=2)
+    #course3.save()
 
-    teacher1 = Faculty_users(id="1",contact="123456",name="CaiDeng",college="123",major="jisuanji",degree="doctor",title="professor")
-    teacher1.save()
-    teacher2 = Faculty_users(id="2",contact="123456",name="ChenYue",college="123",major="jisuanji",degree="doctor",title="professor")
-    teacher2.save()
+    #teacher1 = Faculty_users(id="1",contact="123456",name="CaiDeng",college="123",major="jisuanji",degree="doctor",title="professor")
+    #teacher1.save()
+    #teacher2 = Faculty_users(id="2",contact="123456",name="ChenYue",college="123",major="jisuanji",degree="doctor",title="professor")
+    #teacher2.save()
 
-    class1 = Class_info(id="1",course=course1,teacher=teacher1,time="3012",room="101",examdate="20150607",examtime="12:21",examroom="101",capacity=60,remain=60,semester=12,year="2014-2015",method="English")
-    class1.save()
-    class2 = Class_info(id="2",course=course1,teacher=teacher2,time="2013",room="102",examdate="20150607",examtime="12:21",examroom="102",capacity=60,remain=60,semester=12,year="2014-2015",method="English")
-    class2.save()
-    class3 = Class_info(id="3",course=course2,teacher=teacher2,time="4012|2012",room="103",examdate="20150608",examtime="16:21",examroom="103",capacity=30,remain=30,semester=34,year="2013-2014",method="English")
-    class3.save()
-    class4 = Class_info(id="4",course=course3,teacher=teacher2,time="4012",room="201",examdate="20151008",examtime="10:30",examroom="201",capacity=2,remain=2,semester=34,year="2013-2014",method="English")
-    class4.save()
+    #class1 = Class_info(id="1",course=course1,teacher=teacher1,time="3012",room="101",examdate="20150607",examtime="12:21",examroom="101",capacity=60,remain=60,semester=12,year="2014-2015",method="English")
+    #class1.save()
+    #class2 = Class_info(id="2",course=course1,teacher=teacher2,time="2013",room="102",examdate="20150607",examtime="12:21",examroom="102",capacity=60,remain=60,semester=12,year="2014-2015",method="English")
+    #class2.save()
+    #class3 = Class_info(id="3",course=course2,teacher=teacher2,time="4012|2012",room="103",examdate="20150608",examtime="16:21",examroom="103",capacity=30,remain=30,semester=34,year="2013-2014",method="English")
+    #class3.save()
+    #class4 = Class_info(id="4",course=course3,teacher=teacher2,time="4012",room="201",examdate="20151008",examtime="10:30",examroom="201",capacity=2,remain=2,semester=34,year="2013-2014",method="English")
+    #class4.save()
 
     #class_choose1 = Class_table(id="1",student=student1,Class=class1,status=0)
     #class_choose1.save()
@@ -235,15 +235,15 @@ def  admin_index(request):
     #class_choose5.save()
     #class_choose6 = Class_table(id="180",student=student3,Class=class3,status=0)
     #class_choose6.save()
-    class_choose1 = Class_table(id="14",student=student1,Class=class4,status=0)
-    class_choose1.save()
-    class_choose2 = Class_table(id="24",student=student2,Class=class4,status=0)
-    class_choose2.save()
-    class_choose3 = Class_table(id="34",student=student3,Class=class4,status=0)
-    class_choose3.save()
+    #class_choose1 = Class_table(id="14",student=student1,Class=class4,status=0)
+    #class_choose1.save()
+    #class_choose2 = Class_table(id="24",student=student2,Class=class4,status=0)
+    #class_choose2.save()
+    #class_choose3 = Class_table(id="34",student=student3,Class=class4,status=0)
+    #class_choose3.save()
 
-    college_demand1 =  college_demand(id="1",college="123",	majorCourse_demand =20 ,optionCourse_demand =20 ,generalCourse_demand = 20)
-    college_demand1.save()
+    #college_demand1 =  college_demand(id="1",college="123",	majorCourse_demand =20 ,optionCourse_demand =20 ,generalCourse_demand = 20)
+    #college_demand1.save()
 
     #buXuan_info1= buXuan_info(id="1",student =student1 ,Class =class1 ,reason ="大四狗")
     #buXuan_info1.save()
@@ -265,7 +265,7 @@ def  admin_index(request):
         return HttpResponse("permission denied!")
 
     print ("id:"+admin_id)
-    admin = Admin_users.objects.get(id=admin_id)#the currently loggedin user
+    admin = Admin_user.objects.get(id=admin_id)#the currently loggedin user
     a=False
     if a:
         #if admin.is_authenticated() == False:
@@ -276,13 +276,13 @@ def  admin_index(request):
     else:
         admin_college = admin.college
         #Course_info = Course_info.objects.filter(college=admin_college)
-        classes_list = Class_info.objects.filter(course__college=admin_college).order_by('-course__id')#本学院的所有课
+        classes_list = Class_info.objects.filter(course_id__college=admin_college).order_by('-course_id__course_id')#本学院的所有课
         #sorted(classes_list)
         #for every class in classes_list
         #class.remian=class.capacity-(Class_table.objects.filter(id=class.id).count())
         #print(classes_list)
         for Class in classes_list:
-            qset = (Q(Class__id = Class.id)&Q(status = 1))
+            qset = (Q(class_id__class_id = Class.class_id)&Q(status = 1))
             Class.remain = Class.capacity - (Class_table.objects.filter(qset).count())
         #print (classes_list)
         if request.method=='GET':
@@ -373,9 +373,9 @@ def buXuan(request):
     forcelogout(request)
     print ("buXuan")
     class_ID = request.GET.get('class_id')
-    Class=Class_info.objects.get(id=class_ID)
+    Class=Class_info.objects.get(class_id=class_ID)
     cid=class_ID
-    cname =Class.course.name
+    cname =Class.course_id.name
 
     print (class_ID)
     #class_ID = request.GET.get('class_id')

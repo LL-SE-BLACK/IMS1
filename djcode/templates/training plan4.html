@@ -90,7 +90,7 @@
 		</p>
 	</div>
 	<div  id="necessary"  class="row">
-	<div class="col-md-12" style="background-color: #dedef8;
+	<div class="col-md-12" style="background-color: #dedef8; 
          box-shadow: inset 1px -1px 1px #444, 
          inset -1px 1px 1px #444;"method="POST">
 	<table class="table table-hover">
@@ -110,7 +110,7 @@
 		{% for class in necessary %}  
         <tr>
 			<td><a href="http://127.0.0.1:8000/class_choose/?xh={{student.id}}&xkkh={{class.id}}">{{class.name}}</a></td>
-			<td><a href="http://127.0.0.1:8000/Class_info/?classId={{class.id}}">{{class.name}}</a></td>
+			<td><a href="http://127.0.0.1:8000/class_info/?classId={{class.id}}">{{class.name}}</a></td>
 			<td>{{class.id}}</td>
 			
 			<td>{{class.semester}}</td>
@@ -131,7 +131,7 @@
 	
 	
 	<div  id="alter"  class="row">
-	<div class="col-md-12" style="background-color: #dedef8;
+	<div class="col-md-12" style="background-color: #dedef8; 
          box-shadow: inset 1px -1px 1px #444, 
          inset -1px 1px 1px #444;">
 	<table class="table table-hover">
@@ -151,7 +151,7 @@
 		{% for class2 in alter %}  
         <tr>
 			<td><a href="http://127.0.0.1:8000/class_choose/?xh={{student.id}}&xkkh={{class2.id}}">{{class2.name}}</a></td>
-			<td><a href="http://127.0.0.1:8000/Class_info/?classId={{class2.id}}">{{class2.name}}</a></td>
+			<td><a href="http://127.0.0.1:8000/class_info/?classId={{class2.id}}">{{class2.name}}</a></td>
 			<td>{{class2.id}}</td>
 			<td>{{class2.semester}}</td>
 			<td>{{class2.credits}}</td>
@@ -168,7 +168,7 @@
 	</div>
 	
 	<div  id="common"  class="row">
-	<div class="col-md-12" style="background-color: #dedef8;
+	<div class="col-md-12" style="background-color: #dedef8; 
          box-shadow: inset 1px -1px 1px #444, 
          inset -1px 1px 1px #444;">
 	<table class="table table-hover">
@@ -188,7 +188,7 @@
 		{% for class3 in common %}  
         <tr>
 			<td><a href="http://127.0.0.1:8000/class_choose/?xh={{student.id}}&xkkh={{class3.id}}">{{class3.name}}</a></td>
-			<td><a href="http://127.0.0.1:8000/Class_info/?classId={{class3.id}}">{{class3.name}}</a></td>
+			<td><a href="http://127.0.0.1:8000/class_info/?classId={{class3.id}}">{{class3.name}}</a></td>
 			<td>{{class3.id}}</td>
 			<td>{{class3.semester}}</td>
 			<td>{{class3.credits}}</td>
@@ -203,7 +203,7 @@
 	</div>
 	
 	<div  id="complete"  class="row">
-	<div class="col-md-12" style="background-color: #dedef8;
+	<div class="col-md-12" style="background-color: #dedef8; 
          box-shadow: inset 1px -1px 1px #444, 
          inset -1px 1px 1px #444;">
 		 <p> 您当前的培养方案完成度</p>
@@ -312,6 +312,12 @@
 		for (var i = list2.length - 1; i >= 0; i--) {
           
 		  document.getElementById(list2[i]).checked =true; 
+        };
+
+        var list3 = {{List3|safe}}
+		for (var j = list3.length - 1; j >= 0; j--) {
+          
+		  document.getElementById(list3[j]).disabled =true; 
         };
 		}
 		
