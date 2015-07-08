@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ pagename }}</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+        <script src="/static/js/jquery-1.11.3.js"></script>
+        <script src="/static/js/uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="/static/css/components/progress.min.css">
+        
+        <link rel="stylesheet" href="/static/css/components/datepicker.min.css">
+        <script src="/static/js/components/datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/components/autocomplete.min.css">
+        <script src="/static/js/components/autocomplete.min.js"></script>
+		
+		<link rel="stylesheet" href="/static/css/components/sortable.min.css">
+		<script src="/static/js/components/sortable.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/components/dotnav.min.css">
+		
+	    <link rel="stylesheet" href="/static/css/components/form-advanced.min.css">
+		<!--script src="/static/js/components/form-advanced.min.js"></script-->
+		
+		<link rel="stylesheet" href="/static/css/components/accordion.min.css">
+		<script src="/static/js/components/accordion.min.js"></script>
+        <script src="/static/js/components/timepicker.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>    
+
+        <script src="/static/js/my.js"></script>
+
+
+    </head>
+        <body>
+    	<div class="tm-middle">
+            <div class="uk-container uk-container-center">
+
+                <div class="uk-grid" data-uk-grid-margin>
+                    <div class="tm-sidebar uk-width-medium-1-4 uk-hidden-small">
+
+                        <ul class="tm-nav uk-nav" data-uk-nav>
+
+                            <li>Information Part</li>
+                            <li><a href="/class_list/">class list</a></li>
+                            <li><a href="description-list.html">Description list</a></li>
+                            <li><a href="table.html">Table</a></li>
+                            <li><a href="form.html">Form</a></li>
+
+                            <li class="uk-nav-header">Function Part</li>
+
+                            <div class="uk-accordion" data-uk-accordion>
+
+                            <h3 class="uk-accordion-title">Question Bank</h3>
+                                <div class="uk-accordion-content">
+                            <li><a href="/teacher/ModifyQuestion/">Modify Question</a></li>
+                            <li><a href="/teacher/DeleteQuestion/">Delete Question</a></li>
+                            <li><a href="/teacher/AddQuestion/">AddQuestion</a></li>
+                            </div>
+
+                                <h3 class="uk-accordion-title">Paper Bank</h3>
+                                <div class="uk-accordion-content">
+                                    <li><a href="/teacher/AutoGenerate/">Auto Generate Paper</a></li>
+                                    <li><a href="/teacher/ManualGenerate/">Manually Generate Paper</a></li>
+                                    <li><a href="/teacher/PaperManagement/">Paper Management</a></li>
+                                </div>
+
+                                <h3 class="uk-accordion-title">Statical Function</h3>
+                                <div class="uk-accordion-content">
+                            <li><a href="/teacher/PaperAnalysis/">Paper Analyse</a></li>
+                            </div>
+
+                                </div>
+                        </ul>
+
+                    </div>
+
+
+    <div class="tm-main uk-width-medium-3-4">

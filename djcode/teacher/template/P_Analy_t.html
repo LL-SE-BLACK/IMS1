@@ -1,0 +1,43 @@
+{% include "base.html" %}
+
+{% if errors %}
+{% for error in errors %}
+<p>{{ error }} </p>
+{% endfor %}
+{% endif %}
+
+		<ul class="uk-sortable uk-grid uk-grid-small uk-grid-width-1-3" data-uk-sortable>
+              <li class="uk-active">
+				 <script>
+        			var str = [];
+        			dataset={{ S }};
+					str=[{% for myname in S_name %}
+        			'{{ myname }}',
+        			{% endfor %}];
+        			drawChart(dataset,str);
+        		</script>
+				<h3>Student</h3>
+			</li>
+			<li>
+				<script>
+        			dataset={{ Error }};
+        			str=[{% for myname in ErrorName %}
+        			'{{ myname }}',
+        			{% endfor %}];
+        			drawChart(dataset,str);
+        		</script>
+				<h3>Chapter</h3>
+			</li>
+			<li>
+				<script>
+					dataset={{ typeError }};
+          			str=[{% for myname in TypeName %}
+        			'{{ myname }}',
+        			{% endfor %}];
+        			drawChart(dataset,str);
+        		</script>
+				<h3>Type</h3>
+			</li>
+		</ul>
+</body>
+</html>

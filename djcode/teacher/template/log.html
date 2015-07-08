@@ -1,0 +1,10 @@
+<html>
+	<title>SQL injection test</title>
+	<body>
+		<form action="/show/" method="POST">{% csrf_token %}
+		QuestionId<input type="text" name="ques"></input><br>
+		QuestionN<input type="password" name="pwd"></input><br>
+		<input type="submit" value="Log in"></input>
+		</form>
+	</body>
+</html>

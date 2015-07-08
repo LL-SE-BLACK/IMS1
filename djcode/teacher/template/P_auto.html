@@ -1,0 +1,58 @@
+{% include 'base.html' %}
+   
+		{% if errors %}
+		<p>please correct your errors belows</p>
+		{% for error in errors %}
+		<p><font color='red'>{{ error }}</font></p>
+        {% endfor %}
+		{% endif %}
+		
+		
+		<form action='' class="uk-form" method = 'post' name='form'>{% csrf_token %}
+    			<table>
+    				<tr>
+    			   		<td>
+    			   		ChL<input type= 'text' size=5  name='ChL'>
+    			   		</td>
+    			   		<td>
+    			   		ChH<input type= 'text' size=5  name='ChH'>
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		SelectNum<input type= 'text' size=5  name='SelectNum'>
+    			   		</td>
+    			   		<td>
+    			   		CheckNum<input type= 'text' size=5  name='CheckNum'>
+    			   		</td>
+						<td>
+    			   		Difficulty<input type= 'text' size=5  name='Difficulty'>
+    			   		</td>	
+    			   	</tr>
+    				<tr>
+    			   		<td>
+    					PaperName<input type= 'text' size=20 name='PaperName'>
+    			   		</td> 
+					</tr>
+                    <tr>             
+                        <td>
+                        StartTime<input type="" data-uk-datepicker="{format:'YYYY.MM.DD'}" name='StartTime'>
+                        <input type="" id="form-time" data-uk-timepicker name='mytime2'>
+                        </td>
+                    </tr>      
+					<tr>   			 
+    			   		<td>
+    					DeadLine<input type="" data-uk-datepicker="{format:'YYYY.MM.DD'}" name='DeadLine'>
+                        <input type="" id="form-time" data-uk-timepicker name='mytime'>
+    			   		</td>
+    			   	</tr>       			
+    			   	<tr>
+    			   		<td>    			   		
+    						<input type="submit" value="Generate">
+    			   		</td
+    			   		>
+    			   	</tr>
+    			</table>	
+    	</form>	
+	</body>
+</html>

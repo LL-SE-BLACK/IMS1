@@ -1,0 +1,15 @@
+{% include base.html %}
+    <body>
+        <!--负责前段的童鞋，这里是否可以重用基本布局-->
+        <!--以下代码只编写了学生试题部分-->
+        {% for paper in PaperList %}
+        <!---可点击打开的布局哦-->
+        <>{{ paper.name }}<>
+        <!--下面是打开后显示的内容-->
+        <>{{ paper.MaxScore }}<>
+        <>{{ paper.SubmitTime }}<>
+        <!--提交按钮要是能漂亮点就好-->
+        <form action="../OnlineTest/" method="post"><input type="submit" Value = "开始测试"></form>>
+        {% endfor %}
+    </body>
+</html>

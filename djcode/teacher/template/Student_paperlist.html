@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="css\uikit.min.css" />
+        <script src="js\jquery-1.11.3.js"></script>
+        <script src="js\uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="css\components\progress.min.css">
+        
+        <link rel="stylesheet" href="css\components\datepicker.min.css">
+        <script src="js\components\datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="css\components\autocomplete.min.css">
+        <script src="js\components\autocomplete.min.js"></script>
+		
+		<link rel="stylesheet" href="css\components\sortable.min.css">
+		<script src="js\components\sortable.min.js"></script>
+		<meta name="keywords" content="" />
+		
+		<link rel="stylesheet" href="css/components/accordion.min.css"/>
+		<script type="text/javascript" src="js/components/accordion.min.js"></script>
+
+
+    </head>
+
+    <body background="images/banner.png">
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button"><a href="Choose_Class.html">My Class</a></button>
+
+		</div>	
+        <br>
+        <br>
+		<div class="uk-accordion" data-uk-accordion>
+		<li class="uk-accordion-title">
+		{% for paper in PaperList %}
+		<h3 class="uk-accordion-title"> {{ paper.PaperName }}</h3>
+		 <div class="uk-accordion-content">
+	   
+		 <input type="button" onClick="window.location.href='{{ PaperList.Url }}'" value="Attempt Homework"/>
+		 <p>
+		 {{ paper.PaperName }}</p>
+		  <p>
+		 {{ paper.PaperID }}</p>
+		 <p>
+		 {{ paper.Deadline }}</p>
+		  <p>
+		 {{ paper.Creator }}</p>
+		{% endfor %}
+		
+		</li>
+		</div>
+       
+</body>
+</html>
+

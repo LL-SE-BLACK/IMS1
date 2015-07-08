@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <title>{{ pagename }}</title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+        <script src="/static/js/jquery-1.11.3.js"></script>
+        <script src="/static/js/uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="/static/css/components/progress.min.css">
+        
+        <link rel="stylesheet" href="/static/css/components/datepicker.min.css">
+        <script src="/static/js/components/datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/components/autocomplete.min.css">
+        <script src="/static/js/components/autocomplete.min.js"></script>
+		
+		<link rel="stylesheet" href="/static/css/components/sortable.min.css">
+		<script src="/static/js/components/sortable.min.js"></script>
+		
+	    <link rel="stylesheet" href="/static/css/components/form-advanced.min.css">
+		<script src="/static/js/components/form-advanced.min.js"></script>
+
+		<link rel="stylesheet" href="/static/css/components/sticky.min.css">
+		<script src="/static/js/components/sticky.min.js"></script>
+		
+		<link rel="stylesheet" href="/static/css/components/accordion.min.css">
+		<script src="/static/js/components/accordion.min.js"></script>
+        <script src="/static/js/components/timepicker.js"></script>		
+		<link href="/static/css/style.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.countdown.js"></script> 
+		<script type="text/javascript" src="/static/js/my.js"></script>
+		<script type="text/javascript">
+		$(function(){
+		$(".digits").countdown({
+		image: "/static/images/digits.png",
+		format: "hh:mm:ss",
+		startTime: "00:10:00"
+		});
+		});
+		</script>
+			
+		<script type="text/javascript">
+		var time = 600; //seconds to count down
+		function Redirect() {
+		 document.formtest.submit();
+		}
+		var i = 0;
+		function dis() {
+		var min=parseInt((time-i)/60);
+		var sec=(time-i-60*min);
+		document.all.s.innerHTML = min+ "min"+ sec+"s"+" remains";
+		i++;
+		}
+		timer = setInterval('dis()', 1000); //显示时间
+		timer = setTimeout('Redirect()', time * 1000); //跳转
+		</script>
+	
+		<script>
+		function confirmToSubmit(){
+
+		if(confirm("Are you sure to submit?"){
+			return true;
+		}
+		else{
+			return false;
+		}
+
+		}
+		</script>
+	</head>
+        <body>
+			
+	    {% if errors %}
+		<p>please correct your errors belows</p>
+		{% for error in errors %}
+		<p>{{ error }}</p>
+		{% endfor %}
+		{% endif %}
+		<h3 align="center"> {{ Paper.PaperName }}  </h3>
+		
+<div class="uk-panel uk-panel-box" data-uk-sticky="{boundry:'#define-an-offset'}">		
+<div id="holder">
+	<div class="digits"></div>
+</div>
+</div>
+		<form name="formtest" id="formtest" action={{ URL }} method="post" onsubmit="return confirm('Time is not over, submit now?');">		{% csrf_token %}
+		{% for Question in QuestionList %}
+		
+			<table>
+				<tr align="center">
+					<td>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;
+					</td>
+					<td>
+					<font size="5" face="Verdana">{{ forloop.counter }}. {{ Question.Stem }}</font>
+					</td>
+				</tr>
+			{% ifequal Question.Type 3 %}
+				<tr>
+					<td>
+						<input type="checkbox" name="{{ Question.QuestionId }}" value="A" > A.
+					</td>
+					<td>
+						{{ Question.OptionA }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" name="{{ Question.QuestionId }}" value="B" > B.
+					</td>
+					<td>
+						{{ Question.OptionB }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" name="{{ Question.QuestionId }}" value="C" > C.
+					</td>
+					<td>
+						{{ Question.OptionC }}
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" name="{{ Question.QuestionId }}" value="D" > D.
+					</td>
+					<td>
+						{{ Question.OptionD }}
+					</td>
+				</tr>
+			{% endifequal %}
+			
+			{% ifequal Question.Type 1 %}
+				<tr>
+                    <td>
+					    <input type="radio" name="{{ Question.QuestionId }}" value="T" > T
+                    </td>
+				</tr>
+				<tr>
+                    <td>
+					    <input type="radio" name="{{ Question.QuestionId }}" value="F" > F
+				    </td>
+                </tr>
+			{% endifequal %}
+			
+			{% ifequal Question.Type 2 %}
+				<tr>
+					<td>
+						<input type="radio" name="{{ Question.QuestionId }}" value="A" > A.
+					</td>
+					<td>
+						{{ Question.OptionA }}			
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="radio" name="{{ Question.QuestionId }}" value="B" > B.
+					</td>
+					<td>
+						{{ Question.OptionB }}			
+					</td>
+				</tr>	
+				<tr>
+					<td>
+						<input type="radio" name="{{ Question.QuestionId }}" value="C" > C.		
+					</td>
+					<td>
+						{{ Question.OptionC }}			
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="radio" name="{{ Question.QuestionId }}" value="D" > D
+					</td>
+					<td>
+						{{ Question.OptionD }}
+					</td>	
+				</tr>
+			
+			{% endifequal %}
+			</table>	
+		<br/>
+		
+	  		  {% endfor %}
+
+ 			<input type="submit" value="Submit" />
+		</form>
+</body>
+</html>

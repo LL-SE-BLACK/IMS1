@@ -1,0 +1,54 @@
+{%  include 'base_stu.html' %}
+		
+			
+	    {% if errors %}
+		<p>please correct your errors belows</p>
+		{% for error in errors %}
+		<p>{{ error }}</p>
+		{% endfor %}
+		{% endif %}
+
+
+		{% if PaperList %}
+
+		
+		
+        <div class="uk-accordion" data-uk-accordion>
+		{% for paper in PaperList %}
+
+		<h3 class="uk-accordion-title"> {{ paper.PaperName }}</h3>
+		<div class="uk-accordion-content">
+	
+		<table>
+			<tr>
+			<td>
+			ValidScore:  &nbsp;&nbsp;&nbsp;{{ paper.ValidScore }} / {{ paper.Full }}
+			</td>
+			</tr>
+			
+			<tr>
+			<td>
+			DeadLine:  &nbsp;&nbsp;&nbsp;{{ paper.DeadLine }}
+			</td>
+			</tr>
+			<tr>
+			<td>
+			SubmitTime:  &nbsp;&nbsp;&nbsp;{{ paper.SubmitTime }}
+			</td>
+			</tr>
+		</table>
+		<form action="{{ paper.URL }}" method="post">{% csrf_token %}
+			<input type="submit" value="Enter"/>
+		</form>
+        </div>	
+	    {% endfor %}
+		</div>
+		
+
+		
+
+		{% else %}
+		<p>You don't have any paper. Sorry that happened.</p>
+		{% endif %}
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% base.html %}
+    <body>
+        <ul data-uk-switcher="{connect:'#card-id',animation: 'uk-animation-fade, uk-animation-slide-left'}">
+            <li class="uk-actve"><a href="#">≈–∂œÃ‚</a></li>
+            <li><a href="#">—°‘ÒÃ‚</a></li>
+        </ul>
+        <ul id="card-id" class="uk-switcher">
+            <li class="uk-active">
+                {% if form1.errors %}
+                    <p style="color: red;">
+                        please correct the error {{ form1.errors|pluralize }} below
+                    </p>
+                {% endif %}
+                <form action="" method="POST">
+                    <table>
+                        {{ form1.as_table }}
+                    </table>
+                    <input type="submit" VALUE="Submit">
+                </form>
+            </li>
+            <li>
+                {% if form2.errors %}
+                    <p style="color: red;">
+                        please correct the error {{ form2.errors|pluralize }} below
+                    </p>
+                {% endif %}
+                <form action="" method="POST">
+                    <table>
+                        {{ form2.as_table }}
+                    </table>
+                    <input type="submit" VALUE="Submit">
+                </form>
+            </li>
+        </ul>
+     </body>
+</html>

@@ -1,0 +1,143 @@
+{%  include 'base.html' %}
+{%  include 'Q_search.html' %}
+
+
+		{% if QuestionList %}
+		
+		
+        <div class="uk-accordion" data-uk-accordion>
+        {% for question in QuestionList %}    
+		<h3 class="uk-accordion-title"> {{ question.Stem }}</h3>
+		<div class="uk-accordion-content">
+		{% ifequal question.Type 1  %}
+			<form method="post" action="/delete/{{ question.QuestionId }}/">{% csrf_token %}
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+
+    				<tr>   			 
+    			   		<td>
+    					Difficulty:  &nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr> 
+                    <tr>             
+                        <td>
+                        Score:  &nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr>            			
+    			</table>
+				<input type="submit" value="Delete"/>
+			</form>
+		{% endifequal %}
+		{% ifequal question.Type 2  %}
+			<form method="post" action="/delete/{{ question.QuestionId }}/">{% csrf_token %}
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>
+    			   		A: &nbsp;&nbsp;&nbsp;{{ question.OptionA }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		B: &nbsp;&nbsp;&nbsp;{{ question.OptionB }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		C: &nbsp;&nbsp;&nbsp;{{ question.OptionC }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		D: &nbsp;&nbsp;&nbsp;{{ question.OptionD }}
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty&nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr>
+                    <tr>             
+                        <td>
+                        Score&nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr>             			
+    			</table>
+			<input type="submit" value="Delete"/>
+			</form>
+		{% endifequal %}
+		{% ifequal question.Type 3  %}
+		    	<form method="post" action="/delete/{{ question.QuestionId }}/">{% csrf_token %}
+		    	 <table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>
+    			   		A: &nbsp;&nbsp;&nbsp;{{ question.OptionA }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		B: &nbsp;&nbsp;&nbsp;{{ question.OptionB }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		C: &nbsp;&nbsp;&nbsp;{{ question.OptionC }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		D: &nbsp;&nbsp;&nbsp;{{ question.OptionD }}
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty&nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr>
+                    <tr>             
+                        <td>
+                        Score&nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr>             			
+    			</table>
+			     <input type="submit" value="Delete"/>
+			    </form>	
+		{% endifequal %}
+        </div>
+
+        {% endfor %}
+		</div>	
+
+      
+		{% endif %}
+
+</body>
+</html>

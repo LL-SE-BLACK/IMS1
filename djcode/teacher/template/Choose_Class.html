@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="/static/css/uikit.min.css" />
+        <script src="/static/js/jquery-1.11.3.js"></script>
+        <script src="/static/js/uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="/static/css\components\progress.min.css">
+        
+        <link rel="stylesheet" href="/static/css/components/datepicker.min.css">
+        <script src="/static/js/components/datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/components/autocomplete.min.css">
+        <script src="/static/js/components/autocomplete.min.js"></script>
+		
+		<link rel="stylesheet" href="/static/css/components/sortable.min.css">
+		<script src="/static/js/components/sortable.min.js"></script>
+		
+	    <link rel="stylesheet" href="/static/css/components/form-advanced.min.css">
+		<script src="/static/js/components/form-advanced.min.js"></script>
+    </head>
+
+    <body>
+		
+		{% for class in ClassList %}
+		<div class="uk-grid" data-uk-grid-margin>
+			<div class="uk-width-medium-1-2 uk-width-large-1-3">
+				<div class="uk-panel uk-panel-box uk-text-left">
+				<p> {{ class.Name }}</p>
+                <form action="{{ class.URL }}"  method="post">{% csrf_token %}
+				    <input type="submit"  value="Enter" />
+				</form>
+                </div>
+			</div>
+		</div>
+		{% endfor %}
+    
+</body>
+</html>
+

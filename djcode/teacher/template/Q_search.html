@@ -1,0 +1,40 @@
+<li>
+<form action='' method = 'post'>{% csrf_token %}
+<table>
+<tr>
+
+<td>
+Startch<input type= 'text' size=5  name='ChapterL'>
+</td>	
+<td>
+Stopch<input type= 'text' size=5  name='ChapterU'>
+</td>    		
+<td>    			   		
+DifL<input type='text' size=5 name='DifL'>
+</td>
+<td>
+DifU<input type='text'  size=5 name='DifU'>
+</td>
+<td>
+Key<input type='text' size=5  name='Keyword'>
+
+</td>    			     			 
+<td>
+Type
+</td>
+<td>
+<select name="Type">
+<option value ='0' >----</option>
+<option value ='2'>Single</option>
+<option value ='3'>Multi</option>
+<option value ='1'>Judge</option>
+</select> 			 
+</td>
+<td>    			   		
+<input type="submit" value="Search">
+</td>
+
+</table>
+
+</form>
+</li>

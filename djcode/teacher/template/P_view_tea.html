@@ -1,0 +1,190 @@
+{% include 'base.html' %}
+	<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Paper<i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="/class_list">Manual</a></li>
+					<li><a href="/class_list">Auto</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Question <i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="Q_add.html">Add</a></li>
+					<li><a href="Q_del_mod.html">Del/Modi</a></li>
+				</ul>
+			</div>
+		</div>	
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button"><a href="Analy.html">Analysis </a></button>
+		</div>	   
+		{% if errors %}
+		<p>please correct your errors belows</p>
+		{% for error in errors %}
+		<p>{{ error }}</p>
+		{% endfor %}
+		{% endif %}
+		
+		
+		<h3 align="center"> {{ Paper.PaperName }}</h3>		
+	
+		<form method="post" action="/paper/{{ Paper.PaperId }}/">{% csrf_token %}
+        <div class="uk-accordion" data-uk-accordion>
+		
+		{% if QuestionList %}
+		{% for question in QuestionList %}
+		<h3 class="uk-accordion-title"> {{ question.Stem }}</h3>
+		<div class="uk-accordion-content">
+		{% ifequal question.Type 1  %}
+
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+
+    				<tr>   			 
+    			   		<td>
+    					Difficulty:  &nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr> 
+                    <tr>             
+                        <td>
+                        Score:  &nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr> 
+					<tr>
+						<td>
+						<input type="checkbox" name="list" value={{ forloop.counter0 }} /><br>
+						</td>
+					</tr>           			
+    			</table>
+
+		{% endifequal %}
+		{% ifequal question.Type 2  %}
+
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>
+    			   		A: &nbsp;&nbsp;&nbsp;{{ question.OptionA }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		B: &nbsp;&nbsp;&nbsp;{{ question.OptionB }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		C: &nbsp;&nbsp;&nbsp;{{ question.OptionC }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		D: &nbsp;&nbsp;&nbsp;{{ question.OptionD }}
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty&nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr>
+                    <tr>             
+                        <td>
+                        Score&nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr>
+					<tr>
+						<td>
+						<input type="checkbox" name="list" value={{ forloop.counter0 }} /><br>
+						</td>
+					</tr>           	             			
+    			</table>
+
+		{% endifequal %}
+		{% ifequal question.Type 3  %}
+
+		    	 <table>
+    				<tr>
+    			   		<td>
+    			   		Stem:  &nbsp;&nbsp;&nbsp;{{ question.Stem }}
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>
+    			   		A: &nbsp;&nbsp;&nbsp;{{ question.OptionA }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		B: &nbsp;&nbsp;&nbsp;{{ question.OptionB }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		C: &nbsp;&nbsp;&nbsp;{{ question.OptionC }}
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		D: &nbsp;&nbsp;&nbsp;{{ question.OptionD }}
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td> 	
+    			   		Answer:  &nbsp;&nbsp;&nbsp;{{ question.Answer }}
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty&nbsp;&nbsp;&nbsp;{{ question.Difficulty }}
+    			   		</td>
+    			   	</tr>
+                    <tr>             
+                        <td>
+                        Score&nbsp;&nbsp;&nbsp;{{ question.Score }}
+                        </td>
+                    </tr>
+					<tr>
+						<td>
+						<input type="checkbox" name="list" value={{ forloop.counter0 }} /><br>
+						</td>
+					</tr>           	             			
+    			</table>
+
+		{% endifequal %}
+        </div>
+		
+		  {% endfor %}
+        {% else %}
+        <p>狗后端没数据<p>
+        {% endif %}
+		</div>	
+
+       	
+			<input type="submit" value="Confirm"/><br>
+		</form>
+		
+		 <form method="post" action="/Cancel/{{ Paper.PaperId }}/" >{% csrf_token %}
+			<input type="submit" value="Cancel"/><br>
+		</form>
+	</body>
+</html>

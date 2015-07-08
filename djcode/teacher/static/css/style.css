@@ -1,0 +1,7 @@
+@charset "utf-8";
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+body{}
+
+#holder{margin:10px auto 0 auto;width:485px;height:30px;}
+.cntSeparator{display:block;color:#fff;font-size:32px;font-weight:400;text-align:center;width:40px;}

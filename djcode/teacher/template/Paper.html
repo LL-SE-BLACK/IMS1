@@ -1,0 +1,28 @@
+
+
+{{% include base.html %}}
+<html>
+<body>
+    <!--下面一行是一个表示整张试卷分布的图表，需要布局-->
+        {% bar_chart paper_distribute %}
+        {% for  question in QuestionList %}
+        <!--负责模板的同学注意，这里需要实现成点击出现框的样式，题干是内容-->
+        <>{{ question.Stem }}<>
+        <!--这里是下拉的内容-->
+        <>{{ question.OptionA }}<>
+        <>{{ question.OptionB }}<>
+        {% if question.OptionC %}
+        <>{{ question.OptionC }}<>
+        <>{{ question.OptionD }}<>
+        {% endif %}
+        <!--这里是这一题的统计信息-->
+        {% if not view %}
+        <!---试卷分析提供这道题的统计-->
+        {% bar_chart  questionAna %}
+        {% else %}
+        <!--查看试卷提供的是修改按钮-->
+        <!--然而并没有想好表单怎么写，放一个坑在这-->
+        {% endif %}
+        {% endfor %}
+    </body>
+</html>

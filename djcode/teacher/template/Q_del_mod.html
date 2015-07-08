@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="css\uikit.min.css" />
+        <script src="js\jquery-1.11.3.js"></script>
+        <script src="js\uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="css\components\progress.min.css">
+        
+        <link rel="stylesheet" href="css\components\datepicker.min.css">
+        <script src="js\components\datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="css\components\autocomplete.min.css">
+        <script src="js\components\autocomplete.min.js"></script>
+    
+    <link rel="stylesheet" href="css\components\sortable.min.css">
+    <script src="js\components\sortable.min.js"></script>
+    </head>
+
+    <body>
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Paper<i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="P_manual.html">Manual</a></li>
+					<li><a href="P_auto.html">Auto</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Question <i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="Q_add.html">Add</a></li>
+					<li><a href="Q_del_mod.html">Del/Modi</a></li>
+				</ul>
+			</div>
+		</div>	
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button"><a href="Analy.html">Analysis </a></button>
+
+		</div>		
+
+        <br>
+         <form action="" method="post">
+        <p>ch_up<span class="uk-autocomplete uk-form">
+          <input name="text" type="number" id="ch_up">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           ch_lo</span><span class="uk-autocomplete uk-form">
+           <input name="text2" type="number" id="ch_lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           key </span><span class="uk-autocomplete uk-form">
+           <input name="text3" type="text" id="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            dif_up </span><span class="uk-autocomplete uk-form">
+           <input name="text4" type="number" id="dif_up">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            dif_lo </span><span class="uk-autocomplete uk-form">
+           <input name="text5" type="number" id="dif_lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+            <input type="submit" VALUE="Search">
+	     </form>
+		 
+		 <form action="" method="post">
+		 {% for  question in QuestionList %}
+		<div class="uk-grid" data-uk-grid-margin>
+			<div class="uk-width-medium-1-2 uk-width-large-1-3">
+				<div class="uk-panel uk-panel-box uk-text-left">
+				<p>{{ question.Stem }}</p>
+				{% if question.OptionC %}
+				<p>{{ question.OptionA }}</p>
+				<p>{{ question.OptionB }}</p>
+				<p>{{ question.OptionC }}</p>
+        		<p>{{ question.OptionD }}</p>
+        		{% endif %}
+				<p>{{ question.Difficulty }}</p>
+				<p>{{ question.Score }}</p>
+				 </div>
+			</div>
+		</div>
+		<input type="checkbox" id={{ question.Id }} name={{ question.Id }}>
+		<input type="button" onClick="window.location.href='{{ question.Url }}';" value="Modify" /> 
+		{% endfor %}
+ 		
+          
+	  <br>            
+	  <input type="submit" VALUE="Delete">
+	  </p>  
+	  </form>
+       
+    
+</body>
+</html>
+

@@ -1,0 +1,185 @@
+{%  include 'base.html' %}
+		{% include 'Q_search.html' %}
+		
+		{% if QuestionList %}
+		
+		
+        <div class="uk-accordion" data-uk-accordion>
+        {% for question in QuestionList %}
+		<h3 class="uk-accordion-title"> {{ question.Stem }}</h3>
+		<div class="uk-accordion-content">
+		{% ifequal question.Type 1  %}
+			<form method="post" action="/modify/{{ question.QuestionId }}/">{% csrf_token %}
+                {{ question.OptionA }}
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem
+                        </td>
+                        <td>
+                        <input type= 'textarea'  name='Stem' value={{ question.Stem }}>
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td> 	
+    			   		<input type='radio' name='Option' value='T'>T 
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		<input type='radio' name='Option' value='F'>F
+    			   		</td>    			 
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty
+                        </td>
+                        <td>
+                        <input type="textarea" name="Difficulty" value={{ question.Difficulty }}>
+    			   		</td>
+    			   	</tr> 
+                    <tr>             
+                        <td>
+                        Score
+                        </td>
+                        <td>
+                        <input type="textarea" name="Score" value={{ question.Score }}>
+                        </td>
+                    </tr>            			
+    			</table>
+				<input type="submit" value="Modify"/>
+			</form>
+		{% endifequal %}
+		{% ifequal question.Type 2 %}
+			<form method="post" action="/modify/{{ question.QuestionId }}/">{% csrf_token %}
+		    	<table>
+    				<tr>
+    			   		<td>
+    			   		Stem
+                    </td>
+                    <td>
+                    <input type= 'textarea'  name='Stem' value={{ question.Stem }}>
+    			   	</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>    			   		
+    			   		<input type='radio' name='Option' value='A'>A 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionA' value={{ question.OptionA }}>
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>    			   		
+    			   		<input type='radio' name='Option' value='B'>B 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionB' value={{ question.OptionB }}>
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td>    			   		
+    			   		<input type='radio' name='Option' value='C'>C 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionC' value={{ question.OptionC }}>
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td>    			   		
+    			   		<input type='radio' name='Option' value='D'>D 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionD' value={{ question.OptionD }}>
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty
+                    </td>
+                    <td>
+                        <input type="textarea" name="Difficulty" value={{ question.Difficulty }}>
+    			   		</td>
+    			   	</tr>
+                    <tr>             
+                        <td>
+                        Score
+                    </td>
+                    <td>
+                        <input type="textarea" name="Score" value={{ question.Score }}>
+                        </td>
+                    </tr>             			
+    			</table>
+			<input type="submit" value="Modify"/>
+			</form>
+		{% endifequal %}
+		{% ifequal question.Type 3  %}
+		    	<form method="post" action="/modify/{{ question.QuestionId }}/">{% csrf_token %}
+		    	 <table>
+    				<tr>
+    			   		<td>
+    			   		Stem
+                        </td>
+                        <td>
+                            <input type= 'textarea'  name='Stem' value={{ question.Stem }}>
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>    			   		
+    			   		<input type='checkbox' name='Option' value='A'>A 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionA' value={{ question.OptionA }}>
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>    			   		
+    			   		<input type='checkbox' name='Option' value='B'>B 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionB' value={{ question.OptionB }}>
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td>    			   		
+    			   		<input type='checkbox' name='Option' value='C'>C 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionC' value={{ question.OptionC }}>
+    			   		</td>
+    			   	</tr>
+					<tr>
+    			   		<td>    			   		
+    			   		<input type='checkbox' name='Option' value='D'>D 
+    			   		</td>
+    			   		<td>
+    			   			<input type='textarea' name='OptionD' value={{ question.OptionD }}>
+    			   		</td>
+    			   	</tr>
+    				<tr>   			 
+    			   		<td>
+    					Difficulty<input type="textarea" name="Difficulty" value={{ question.Difficulty }}>
+    			   		</td>
+    			   	</tr> 
+                    <tr>             
+                        <td>
+                        Score
+                    </td>
+                    <td><input type="textarea" name="Score" value={{ question.Score }}>
+                        </td>
+                    </tr>            			
+    			 </table>
+			     <input type="submit" value="Modify"/>
+			    </form>	
+		{% endifequal %}
+        </div>
+        {% endfor %}
+        
+
+		</div>	
+
+        
+		{% endif %}
+
+</body>
+</html>

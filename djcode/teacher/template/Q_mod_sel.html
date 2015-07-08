@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="css\uikit.min.css" />
+        <script src="js\jquery-1.11.3.js"></script>
+        <script src="js\uikit.min.js"></script>
+        
+        <link rel="stylesheet" href="css\components\progress.min.css">
+        
+        <link rel="stylesheet" href="css\components\datepicker.min.css">
+        <script src="js\components\datepicker.min.js"></script>
+
+        <link rel="stylesheet" href="css\components\autocomplete.min.css">
+        <script src="js\components\autocomplete.min.js"></script>
+		
+		<link rel="stylesheet" href="css\components\sortable.min.css">
+		<script src="js\components\sortable.min.js"></script>
+		
+	    <link rel="stylesheet" href="css\components\form-advanced.min.css">
+		<script src="js\components\form-advanced.min.js"></script>
+    </head>
+
+    <body>
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Paper<i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="P_manual.html">Manual</a></li>
+					<li><a href="P_auto.html">Auto</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button">Question <i class="uk-icon-caret-down"></i></button>
+			<div class="uk-dropdown">
+				<ul class="uk-nav uk-nav-dropdown">
+					<li><a href="Q_add.html">Add</a></li>
+					<li><a href="Q_del_mod.html">Del/Modi</a></li>
+				</ul>
+			</div>
+		</div>	
+		<div class="uk-button-dropdown" data-uk-dropdown="{mode:'click'}">
+			<button class="uk-button"><a href="Analy.html">Analysis </a></button>
+
+		</div>	
+    	
+		<ul class="uk-tab uk-tab-grid uk-tab-bottom" data-uk-tab>
+			
+							<div class="uk-width-medium-3-4">
+								<div class="uk-grid uk-grid-width-medium-1-2" data-uk-margin>
+
+									<div>
+										<ul id="switch-multiple-1" class="uk-switcher">
+											<li class="uk-active">
+											    {% if form2.errors %}
+                    								<p style="color: red;">
+                        								please correct the error {{ form2.errors|pluralize }} below
+                   									</p>
+                								{% endif %}
+												<form class="uk-form" action="" method="POST">
+												 <p align="center">Stem of select<span class="uk-autocomplete uk-form">
+													<textarea id={{ form2.Stem }} style="width:500px;height:300px;">{{ question.Stem }}</textarea>
+       											 </span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">A
+												<input type="text" name="text2" value={{ question.OptionA }}  id={{ form2.OptionA }} />
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">B
+												<input type="text" name="text2" value={{ question.OptionB }}  id={{ form2.OptionA }} />
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">C
+												<input type="text" name="text2" value={{ question.OptionC }} id={{ form2.OptionC }} />
+												</span>        </p>
+												<p align="center"><span class="uk-autocomplete uk-form">D
+												<input type="text" name="text2" value={{ question.OptionD }} id={{ form2.OptionD }} />
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">Answer:
+                                    				<input type="checkbox"> <label>A</label>
+                                    				<label><input type="checkbox"> B</label>
+                                    				<label><input type="checkbox"> C</label>
+													<label><input type="checkbox"> D</label>
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">Course
+													<input name="text52222" type="text" value={{ question.Course }} id={{ form2.Course }}>
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">Chapter
+													<input name="text5222" type="text" value={{ question.Chapter }} id={{ form2.Chapter }}>
+												</span></p>
+												<p align="center"><span class="uk-autocomplete uk-form">Difficulty
+													<input name="text52223" type="text" value={{ question.Difficulty }} id={{ form2.Difficulty }}>
+												</span></p>
+												<input type="submit" VALUE="Submit">
+												</form>	 
+											</li>
+	
+											
+											
+										</ul>
+									</div>
+
+									
+								</div>
+							</div>  			
+		</ul>
+
+
+
+	   
+    
+</body>
+</html>
+

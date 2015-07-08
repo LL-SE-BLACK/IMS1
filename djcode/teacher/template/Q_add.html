@@ -1,0 +1,154 @@
+{%  include 'base.html' %}
+		
+		{% if errors %}
+		<p>please correct your errors belows</p>
+		{for error in errors %}
+		<p>error</p>
+		{% endif %}
+		<!-- This is the tabbed navigation containing the toggling elements -->
+		<ul class="uk-tab" data-uk-tab="{connect:'#my-id'}">
+    	<li><a href="#">Select</a></li>
+    	<li><a href="#">Judge</a></li>
+		</ul>
+
+		<!-- This is the container of the content items -->
+		<ul id="my-id" class="uk-switcher uk-margin">
+    		<li>
+    			<form action='/addform1/' method = 'post' name='form1'>{% csrf_token %}
+    			<table>
+    				<tr>
+    			   		<td>
+    			   		<span class="uk-text-bold"> 题干</span>
+    			   		</td>
+    			   		<td>
+    			   			<input type= 'textarea' style name='Stem'><br>
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>    			   		
+    			   		A <input type='checkbox' name='SOptionc' value='A'>
+    			   		</td>
+    			   		<td>
+    			   			<input type='text' name='SOptionA'>
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		B <input type='checkbox' name='SOptionc' value='B'>
+    			   		
+    			   		</td>    			 
+    			   		<td>
+    			   			<input type='text' name='SOptionB'>
+       			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>
+    			   		C <input type='checkbox' name='SOptionc' value='C'>
+    			   		</td>    			 
+    			   		<td>
+    			   			<input type='text' name='SOptionC'>
+    			   		</td>
+    			   	</tr>
+    				<tr>
+    			   		<td>
+    			   		D <input type='checkbox' name='SOptionc' value='D'>
+    			   		</td>    			 
+    			   		<td>
+    			   			<input type='text' name='SOptionD'>
+    			   		</td>
+    			   	</tr>
+                    <tr>
+                        <td>
+                            Chapter
+                        </td>                
+                        <td>
+                            <input type="text" name='Chapter'>
+                        </td>
+                    </tr>
+    				<tr>
+    			   		<td>
+    						Difficulty
+    			   		</td>    			 
+    			   		<td>
+    						<input type="text" name='Difficulty'>
+    			   		</td>
+    			   	</tr>       			
+                    <tr>
+                        <td>
+                            Score
+                        </td>                
+                        <td>
+                            <input type="text" name='Score'>
+                        </td>
+                    </tr>
+    			   	<tr>
+    			   		<td>
+    			   		</td>
+    			   		<td>    			   		
+    						<button class="uk-button-primary uk-button-mini" type="submit">提交试题</button> 
+    			   		</td
+    			   		>
+    			   	</tr>
+    			</table>
+    			
+    			</form>
+    		</li>
+    		<li>
+    		   	<form action='/addform2/' method = 'post' name="form2">{% csrf_token %}
+    			<table>
+    				<tr>
+    			   		<td>
+    			   		<span class="uk-text-bold"> 题干</span>
+    			   		</td>
+    			   		<td>
+    			   			<input type= 'textarea'  name='JStem'><br>
+    			   		</td>
+    			   	</tr>
+    			   	<tr>
+    			   		<td>    			   		
+    			   		
+    			   		</td>
+    			   		<td>
+    			   		    <input type='radio' name='JTr' value='T'>T 	
+    			   		</td>
+    			   	</tr>
+    			    <tr>
+    			   		<td>
+    			   		
+    			   		</td>    			 
+    			   		<td>
+    			   		<input type='radio' name='JTr' value='F'>F	
+       			   		</td>
+    			   	</tr>
+                    <tr>
+                        <td>
+                            Chapter
+                        </td>                
+                        <td>
+                            <input type="text" name='Chapter'>
+                        </td>
+                    </tr>
+    			     <tr>
+                        <td>
+                            Difficulty
+                        </td>                
+                        <td>
+                            <input type="text" name='Difficulty'>
+                        </td>
+                    </tr>                   
+                    <tr>
+                        <td>
+                            Score
+                        </td>                
+                        <td>
+                            <input type="text" name='Score'>
+                        </td>
+                    </tr>
+    			</table>
+    			<input type="submit" value="添加试题">
+    			</form>
+       		</li>
+		</ul>
+	</div>	
+	</body>
+</html>

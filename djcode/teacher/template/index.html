@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="css/uikit.min.css" />
+        <script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+        <link rel="stylesheet" href="css/components/accordion.min.css"/>
+        <script type="text/javascript" src="js/uikit.min.js"></script>
+        <script type="text/javascript" src="js/components/accordion.min.js"></script>
+        <script type="text/javascript" src="js/core/grid.min.js"></script>
+    </head>
+    <body>
+<!-- 这是左侧垂直选项卡式导航 -->
+<div class="uk-grid" data-uk-grid-margin>
+								<div class="uk-width-medium-1-2">
+									<div class="uk-grid">
+										<div class="uk-width-medium-1-2">
+											<ul class="uk-tab uk-tab-left" data-uk-tab="{connect:'#tab-left-content'}">
+                                            {% for class in ClassList %}
+												<li class="uk-active"><a href="{{ class.Url }}">{{ class.Name }}</a></li>
+								            {% endfor %}
+											</ul>
+
+										</div>
+										<div class="uk-width-medium-1-2">
+											<ul id="tab-left-content" class="uk-switcher">
+                                             <div class="uk-accordion" data-uk-accordion>
+												<li class="uk-accordion-title">
+                                                {% for paper in PaperList %}
+                                                <h3 class="uk-accordion-title"> {{ paper.PaperName }}</h3>
+                                                 <div class="uk-accordion-content">
+                                               
+                                                 <input type="button" onClick="window.location.href='{{ PaperList.Url }}'" value="Attempt Homework"/>
+                                                 <p>
+                                                 {{ paper.PaperName }}</p>
+                                                  <p>
+                                                 {{ paper.PaperID }}</p>
+                                                 <p>
+                                                 {{ paper.Deadline }}</p>
+                                                  <p>
+                                                 {{ paper.Creator }}</p>
+                                                {% endfor %}
+                                                
+                                                </li>
+                                                </div>
+												              
+											</ul>
+										</div>
+									</div>
+								</div>
+                            
+
+ </body>
+</html>
