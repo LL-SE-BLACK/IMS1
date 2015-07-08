@@ -224,7 +224,6 @@ def changePasswd(request):
 @csrf_exempt
 @login_required
 def changePhoto(request):
-    print "change photo"
     # Handle file upload
     if request.method == 'POST':
         form = UserPhotoForm(request.POST, request.FILES)
