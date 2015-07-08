@@ -34,18 +34,18 @@ def  add_done(class_ID,student_ID):
     flag=""
     #class_ID = request.POST.get('class_id_hidden')
     #student_ID = request.POST.get('add_id')
-    qset = (Q(class_id__class_id = class_ID)&Q(student_id__id = student_ID))
+    qset = (Q(Class__id = class_ID)&Q(student__id = student_ID))
     n = Class_table.objects.filter(qset).count()
     if n==0:
         add_info = Class_table()
-        Class = Class_info.objects.get(class_id=class_ID)
+        Class = Class_info.objects.get(id=class_ID)
         print(Class)
         student = Student_user.objects.get(id=student_ID)
         print(student)
         #add_info.id = '%d' %(random.randint(1, 100))
         add_info.id = class_ID+student_ID
-        add_info.class_id = Class     #query Class_info by class_id
-        add_info.student_id = student     #query Student_user by student_id
+        add_info.Class = Class     #query Class_info by class_id
+        add_info.student = student     #query Student_user by student_id
         add_info.status = 1
         print (add_info)
         flag = add_info.save()
@@ -72,7 +72,7 @@ def  delete_done(class_ID,students_ID_list):
     #delete_info = Class_table.objects.filter(class_id=class_ID,student_id=student_ID)
     print (len(students_ID_list))
     for i in range(0,len(students_ID_list)-1):
-        qset = (Q(class_id__class_id=class_ID)&Q(student_id__id=students_ID_list[i]))
+        qset = (Q(Class__id=class_ID)&Q(student__id=students_ID_list[i]))
         delete_info = Class_table.objects.get(qset)
         delete_info.delete()
     if i==len(students_ID_list)-1:
@@ -91,8 +91,8 @@ def select_students_list(class_ID):
     forcelogout(request)
     #print (class_ID)
     #print (Class_table.objects.all())
-    qset = (Q(class_id__class_id = class_ID)&Q(status = 1))
-    choose_list = Class_table.objects.filter(qset).order_by('student_id__id') #Class_table和Student_user的交集
+    qset = (Q(Class__id = class_ID)&Q(status = 1))
+    choose_list = Class_table.objects.filter(qset).order_by('student__id') #Class_table和Student_user的交集
     #print (choose_list)
     students_id_list = list()
     students_list = list()
@@ -102,8 +102,8 @@ def select_students_list(class_ID):
     for choose in choose_list:
         #print ("a")
         #print (choose_list[i].student.id)
-        students_id_list.append(choose.student_id.student_id)
-        students_list.append(Student_user.objects.get(id=choose.student_id.id))
+        students_id_list.append(choose.student.id)
+        students_list.append(Student_user.objects.get(id=choose.student.id))
     return (students_list,students_id_list)
 
 @login_required(login_url="/login/")
@@ -118,8 +118,8 @@ def sift(Time,classes_list,admin_college):
             #print("classes_list:")
             #print (classes_list)
             for Class in classes_list: #for every class
-                number = (Class_info.objects.get(class_id=Class.class_id)).capacity
-                qset = (Q(class_id__class_id = Class.class_id)&Q(status = 0))
+                number = (Class_info.objects.get(id=Class.id)).capacity
+                qset = (Q(Class__id = Class.id)&Q(status = 0))
                 choose_list = Class_table.objects.filter(qset)
                 if(len(choose_list)==0):  #if no students choose
                     break
@@ -141,15 +141,15 @@ def sift(Time,classes_list,admin_college):
                         print (choose_list)
                         for i in range(0,len(choose_list)):
                             print ("in for")
-                            if choose_list[i].student_id.college==admin_college: #the same college as admin plus 1
+                            if choose_list[i].student.college==admin_college: #the same college as admin plus 1
                                 score=2
-                                if choose_list[i].student_id.grade==4:        #the last year students plus 1
+                                if choose_list[i].student.grade==4:        #the last year students plus 1
                                     score = score+1
                                 else:
                                     score = score+0
                             else:
                                 score=0
-                                if choose_list[i].student_id.grade==4:        #the last year students plus 1
+                                if choose_list[i].student.grade==4:        #the last year students plus 1
                                     score = score+1
                                 else:
                                     score = score+0
@@ -276,13 +276,13 @@ def  admin_index(request):
     else:
         admin_college = admin.college
         #Course_info = Course_info.objects.filter(college=admin_college)
-        classes_list = Class_info.objects.filter(course_id__college=admin_college).order_by('-course_id__course_id')#本学院的所有课
+        classes_list = Class_info.objects.filter(course__college=admin_college).order_by('-course__id')#本学院的所有课
         #sorted(classes_list)
         #for every class in classes_list
         #class.remian=class.capacity-(Class_table.objects.filter(id=class.id).count())
         #print(classes_list)
         for Class in classes_list:
-            qset = (Q(class_id__class_id = Class.class_id)&Q(status = 1))
+            qset = (Q(Class__id = Class.id)&Q(status = 1))
             Class.remain = Class.capacity - (Class_table.objects.filter(qset).count())
         #print (classes_list)
         if request.method=='GET':
@@ -373,9 +373,9 @@ def buXuan(request):
     forcelogout(request)
     print ("buXuan")
     class_ID = request.GET.get('class_id')
-    Class=Class_info.objects.get(class_id=class_ID)
+    Class=Class_info.objects.get(id=class_ID)
     cid=class_ID
-    cname =Class.course_id.name
+    cname =Class.course.name
 
     print (class_ID)
     #class_ID = request.GET.get('class_id')
