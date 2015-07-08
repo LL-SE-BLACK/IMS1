@@ -51,25 +51,25 @@ def templay(request):
 			#是否由此记录
 				scheme_info.objects.get(id=temp)
 			except:
-				scheme_info.objects.create(id=temp, student_id=user_id, course__course_id=e)
+				scheme_info.objects.create(id=temp, student_id=user_id, course_id=e)
 		
 		#get the course list
-		list_required = Course_info.objects.filter(course_type=0, college=user_info.college)
-		list_optional = Course_info.objects.filter(course_type=1, college=user_info.college)
-		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, course_type=2)
+		list_required = Course_info.objects.filter(style=0, college=user_info.college)
+		list_optional = Course_info.objects.filter(style=1, college=user_info.college)
+		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, style=2)
 		
 		#get all course list
 		list_all = list_required | list_optional
 		all = []
 		for e in list_all:
-			all.append(e.course_id)
+			all.append(e.id)
 		
 		#delete the courses cancelled by the student
-		list_deleted = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
+		list_deleted = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
 		print(list_deleted.values())
 		for e in list_new:
 			print(e)
-			list_deleted = list_deleted.exclude(course__course_id=e)
+			list_deleted = list_deleted.exclude(course_id=e)
 			print(list_deleted.values())
 		for e in list_deleted:
 			scheme_info.objects.get(id=e.id).delete()
@@ -90,29 +90,22 @@ def templay(request):
 		'alter2': total_optional, 'common1': demand.generalCourse_demand, 'common2': total_common}
 		
 		#get the new selected courses
-		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
+		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
 		selected = []
 		for e in list_selected:
-			selected.append(e.course__course_id)
-			
-		list_studied = Class_table.objects.filter(student_id=user_id, status=1)
-		studied = []
-		for e in list_all:
-			for f in list_studied:
-				if e.class_id__course_id == f.course_id:
-					studied.append(f.course_id)
+			selected.append(e.course_id)
 		
 		flag = '修改成功！'
 		#render
 		return render(request, 'training plan4.html', {'student': Student_info, 'necessary': list_required,\
 		'alter': list_optional, 'common': list_common, 'flag': flag, 'List2': json.dumps(selected),\
-		'List3': json.dumps(studied), 'List': json.dumps(all), 'credit': credit})
+		'List': json.dumps(all), 'credit': credit})
 	
 	else:
 		#get the course list
-		list_required = Course_info.objects.filter(course_type=0, college=user_info.college)
-		list_optional = Course_info.objects.filter(course_type=1, college=user_info.college)
-		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, course_type=2)
+		list_required = Course_info.objects.filter(style=0, college=user_info.college)
+		list_optional = Course_info.objects.filter(style=1, college=user_info.college)
+		list_common = Course_info.objects.filter(scheme_course__student__id=user_info.id, style=2)
 		
 		#Calculate the credits
 		selected_required = list_required.filter(scheme_course__student__id=user_id)
@@ -136,23 +129,15 @@ def templay(request):
 			all.append(e.id)
 		
 		#get original selected courses
-		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__course_type=2)
+		list_selected = scheme_info.objects.filter(student_id=user_id).exclude(course__style=2)
 		selected = []
 		for e in list_selected:
-			selected.append(e.course__course_id)
-			
-		list_studied = Class_table.objects.filter(student_id=user_id, status=1)
-		studied = []
-		for e in list_all:
-			for f in list_studied:
-				if e.class_id__course_id == f.course_id:
-					studied.append(f.course_id)
-			
+			selected.append(e.course_id)
 						
 		#render
 		return render(request, 'training plan4.html', {'student': Student_info, 'necessary': list_required,\
 		'alter': list_optional, 'common': list_common, 'flag': flag, 'List2': json.dumps(selected),\
-		'List3': json.dumps(studied), 'List': json.dumps(all), 'credit': credit})
+		'List': json.dumps(all), 'credit': credit})
 	
 @csrf_protect 
 @login_required(login_url="/login/")  	
@@ -190,7 +175,7 @@ def search(request):
 				filter_list = Class_info.objects.filter(course__name__contains=list_get[1])
 			#search through course ID
 			elif list_get[0] == "2":
-				filter_list = Class_info.objects.filter(course__course_id__contains=list_get[1])
+				filter_list = Class_info.objects.filter(course__id__contains=list_get[1])
 			#search through teacher name
 			elif list_get[0] == "3":
 				filter_list = Class_info.objects.filter(teacher__name__contains=list_get[1])
@@ -199,9 +184,9 @@ def search(request):
 			
 			#get the search list
 			for e in filter_list:
-				temp_list = Course_info.objects.get(id=e.course__course_id)
+				temp_list = Course_info.objects.get(id=e.course_id)
 				temp_teacherName = e.teacher.name
-				temp_classId = e.course__course_id
+				temp_classId = e.course_id
 				temp_className = temp_list.name
 				temp_classSem = temp_list.semester
 				temp_classTime = e.time
@@ -211,7 +196,7 @@ def search(request):
 				'classSem': temp_classSem, 'classTime': temp_classTime, 'classroom': temp_classroom,\
 				'classCredit': temp_classCredit}
 				search_list.append(temp)
-				all.append(e.course__course_id)
+				all.append(e.course_id)
 		
 		
 		
@@ -223,9 +208,9 @@ def search(request):
 			#get the search list
 			for e in all_list:
 				try:
-					temp_list = Course_info.objects.get(id=e.course__course_id)
+					temp_list = Course_info.objects.get(id=e.course_id)
 					temp_teacherName = e.teacher.name
-					temp_classId = e.course__course_id
+					temp_classId = e.course_id
 					temp_className = temp_list.name
 					temp_classSem = temp_list.semester
 					temp_classTime = e.time
@@ -235,14 +220,14 @@ def search(request):
 					'classSem': temp_classSem, 'classTime': temp_classTime, 'classroom': temp_classroom,\
 					'classCredit': temp_classCredit}
 					search_list.append(temp)
-					all.append(e.course__course_id)
+					all.append(e.course_id)
 				except:
 						print("暂无开课")
 		
 			for e in list_get:
 				try:
 					temp = user_id + "_" + e
-					scheme_info.objects.create(id=temp, student_id=user_id, course__course_id=e)
+					scheme_info.objects.create(id=temp, student_id=user_id, course_id=e)
 				except:
 					print("重复选择！")
 		
@@ -255,9 +240,9 @@ def search(request):
 		#get the search list
 		for e in all_list:
 			try:
-				temp_list = Course_info.objects.get(id=e.course__course_id)
+				temp_list = Course_info.objects.get(id=e.course_id)
 				temp_teacherName = e.teacher.name
-				temp_classId = e.course__course_id
+				temp_classId = e.course_id
 				temp_className = temp_list.name
 				temp_classSem = temp_list.semester
 				temp_classTime = e.time
@@ -267,7 +252,7 @@ def search(request):
 				'classSem': temp_classSem, 'classTime': temp_classTime, 'classroom': temp_classroom,\
 				'classCredit': temp_classCredit}
 				search_list.append(temp)
-				all.append(e.course__course_id)
+				all.append(e.course_id)
 			except:
 					print("暂无开课")
 		
@@ -313,8 +298,8 @@ def download(request):
 	teacher_id = request.GET['jsgh']
 	class_id = request.GET['jxbid']
 	
-	#print(class__class_id)
-	list = Class_table.objects.filter(Class=class__class_id)
+	print(class_id)
+	list = Class_table.objects.filter(Class=class_id)
 	
 	print(list.values())
 	
@@ -344,7 +329,7 @@ def download(request):
 		ws.write(i, 6, student_list.grade)
 		i = i + 1
 	
-	filename = 'list_' + class__class_id + '.xls'
+	filename = 'list_' + class_id + '.xls'
 
 	response = HttpResponse(content_type='application/ms-excel')
 	response['Content-Disposition'] ='attachment; filename=%s' % filename
@@ -358,9 +343,9 @@ def showCourseInfo(request):
 	forcelogout(request)
 	course_id = request.GET['classId']
 	
-	getInfo = Course_info.objects.get(id = course__course_id)
+	getInfo = Course_info.objects.get(id = course_id)
 	
-	return render(request, 'courseInfo.html', {'courseInfo': getInfo.introduce, 'courseID': getInfo.course_id,\
+	return render(request, 'courseInfo.html', {'courseInfo': getInfo.introduce, 'courseID': getInfo.id,\
 	'courseName': getInfo.name, 'credit': getInfo.credits, 'college': getInfo.college})
 	
 @csrf_protect 

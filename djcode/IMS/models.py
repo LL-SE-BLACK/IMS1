@@ -112,7 +112,7 @@ class Course_info(models.Model):
     |---|---|---|---|---|---|
     | CHARACTER(8) | VARCHAR(110) | FLOAT | INTEGER | VARCHAR(110) | VARCHAR(50) |
     '''
-    id = models.CharField(max_length=8, primary_key=True)
+    course_id = models.CharField(max_length=8, primary_key=True)
     name = models.CharField(max_length=110)
     credits = models.FloatField(default=0)
     semester = models.IntegerField(default=0)
@@ -138,7 +138,7 @@ class Class_info(models.Model):
     |---|---|---|---|---|---|---|---|---|
     | CHARACTER(10) | CHARACTER(8) | VARCHAR(20) | INTEGER | VARCHAR(20) | DATETIME(TEXT) | INTEGER | VARCHAR(20) | INTEGER |
     '''
-    id = models.CharField(max_length=10, primary_key=True)
+    class_id = models.CharField(max_length=10, primary_key=True)
     course_id = models.ForeignKey(Course_info, related_name='class_course')
     teacher = models.ForeignKey(Faculty_user)
     time = models.CharField(max_length=20) #by CCS: type integer to char

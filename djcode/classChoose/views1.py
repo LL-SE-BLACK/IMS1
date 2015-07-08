@@ -144,12 +144,12 @@ def choose_class(request):
 			
 			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
-				if Eachclass.class_id.course_id.course_id==xkkh:
+				if Eachclass.Class.course.id==xkkh:
 					Eachclass.delete()
 				#Eachclass.save()
 			for temp in tem:
 				timecof=0
-				classes1 = Class_info.objects.get(class_id=temp)
+				classes1 = Class_info.objects.get(id=temp)
 				timeclass=classes1.time
 				timeclass1=timeclass.split('|')
 				week1=[]
@@ -164,7 +164,7 @@ def choose_class(request):
 					classt1.append(classt)
 				##print week1
 				##print classt1
-				HavenClass = Class_table.objects.filter(student_id=xh)
+				HavenClass = Class_table.objects.filter(student=xh)
 				student=Student_user.objects.get(id=xh)
 				#对每一门课程 检验是否冲突
 				for Eachclass in HavenClass:
@@ -180,7 +180,7 @@ def choose_class(request):
 						for i in range(0,len(week1)-1):
 							if week==week1[i] and classt==classt1[i]:
 								timecof=1
-					if timecof==1 and classes1.course.course_id!=Eachclass.Class.course.id:
+					if timecof==1 and classes1.course.id!=Eachclass.Class.course.id:
 						Csuccess=2
 					#考试时间冲突，非同一门课
 					if classes1.examtime==Eachclass.Class.examtime and Eachclass.Class.examdate==classes1.examdate and  classes1.course.id!=Eachclass.Class.course.id:
@@ -189,7 +189,7 @@ def choose_class(request):
 						Csuccess=4
 				#对于每一门课程注册
 				if  Csuccess==1 and succ1==1:
-					q=Class_table(id=classes1.class_id+student.id,class_id=classes1,student_id=student,status=0)
+					q=Class_table(id=classes1.id+student.id,Class=classes1,student=student,status=0)
 					q.save()
 					a='%r class choose success' % classes1.teacher.name
 				if Csuccess==2 and succ1==1:
@@ -203,11 +203,11 @@ def choose_class(request):
 				a1=a1+a
 			#显示信息头
 			student = Student_user.objects.get(id=xh)
-			course = Course_info.objects.get(course_id=xkkh)
-			classes = Class_info.objects.filter(course_id=xkkh)
+			course = Course_info.objects.get(id=xkkh)
+			classes = Class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
-			pageheader.cid=course.course_id
+			pageheader.cid=course.id
 			pageheader.cname=course.name
 			pageheader.credit=course.credits
 			#for i in range(0, 1 + 1):
@@ -248,15 +248,15 @@ def choose_class(request):
 					class_dict['classRoom']=class_listing.room
 					class_dict['capacity']=class_listing.capacity
 					class_dict['remain']=class_listing.remain
-					class_dict['jId']=class_listing.class_id
+					class_dict['jId']=class_listing.id
 					class_list.append(class_dict)
-					List3.append(class_listing.class_id)
+					List3.append(class_listing.id)
 			#message = 'You submitted an empty form.%r' % tem
 			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				semyes=(Eachclass.Class.semester == timesem or Eachclass.Class.semester == timesem1 or Eachclass.Class.semester == timesem2)
-				if Eachclass.class_id.course_id.course_id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
-					List4.append(Eachclass.class_id.class_id)
+				if Eachclass.Class.course.id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
+					List4.append(Eachclass.Class.id)
 
 			#List4=['1','2']
 			##print List4
@@ -272,11 +272,11 @@ def choose_class(request):
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			student = Student_user.objects.get(id=xh)
-			course = Course_info.objects.get(course_id=xkkh)
+			course = Course_info.objects.get(id=xkkh)
 			classes = Class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
-			pageheader.cid=course.course_id
+			pageheader.cid=course.id
 			pageheader.cname=course.name
 			pageheader.credit=course.credits
 			#for i in range(0, 1 + 1):
@@ -319,14 +319,14 @@ def choose_class(request):
 					class_dict['classRoom']=class_listing.room
 					class_dict['capacity']=class_listing.capacity
 					class_dict['remain']=class_listing.remain
-					class_dict['jId']=class_listing.class_id
+					class_dict['jId']=class_listing.id
 					class_list.append(class_dict)
-					List3.append(class_listing.class_id)
+					List3.append(class_listing.id)
 			HavenClass = Class_table.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				semyes=(Eachclass.Class.semester == timesem or Eachclass.Class.semester == timesem1 or Eachclass.Class.semester == timesem2)
-				if Eachclass.class_id.course_id.course_id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
-					List4.append(Eachclass.class_id.class_id)
+				if Eachclass.Class.course.id==xkkh and semyes==1 and Eachclass.Class.year==timeyear:
+					List4.append(Eachclass.Class.id)
 			##print (HavenClass)
 			#List3=['1','2']
 			#message = 'You submitted an empty form.%r' % class_list[0]['teacherName']
@@ -377,9 +377,9 @@ def show_class(request):
 			for class_listing in choose:
 				#class_listing=Class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==sem or class_listing.Class.course.semester==(sem%10) or class_listing.Class.course.semester==sem1):
-					eachcourse=Course_info.objects.get(course_id=class_listing.class_id.course_id.course_id)
+					eachcourse=Course_info.objects.get(id=class_listing.Class.course.id)
 					class_dict={}
-					class_dict['cID']=class_listing.class_id.class_id
+					class_dict['cID']=class_listing.Class.id
 					class_dict['className']=eachcourse.name
 					class_dict['teacherName']=class_listing.Class.teacher.name
 
@@ -436,9 +436,9 @@ def show_class(request):
 			for class_listing in choose:
 				#class_listing=Class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==12 or class_listing.Class.course.semester==1 or class_listing.Class.course.semester==2):
-					eachcourse=Course_info.objects.get(course_id=class_listing.class_id.course_id.course_id)
+					eachcourse=Course_info.objects.get(id=class_listing.Class.course.id)
 					class_dict={}
-					class_dict['cID']=class_listing.class_id.class_id
+					class_dict['cID']=class_listing.Class.id
 					class_dict['className']=eachcourse.name
 					class_dict['teacherName']=class_listing.Class.teacher.name
 					
@@ -474,7 +474,7 @@ def buxuan(request):
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			class_dict={}
-			choose=Class_info.objects.get(class_id=xkkh)
+			choose=Class_info.objects.get(id=xkkh)
 			class_dict['name']=choose.course.name
 			#判断是否已经补选，是否在补选时间
 			time2=get_webservertime('www.baidu.com')
@@ -524,7 +524,7 @@ def buxuan(request):
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 			class_dict={}
-			choose1=Class_info.objects.get(course_id=xkkh)
+			choose1=Class_info.objects.get(id=xkkh)
 			class_dict['name']=choose1.course.name
 			return render_to_response('chooseextra.html',{'class':class_dict},context_instance=RequestContext(request))
 		
@@ -564,8 +564,8 @@ def pingjia1(request):
 			for i in range(1,len(a1)):
 				a2=a1[i].split('#')
 				if a2[1]!='Undefined':
-					Class1=Class_info.objects.get(class_id=a2[0])
-					q=pingjia(id=xh+a2[0],class_id=Class1,student_id=student,dengji=a2[1])
+					Class1=Class_info.objects.get(id=a2[0])
+					q=pingjia(id=xh+a2[0],Class=Class1,student=student,dengji=a2[1])
 					q.save()
 			pageheader.sid=student.id
 			pageheader.sname=student.name
@@ -590,8 +590,8 @@ def pingjia1(request):
 				if yipingjia1==0 and already==1:
 					list1['courseName']=eachclass.Class.course.name
 					list1['teacherName']=eachclass.Class.teacher.name
-					list1['jID']=eachclass.class_id.class_id
-					List.append(eachclass.class_id.class_id)
+					list1['jID']=eachclass.Class.id
+					List.append(eachclass.Class.id)
 			#	#print list1
 					list.append(list1)
 			##print list
@@ -627,8 +627,8 @@ def pingjia1(request):
 				if yipingjia1==0 and already==1:
 					list1['courseName']=eachclass.Class.course.name
 					list1['teacherName']=eachclass.Class.teacher.name
-					list1['jID']=eachclass.class_id.class_id
-					List.append(eachclass.class_id.class_id)
+					list1['jID']=eachclass.Class.id
+					List.append(eachclass.Class.id)
 				##print list1
 					list.append(list1)
 			##print list

@@ -78,14 +78,10 @@
 	<p>您可以在这里设置选课起止时间：</p>
 	<form method='post'>
 		{% csrf_token %}
-<!-- 			<input type="text"  name="start_time" placeholder="选课开始时间">
+			<input type="text"  name="start_time" placeholder="选课开始时间">
 			<input type="text"  name="sift_time" placeholder="选课结束时间">
 			<input type="text"  name="buxuan_time" placeholder="补选开始时间">
-			<input type="text"  name="end_buxuan_time" placeholder="补选结束时间"> -->
-			<p>选课开始时间<input type="datetime-local" name="start_time" style="width:150px;height:30px" /></p>
-			<p>选课结束时间<input type="datetime-local" name="sift_time" style="width:150px;height:30px"/></p>
-			<p>补选开始时间<input type="datetime-local" name="buxuan_time" style="width:150px;height:30px"/></p>
-			<p>补选结束时间<input type="datetime-local" name="end_buxuan_time" style="width:150px;height:30px"/></p>
+			<input type="text"  name="end_buxuan_time" placeholder="补选结束时间">
 		{{ form }}
 		<input type="submit" value="提交">
 	</form>
