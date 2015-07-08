@@ -148,7 +148,7 @@ def changeUserInfo(request):
 
             if form.is_valid():
                 info = form.cleaned_data
-                print request.user
+                print(request.user)
                 userid = str(request.user)
                 obj = None
                 if user_type == IS_STUDENT:
@@ -182,19 +182,18 @@ def changeUserInfo(request):
                 return HttpResponseRedirect('../../profile')
 
     else:
-        print 'ERROR: not GET'
+        print('ERROR: not GET')
         raise Http404()
 
 @csrf_exempt  #Note: 如果有人有时间，求帮我看看跨站为啥搞不定。。
 @login_required
 def changePasswd(request):
-    print "Change passwd"
+    print("Change passwd")
     if request.method == 'POST':
         c = {}
         c.update(csrf(request))
         errors = {}
 
-        print(request.POST)
         passwd1 = request.POST.get("passwd1","")
         passwd2 = request.POST.get("passwd2","")
         if not passwd1 == passwd2:
@@ -211,7 +210,6 @@ def changePasswd(request):
             # c.update(errors)
             # stu = Student_user.objects.get(id=str(request.user))
             # c.update({'studentInfo': stu })
-            print errors
             messages.error(request, errors, extra_tags="password")
             return HttpResponseRedirect('../../profile')
             # return render_to_response('profile.html', c, context_instance=RequestContext(request))
@@ -229,15 +227,12 @@ def changePhoto(request):
     print "change photo"
     # Handle file upload
     if request.method == 'POST':
-        print request.FILES
         form = UserPhotoForm(request.POST, request.FILES)
         if form.is_valid():
-            print "is valid"
             user_id = str(request.user)  # user Id
             user_type = getTypeOfUser(user_id)
 
             newPhoto = form.cleaned_data['photo']
-            print newPhoto
             if user_type == IS_STUDENT:
                 try:
                     stu = Student_user.objects.get(id=user_id)

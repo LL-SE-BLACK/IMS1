@@ -30,7 +30,6 @@ class LoginForm(forms.Form):
         return cleaned_data
 
 def startup(request):
-    print request.user
     return HttpResponseRedirect('ims/login/')
 
 def loggingin(request):

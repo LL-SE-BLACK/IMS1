@@ -97,11 +97,7 @@ def reset_pwd(request, key):
     findPasses = FindPass.objects.filter(activation_key=key)
     if findPasses:
         findPass = findPasses[0]
-        print key
-        print findPass.activation_key
         #Time is within 10 min
-        print int(time.time())
-        print int(findPass.timestamp)
         if int(time.time())-int(findPass.timestamp) < 300 * 600:
             #reset passwd to default
             user = User.objects.get(username=findPass.username)
