@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'IMS',
+    'dbtest',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,7 +59,9 @@ ROOT_URLCONF = 'djcode.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'), ],
+        'DIRS': [os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
+                 os.path.join(os.path.dirname(__file__), '../templates').replace('\\','/'),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

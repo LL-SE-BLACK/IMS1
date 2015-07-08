@@ -19,10 +19,14 @@ from django.contrib import admin
 import django.contrib.auth.views as auth_views
 from IMS.views import startup
 from djcode import settings
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns #by SMS
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^ims/', include('IMS.urls')),
+    url(r'^SM/', include('dbtest.urls')), #by SMS
     url(r'^$', startup),
 ]
+
+urlpatterns += staticfiles_urlpatterns() #by SMS
 
