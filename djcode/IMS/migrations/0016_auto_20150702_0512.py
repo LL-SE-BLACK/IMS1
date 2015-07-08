@@ -12,15 +12,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='Admin_user',
+            name='admin_user',
             options={'permissions': (('admin_manage', 'Can manage admin user info'),)},
         ),
         migrations.AlterModelOptions(
-            name='Course_info',
+            name='course_info',
             options={'permissions': (('course_manage', 'Can manage basic course info'),)},
         ),
         migrations.AlterModelOptions(
-            name='Faculty_user',
+            name='faculty_user',
             options={'permissions': (('faculty_manage', 'Can manage faculty user info'),)},
         ),
         migrations.AlterModelOptions(

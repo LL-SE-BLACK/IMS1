@@ -58,17 +58,17 @@ def choose_class(request):
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
 
-			HavenClass = Class_table.objects.filter(student=xh)
+			HavenClass = class_choose_info.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				if Eachclass.Class.course.id==xkkh:
 					Eachclass.delete()
 			for temp in tem:
-				classes1 = Class_info.objects.get(id=temp)
-				HavenClass = Class_table.objects.filter(student=xh)
-				student=Student_user.objects.get(id=xh)
+				classes1 = class_info.objects.get(id=temp)
+				HavenClass = class_choose_info.objects.filter(student=xh)
+				student=students_users.objects.get(id=xh)
 				#对每一门课程 检验是否冲突
 				for Eachclass in HavenClass:
-					#eachclass=Class_info.objects.get(id=EachClass.Class)
+					#eachclass=class_info.objects.get(id=EachClass.Class)
 					#上课时间冲突，非同一门课 的话
 					if classes1.time==Eachclass.Class.time and classes1.course.id!=Eachclass.Class.course.id:
 						Csuccess=2
@@ -79,7 +79,7 @@ def choose_class(request):
 						Csuccess=4
 				#对于每一门课程注册
 				if  Csuccess==1:
-					q=Class_table(id=classes1.id+student.id,Class=classes1,student=student,status=0)
+					q=class_choose_info(id=classes1.id+student.id,Class=classes1,student=student,status=0)
 					q.save()
 					a='%r class choose success' % classes1.teacher.name
 				if Csuccess==2:
@@ -90,9 +90,9 @@ def choose_class(request):
 					a='%r class Already have' % classes1.teacher.name
 				a1=a1+a
 
-			student = Student_user.objects.get(id=xh)
-			course = Course_info.objects.get(id=xkkh)
-			classes = Class_info.objects.filter(course=xkkh)
+			student = students_users.objects.get(id=xh)
+			course = course_info.objects.get(id=xkkh)
+			classes = class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.cid=course.id
@@ -110,7 +110,7 @@ def choose_class(request):
 				class_list.append(class_dict)
 				List3.append(class_listing.id)
 			#message = 'You submitted an empty form.%r' % tem
-			HavenClass = Class_table.objects.filter(student=xh)
+			HavenClass = class_choose_info.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				if Eachclass.Class.course.id:
 					List4.append(Eachclass.Class.id)
@@ -126,9 +126,9 @@ def choose_class(request):
 			xh = request.GET['xh']
 		if 'xkkh' in request.GET:
 			xkkh = request.GET['xkkh']
-			student = Student_user.objects.get(id=xh)
-			course = Course_info.objects.get(id=xkkh)
-			classes = Class_info.objects.filter(course=xkkh)
+			student = students_users.objects.get(id=xh)
+			course = course_info.objects.get(id=xkkh)
+			classes = class_info.objects.filter(course=xkkh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.cid=course.id
@@ -145,7 +145,7 @@ def choose_class(request):
 				class_dict['jId']=class_listing.id
 				class_list.append(class_dict)
 				List3.append(class_listing.id)
-			HavenClass = Class_table.objects.filter(student=xh)
+			HavenClass = class_choose_info.objects.filter(student=xh)
 			for Eachclass in HavenClass:
 				if Eachclass.Class.course.id==xkkh:
 					List4.append(Eachclass.Class.id)
@@ -187,16 +187,16 @@ def show_class(request):
 		sem1=int(sem1)
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = Student_user.objects.get(id=xh)
+			student = students_users.objects.get(id=xh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			choose=Class_table.objects.filter(student=xh)
+			choose=class_choose_info.objects.filter(student=xh)
 			for class_listing in choose:
-				#class_listing=Class_info.objects.get(id=Eachclass.Class.id)
+				#class_listing=class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==sem or class_listing.Class.course.semester==(sem%10) or class_listing.Class.course.semester==sem1):
-					eachcourse=Course_info.objects.get(id=class_listing.Class.course.id)
+					eachcourse=course_info.objects.get(id=class_listing.Class.course.id)
 					class_dict={}
 					class_dict['cID']=class_listing.Class.id
 					class_dict['className']=eachcourse.name
@@ -246,16 +246,16 @@ def show_class(request):
 		#print year
 		if 'xh' in request.GET:
 			xh = request.GET['xh']
-			student = Student_user.objects.get(id=xh)
+			student = students_users.objects.get(id=xh)
 			pageheader.sid=student.id
 			pageheader.sname=student.name
 			pageheader.college=student.college
 			pageheader.smajor=student.major
-			choose=Class_table.objects.filter(student=xh)
+			choose=class_choose_info.objects.filter(student=xh)
 			for class_listing in choose:
-				#class_listing=Class_info.objects.get(id=Eachclass.Class.id)
+				#class_listing=class_info.objects.get(id=Eachclass.Class.id)
 				if class_listing.Class.year==year and (class_listing.Class.course.semester==12 or class_listing.Class.course.semester==1 or class_listing.Class.course.semester==2):
-					eachcourse=Course_info.objects.get(id=class_listing.Class.course.id)
+					eachcourse=course_info.objects.get(id=class_listing.Class.course.id)
 					class_dict={}
 					class_dict['cID']=class_listing.Class.id
 					class_dict['className']=eachcourse.name

@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='Admin_user',
+            name='admin_user',
             options={},
         ),
         migrations.AlterModelOptions(
-            name='Faculty_user',
+            name='faculty_user',
             options={},
         ),
         migrations.AlterModelOptions(

@@ -18,15 +18,15 @@ class Migration(migrations.Migration):
             name='Sys_log',
         ),
         migrations.AlterModelOptions(
-            name='Admin_user',
+            name='admin_user',
             options={'permissions': (('manage', 'Can manage admin user info'),)},
         ),
         migrations.AlterModelOptions(
-            name='Course_info',
+            name='course_info',
             options={'permissions': (('manage', 'Can manage basic course info'),)},
         ),
         migrations.AlterModelOptions(
-            name='Faculty_user',
+            name='faculty_user',
             options={'permissions': (('manage', 'Can manage faculty user info'),)},
         ),
     ]

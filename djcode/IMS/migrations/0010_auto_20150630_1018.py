@@ -13,62 +13,62 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name='Course_info',
+            model_name='course_info',
             old_name='type',
             new_name='course_type',
         ),
         migrations.AlterField(
-            model_name='Admin_user',
+            model_name='admin_user',
             name='college',
             field=models.CharField(default='all', max_length=50),
         ),
         migrations.AlterField(
-            model_name='Admin_user',
+            model_name='admin_user',
             name='contact',
             field=models.CharField(default='18812345678', max_length=11),
         ),
         migrations.AlterField(
-            model_name='Admin_user',
+            model_name='admin_user',
             name='name',
             field=models.CharField(default='张三', max_length=20),
         ),
         migrations.AlterField(
-            model_name='Admin_user',
+            model_name='admin_user',
             name='photo',
             field=models.FileField(default='photo/default.jpg', upload_to=IMS.models.get_photo_file_name),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='college',
             field=models.CharField(default='计算机科学与技术学院', max_length=50),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='contact',
             field=models.CharField(default='18812345678', max_length=11),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='degree',
             field=models.CharField(default='博士', max_length=20),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='major',
             field=models.CharField(default='计算机科学与技术', max_length=50),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='name',
             field=models.CharField(default='张三', max_length=20),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='photo',
             field=models.FileField(default='photo/default.jpg', upload_to=IMS.models.get_photo_file_name),
         ),
         migrations.AlterField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='title',
             field=models.CharField(default='研究员', max_length=20),
         ),

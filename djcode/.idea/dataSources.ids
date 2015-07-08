@@ -30,9 +30,6 @@
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_IMS_class_info_1" columns="course_id_id" ref-table="IMS_course_info" ref-schema="" ref-catalog="" ref-columns="course_id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_IMS_class_table_2" table="IMS_class_table" schema="" catalog="" columns="class_id_id"/>
-      <exported-key name="#FAKE_dbtest_messagetable_1" table="dbtest_messagetable" schema="" catalog="" columns="class_id_id"/>
-      <exported-key name="#FAKE_dbtest_scoretable_2" table="dbtest_scoretable" schema="" catalog="" columns="class_id_id"/>
-      <exported-key name="#FAKE_dbtest_temptable_1" table="dbtest_temptable" schema="" catalog="" columns="class_id_id"/>
       <index name="IMS_class_info_4c30cc1b" unique="true" columns="course_id_id"/>
     </table>
     <table name="IMS_class_table" schema="" catalog="" type="TABLE">
@@ -55,7 +52,6 @@
       <column name="course_type" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="course_id"/>
       <exported-key name="#FAKE_IMS_class_info_1" table="IMS_class_info" schema="" catalog="" columns="course_id_id"/>
-      <exported-key name="#FAKE_dbtest_scheme_info_1" table="dbtest_scheme_info" schema="" catalog="" columns="course_id_id"/>
     </table>
     <table name="IMS_faculty_user" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="VARCHAR(6)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
@@ -69,8 +65,6 @@
       <column name="photo" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="title" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <exported-key name="#FAKE_dbtest_messagetable_3" table="dbtest_messagetable" schema="" catalog="" columns="to_faculty_id_id"/>
-      <exported-key name="#FAKE_dbtest_messagetable_4" table="dbtest_messagetable" schema="" catalog="" columns="from_faculty_id_id"/>
     </table>
     <table name="IMS_findpass" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
@@ -93,10 +87,6 @@
       <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
       <exported-key name="#FAKE_IMS_class_table_1" table="IMS_class_table" schema="" catalog="" columns="student_id_id"/>
-      <exported-key name="#FAKE_dbtest_messagetable_2" table="dbtest_messagetable" schema="" catalog="" columns="student_id_id"/>
-      <exported-key name="#FAKE_dbtest_scheme_info_2" table="dbtest_scheme_info" schema="" catalog="" columns="student_id_id"/>
-      <exported-key name="#FAKE_dbtest_scoretable_1" table="dbtest_scoretable" schema="" catalog="" columns="student_id_id"/>
-      <exported-key name="#FAKE_dbtest_temptable_2" table="dbtest_temptable" schema="" catalog="" columns="student_id_id"/>
     </table>
     <table name="auth_group" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
@@ -162,65 +152,6 @@
       <foreign-key name="#FAKE_auth_user_user_permissions_2" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <index name="auth_user_user_permissions_8373b171" unique="true" columns="permission_id"/>
       <index name="auth_user_user_permissions_e8701ad4" unique="true" columns="user_id"/>
-    </table>
-    <table name="dbtest_messagetable" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="message_id" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="from_faculty_id_id" sqlType="VARCHAR(6)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="to_faculty_id_id" sqlType="VARCHAR(6)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="student_id_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="class_id_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="old_score" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="new_score" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <column name="reason" sqlType="VARCHAR(200)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="status" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <primary-key columns="id"/>
-      <foreign-key name="#FAKE_dbtest_messagetable_1" columns="class_id_id" ref-table="IMS_class_info" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_messagetable_2" columns="student_id_id" ref-table="IMS_student_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_messagetable_3" columns="to_faculty_id_id" ref-table="IMS_faculty_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_messagetable_4" columns="from_faculty_id_id" ref-table="IMS_faculty_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="dbtest_messagetable_468acf72" unique="true" columns="class_id_id"/>
-      <index name="dbtest_messagetable_e462bf81" unique="true" columns="student_id_id"/>
-      <index name="dbtest_messagetable_543a2f79" unique="true" columns="to_faculty_id_id"/>
-      <index name="dbtest_messagetable_03a3e690" unique="true" columns="from_faculty_id_id"/>
-    </table>
-    <table name="dbtest_scheme_info" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="student_id_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="course_id_id" sqlType="VARCHAR(8)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="state" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <primary-key columns="id"/>
-      <foreign-key name="#FAKE_dbtest_scheme_info_1" columns="course_id_id" ref-table="IMS_course_info" ref-schema="" ref-catalog="" ref-columns="course_id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_scheme_info_2" columns="student_id_id" ref-table="IMS_student_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="dbtest_scheme_info_4c30cc1b" unique="true" columns="course_id_id"/>
-      <index name="dbtest_scheme_info_e462bf81" unique="true" columns="student_id_id"/>
-    </table>
-    <table name="dbtest_scoretable" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="class_id_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="student_id_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="score" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <primary-key columns="id"/>
-      <foreign-key name="#FAKE_dbtest_scoretable_1" columns="student_id_id" ref-table="IMS_student_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_scoretable_2" columns="class_id_id" ref-table="IMS_class_info" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="dbtest_scoretable_e462bf81" unique="true" columns="student_id_id"/>
-      <index name="dbtest_scoretable_468acf72" unique="true" columns="class_id_id"/>
-    </table>
-    <table name="dbtest_temptable" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="student_id_id" sqlType="VARCHAR(10)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <column name="class_id_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="score" sqlType="REAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
-      <primary-key columns="id"/>
-      <foreign-key name="#FAKE_dbtest_temptable_1" columns="class_id_id" ref-table="IMS_class_info" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_dbtest_temptable_2" columns="student_id_id" ref-table="IMS_student_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="dbtest_temptable_468acf72" unique="true" columns="class_id_id"/>
-      <index name="dbtest_temptable_e462bf81" unique="true" columns="student_id_id"/>
-    </table>
-    <table name="dbtest_user" schema="" catalog="" type="TABLE">
-      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="xlsx_file" sqlType="VARCHAR(100)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
-      <primary-key columns="id"/>
     </table>
     <table name="django_admin_log" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>

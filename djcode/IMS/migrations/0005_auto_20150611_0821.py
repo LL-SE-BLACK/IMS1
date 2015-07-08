@@ -12,37 +12,37 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='Admin_user',
+            model_name='admin_user',
             name='gender',
             field=models.BooleanField(default=0),
         ),
         migrations.AddField(
-            model_name='Class_info',
+            model_name='class_info',
             name='capacity',
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='Class_info',
+            model_name='class_info',
             name='examtime',
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='Class_info',
+            model_name='class_info',
             name='time',
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='Course_info',
+            model_name='course_info',
             name='credits',
             field=models.FloatField(default=0),
         ),
         migrations.AddField(
-            model_name='Course_info',
+            model_name='course_info',
             name='semester',
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='Faculty_user',
+            model_name='faculty_user',
             name='gender',
             field=models.BooleanField(default=0),
         ),
